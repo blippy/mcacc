@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 
+//#include "autotypes.h"
 #include "parse.h"
 
 typedef double pennies_t;
@@ -38,6 +39,7 @@ void print_strings(ostream &ost, const strings &strs);
 
 /** enhanced etran
  * */
+/*
 class etrana {
 	public:
 		bool taxable;
@@ -65,9 +67,13 @@ class etrana {
 
 };
 
+
 bool same_ticker(etrana a, etrana b);
 typedef vector<etrana> etranas_t;
 etranas_t load_etranas();
+
+*/
+
 
 class stend_c {
 	public:

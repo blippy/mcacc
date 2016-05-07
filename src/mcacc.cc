@@ -15,7 +15,7 @@
 
 #include "common.h"
 #include "parse.h"
-#include "types.h"
+#include "autotypes.h"
 
 using std::cerr;
 using std::cout;
@@ -64,6 +64,46 @@ string slurp(const char *filename)
 	in.close();
     	return sstr.str();
 }
+
+
+bool operator<(const etrana& lhs, const etrana& rhs)
+{
+	return std::tie(lhs.sym, lhs.dstamp) < std::tie(rhs.sym, rhs.dstamp);
+}
+
+bool operator>(const etrana &a, const etrana &b)
+{
+	return std::tie(a.sym, a.dstamp) > std::tie(b.sym, b.dstamp);
+}
+
+etranas_t load_etranas()
+{
+	vecvec_t rows = read_registered_dsv(etransa);
+	etranas_t res;
+	for(vs_t &r: rows) { 
+		etrana e;
+		//e.from_vec(r);
+		convert(r, e);
+		res.push_back(e);
+	}
+	
+
+	// cubie seems to have problems with sorting, so I'll write my own algo: insertion sort
+	// https://en.wikipedia.org/wiki/Insertion_sort
+	for(int i=0; i< res.size(); i++) {
+		etrana x = res[i];
+		int j = i-1;
+		//while(j>=0 && etrana_gt(res[j],x)) {
+		while(j>=0 && res[j] > x) {
+			res[j+1] = res[j];
+			j -= 1;
+		}
+		res[j+1] = x;
+	}
+
+	return res;
+}
+
 
 
 vecvec_t commasep(string  &filename)

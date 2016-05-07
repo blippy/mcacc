@@ -8,7 +8,7 @@
 #include <set>
 
 #include "common.h"
-#include "types.h"
+#include "autotypes.h"
 //#include "vitag.h"
 
 

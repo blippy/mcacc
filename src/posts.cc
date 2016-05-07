@@ -4,7 +4,7 @@
 #include <algorithm>
 
 #include "common.h"
-#include "types.h"
+#include "autotypes.h"
 
 using std::string;
 using std::vector;

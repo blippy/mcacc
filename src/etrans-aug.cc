@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unordered_map>
 
+#include "autotypes.h"
 #include "common.h"
 #include "parse.h"
 #include "types.h"
@@ -79,6 +80,7 @@ int eaug_main()
 	prin_vecvec(etrans, "\t", "\n", "s3/etrans-aug.dsv");
 
 	// TODO HIGH: output in rec format
+	//strings fieldnames = {"Taxable", 
 	
 	return EXIT_SUCCESS;
 }
