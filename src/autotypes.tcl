@@ -21,6 +21,9 @@ set struct {
 
 }
 
+
+###### HEADER FILE
+
 # header file
 set h 0
 set h [open "autotypes.h" w]
@@ -63,12 +66,14 @@ void convert(const strings &str, etrana& e);
 bool same_ticker(etrana a, etrana b);
 typedef vector<etrana> etranas_t;
 etranas_t load_etranas();
+extern strings etrana_fieldnames;
 
 #endif
 "
 close $h
 
 
+###### SOURCE FILE
 # source file
 #set cc 0
 set cc [open "autotypes.cc" w]
@@ -102,6 +107,22 @@ foreach row $struct {
 }
 putcc "
 }
+
+strings etrana_fieldnames = {	
 "
+
+set i 0
+foreach row $struct {
+	lassign $row type name conv
+	incr i
+	set brk ""
+	if {$i < [llength $struct]} { set brk "," }
+	putcc "\t\"$name\"$brk"
+}
+
+putcc "
+};
+"
+
 close $cc
 

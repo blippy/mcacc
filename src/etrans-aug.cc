@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <stdlib.h>
 #include <unordered_map>
 
@@ -28,7 +29,6 @@ int eaug_main()
 	s1("etran.dsv", fname);
 	vecvec_t etrans = vecvec(fname);
 	for(vs_t &e: etrans) {
-//TODO if the etrans is after the period end, just skip it, prolly
 		//string ticker = cmap.at(e[4]);
 		string ticker = e[4];
 		stend_c s;
@@ -79,8 +79,17 @@ int eaug_main()
 	}
 	prin_vecvec(etrans, "\t", "\n", "s3/etrans-aug.dsv");
 
-	// TODO HIGH: output in rec format
-	//strings fieldnames = {"Taxable", 
+	// output in rec format
+	s3("etrans-aug.rec", fname);
+	std::ofstream ofs;
+	ofs.open(fname, std::ofstream::out);
+	for(auto e:etrans) { 
+		for(int i=0 ; i < etrana_fieldnames.size(); i++) {
+			ofs << etrana_fieldnames[i] << ": " ;
+			ofs << e[i] << endl;
+		}
+		ofs << endl;
+	}
 	
 	return EXIT_SUCCESS;
 }
