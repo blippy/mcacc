@@ -2,7 +2,8 @@ bin_PROGRAMS = mcacc
 mcacc_SOURCES = common.cc epics.cc etb.cc \
 		etrans-aug.cc \
 		mcacc.cc \
-		parse.cc posts.cc stend.cc types.cc \
+		parse.cc posts.cc \
+		reusable.cc stend.cc types.cc \
 		autotypes.cc
 BUILT_SOURCES = autotypes.cc autotypes.h
 CLEANFILES = $(BUILT_SOURCES)

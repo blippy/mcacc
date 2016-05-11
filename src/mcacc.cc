@@ -15,6 +15,7 @@
 
 #include "common.h"
 #include "parse.h"
+#include "reusable.h"
 #include "autotypes.h"
 
 using std::cerr;
@@ -22,48 +23,9 @@ using std::cout;
 using std::endl;
 using std::function;
 using std::string;
-//using std::tuple;
 using std::vector;
 
 
-
-/*
-#include <fstream>
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <set>
-#include <vector>
-
-#include "common.h"
-#include "parse.h"
-
-using namespace std;
-*/
-
-/*
-void info(string msg)
-{
-	printf("INFO: mca-yproc: ");
-	cout <<  msg;
-}
-*/
-
-// TODO promote
-bool file_exists(string filename)
-{
-	return ( access( filename.c_str(), F_OK ) != -1 );
-}
-// TODO promote to parse.cc
-string slurp(const char *filename)
-{
-	ifstream in;
-	in.open(filename, ifstream::in);
-	stringstream sstr;
-	sstr << in.rdbuf();
-	in.close();
-    	return sstr.str();
-}
 
 
 bool operator<(const etrana& lhs, const etrana& rhs)
