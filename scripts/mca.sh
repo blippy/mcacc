@@ -44,17 +44,19 @@ stage3 () {
 	rm -f s3/*
 	
 	# perform processing of yahoos
-	mcacc yproc
-	mcacc stend
-	mcacc eaug
+	#mcacc yproc
+	#mcacc stend
+	#mcacc eaug
 
 	# additional processing
-	mcacc posts
-	mcacc etb
+	#mcacc posts
+	#mcacc etb
 
 	# make reports
-	mcacc epics
-	mcacc cgt
+	#mcacc epics
+	#mcacc cgt
+
+	mcacc stage3a
 	cd $s3
 	financials.sh
 	cd -

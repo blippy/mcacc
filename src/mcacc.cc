@@ -215,18 +215,33 @@ void cgt()
 	cout << "TODO: cgt - pending something interesting to report" << endl;
 }
 
+void stage3a()
+{
+	yproc_main();
+	stend_main();
+	eaug_main();
+	posts_main();
+	etb_main();
+	epics_main();
+	cgt();
+}
+
 // command dispatch table
 // TODO why not a map?
 typedef struct dte { string cmd ; function<void()> fn ; } dte;
 const auto ditab = vector<dte> {
-	{"cgt" , cgt },
+	//{"cgt" , cgt },
 	{"dsv", dsv_extract},
+		/*
 	{"eaug", eaug_main},
 	{"epics", epics_main},
 	{"etb", etb_main},
 	{"posts", posts_main},
 	{"stend", stend_main},
 	{"yproc", yproc_main}
+	*/
+
+	{"stage3a", stage3a}
 };
 
 void dispatch(string cmd)
