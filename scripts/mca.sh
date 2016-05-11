@@ -9,9 +9,9 @@ cd $w
 
 clean () { # stage 0
 	mkdir -p ~/.mca/{text,yahoo,work/{s1,s2,s3}}
-	cp ~/repos/mca/mca.htm ~/.mca
-	rm -f *rec *txt all.txt *.dsv *.rep *~ *.csv *.sc
-	rm -f dsv endpoint
+	cp ~/repos/mcacc/mca.htm ~/.mca
+	#rm -f *rec *txt all.txt *.dsv *.rep *~ *.csv *.sc
+	#rm -f dsv endpoint
 	rm -f $s1/* $s2/* $s3/*
 }
 
