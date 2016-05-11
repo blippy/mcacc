@@ -41,39 +41,17 @@ void scan_cache(vecvec_t &yahoos)
 		if(dname == "." || dname == "..") continue;
 		int pos = dname.size() -4 ;
 		if(pos <0) continue;
-		//if(dname.size() >=4 && dname.stubstr(dname
-		//cout << dname.substr(pos) << endl;
 		filenames.insert(dname);
-		//cout << dp->d_name << endl;
 	}
 	closedir(dirp);
 
 
-//	for(auto& p: fs::directory_iterator("/home/mcarter/.mca/yahoo")) {
-//		std::cout << pp << '\n';
-//	}
-
-	//exit(0);
-
-//	glob_t globbuf;
-//	char **p;
-//	int i = glob("~/.mca/yahoo/*.txt", GLOB_TILDE, NULL, &globbuf);
-//	if(i== GLOB_NOMATCH) goto cleanup;
-//	assert(i ==0);
-
-
-//	p = globbuf.gl_pathv;
 	for(auto& f: filenames) {
-//	while(*p) {
-//		vecvec_t vecs = vecvec(*p);
 		string full = ydir + "/" + f;
 		vecvec_t vecs = vecvec( full);		
 		for(auto &v : vecs) { v.erase(v.begin(), v.begin()+1); }
 		yahoos.insert(yahoos.end(), vecs.begin(), vecs.end());
-//		p++;
 	}
-//cleanup:
-//	globfree(&globbuf);
 
 }
 
@@ -94,7 +72,6 @@ void scan_inputs(vecvec_t &yahoos)
 		double cost = stod(e[6]);
 		double price = cost/qty *100;
 		string pstr = format_num(price, 4);
-		//string ticker = cmap[e[4]];
 		string ticker = e[4];
 		vector<string> v = {dstamp, tstamp, ticker, "1.0000", pstr, "0", "0", "P"};
 		yahoos.push_back(v);
@@ -102,9 +79,9 @@ void scan_inputs(vecvec_t &yahoos)
 	
 }
 
+// TODO use tie
 bool ysorter(vector<string> a, vector<string> b)
 {
-	//return (a[0] < b[0]); // && a[1] < b[1] && a[2] < b[2]);
 	if(a[0] != b[0]) return a[0] < b[0];
 	if(a[1] != b[1]) return a[1] < b[1];
 	return a[2] < b[2];
@@ -134,7 +111,6 @@ void output(vecvec_t tbl)
 
 	string start_date, end_date;
 	get_period(start_date, end_date); 
-	//cout << "Start: " << start_date << ", End: " << end_date << endl ;
 	string yr0  = "0000-00-00";
 	string p0  = "0.00";
 	string start_dstamp = yr0;
@@ -143,12 +119,10 @@ void output(vecvec_t tbl)
 	string end_price = p0;
 	string cur_sym = "";
 
-	//vecvec_t &tbl = yahoos;
 	for(int i =0 ; i< tbl.size(); i++) {
 		if(i==0 || tbl[i-1][0] != tbl[i][0]) {
 			//begin group
 			cur_sym = tbl[i][0];
-			//cout << "start " << cur_sym << endl ;
 			start_dstamp = yr0;
 			start_price = p0;
 			end_dstamp = yr0;

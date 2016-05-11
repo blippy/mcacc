@@ -227,7 +227,6 @@ void stage3a()
 }
 
 // command dispatch table
-// TODO why not a map?
 typedef struct dte { string cmd ; function<void()> fn ; } dte;
 const auto ditab = vector<dte> {
 	//{"cgt" , cgt },
