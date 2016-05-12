@@ -21,6 +21,7 @@ OUT: s3/stend.dsv
 #include "common.h"
 #include "parse.h"
 #include "types.h"
+#include "reusable.h"
 
 //namespace fs = std::filesystem;
 

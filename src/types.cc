@@ -10,37 +10,8 @@
 
 #include "common.h"
 #include "types.h"
+#include "reusable.h"
 
-// pad right to n characters
-string pright(string s, int n)
-{
-	string res = s;
-	for(int i = 0; i < n-s.size(); i++) res += " ";
-	return res;
-}
-
-string pleft(string s, int n)
-{
-	string res = "";
-	for(int i=0; i< n- s.size(); i++) { res += " "; }
-	res += s;
-	return res;
-}
-/** format a double N as a string to DP decimal places
- *TODO - document this, as it is very useful
- Includes required are #include <sstream> [sic]
- * */
-string format_num(double n, int dp)
-{
-	//string s;
-	std::ostringstream s;
-	s.precision(dp);
-	s << std::fixed;
-	//ostr << setprecision(dp) << n;
-	s <<  n;
-	//cout << "format_num called" << endl;
-	return s.str();
-}
 
 double enpennies(std::string s, bool round)	
 {
@@ -51,24 +22,18 @@ double enpennies(std::string s, bool round)
 string to_gbx(pennies_t p)
 {
 	string s1 =format_num(p, 2);
-	string s2 = pleft(s1, 12);
+	string s2 = pad_left(s1, 12);
 	return s2 ;
 }
 
 string to_gbp(pennies_t p) { return to_gbx(p/100.0); }
 
 
-string char_times(char c, int num) 
-{
-	string res = "";
-	for(int i=0; i<num; i++) res += c;
-	return res;
-}
-string pad_ticker(string ticker) { return pright(ticker, 7); }
-string pad_ticker(char c) { return char_times(c, 7);}
+string pad_ticker(string ticker) { return pad_right(ticker, 7); }
+string pad_ticker(char c) { return nchars(c, 7);}
 
-string pad_gbp(char c) { return char_times(c, 12);}
-string pad_gbp(string s) { return pleft(s, 12); }
+string pad_gbp(char c) { return nchars(c, 12);}
+string pad_gbp(string s) { return pad_left(s, 12); }
 
 string ret_str(double r)
 {
@@ -79,8 +44,8 @@ string ret_str(double r)
 
 
 string ret_str(double num, double denom) {  return ret_str(num/denom*100-100); }
-string ret_str(char c) { return char_times(c, 6); }
-string ret_str(string s) { return pleft(s, 6); }
+string ret_str(char c) { return nchars(c, 6); }
+string ret_str(string s) { return pad_left(s, 6); }
 
 
 void print_strings(ostream &ost, const strings &strs)
@@ -89,42 +54,6 @@ void print_strings(ostream &ost, const strings &strs)
 	ost << line << endl;
 }
 
-
-
-
-/*
-void etrana::from_vec(std::vector<std::string> &row)
-{
-	taxable = row[0] == "T";
-	dstamp = row[1];
-	buy = row[2] == "B";
-	folio = row[3];
-	sym = row[4];
-	qty = stod(row[5]);
-	cost = stod(row[6]);
-	ucost = stod(row[7]);
-	ticker = row[8];
-	start_dstamp = row[9];
-	start_price = stod(row[10]);
-	end_dstamp = row[11];
-	end_price = stod(row[12]);
-	prior_year_profit = stod(row[13]);
-	vbefore = stod(row[14]);
-	flow = stod(row[15]);
-	profit = stod(row[16]);
-	vto = stod(row[17]);
-	//cout << "*"  << cost << endl ;
-
-}
-*/
-
-
-/*
-bool etrana::operator<(const etrana& rhs)
-{
-	return std::tie(sym, dstamp) < std::tie(rhs.sym, rhs.dstamp);
-}
-*/
 
 void stend_c::from_vec(strings &row)
 {

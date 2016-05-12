@@ -23,3 +23,36 @@ string slurp(const char *filename)
     	return sstr.str();
 }
 
+string nchars(char c, int num) 
+{
+	string res = "";
+	for(int i=0; i<num; i++) res += c;
+	return res;
+}
+// pad right to n characters
+string pad_right(string s, int n) { return s + nchars(' ', n - s.size()); }
+/*{
+	string res = s;
+	for(int i = 0; i < n-s.size(); i++) res += " ";
+	return res;
+}*/
+
+string pad_left(string s, int n) { return nchars(' ', n-s.size()); }
+/*{
+	string res = "";
+	for(int i=0; i< n- s.size(); i++) { res += " "; }
+	res += s;
+	return res;
+}*/
+/** format a double N as a string to DP decimal places
+ Includes required are #include <sstream> [sic]
+ * */
+string format_num(double n, int dp)
+{
+	std::ostringstream s;
+	s.precision(dp);
+	s << std::fixed;
+	s <<  n;
+	return s.str();
+}
+

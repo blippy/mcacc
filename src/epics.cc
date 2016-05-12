@@ -9,8 +9,7 @@
 
 #include "common.h"
 #include "autotypes.h"
-//#include "vitag.h"
-
+#include "reusable.h"
 
 void underline(ostream &ost, char c)
 { 
@@ -82,14 +81,14 @@ void process_folio(folio &f, set<string> &epic_names, etranas_t &es, ostream &eo
 		//vector<string> fields = intersperse " " { k, to_gbp(ucost), to_gbp(uvalue), to_gbp(tcost), to_gbp(value) };
 		//cout << k << "\t" << tqty <<"\t" << ucost << "\t" << uvalue << "\t" << tcost << "\t" << value <<endl;
 
-		fields = {pright(k, 7), to_gbp(tcost), to_gbp(value) , ret_str(value, tcost), 
+		fields = {pad_right(k, 7), to_gbp(tcost), to_gbp(value) , ret_str(value, tcost), 
 			to_gbx(tqty), to_gbx(ucost), to_gbx(uvalue)};
 		print_strings(eout, fields);
 		grand_cost += tcost;
 		grand_value += value;
 
 	}
-	fields = {pright("Grand:", 7), to_gbp(grand_cost), to_gbp(grand_value), ret_str(grand_value, grand_cost), 
+	fields = {pad_right("Grand:", 7), to_gbp(grand_cost), to_gbp(grand_value), ret_str(grand_value, grand_cost), 
 		pad_gbp(' '), pad_gbp(' '), pad_gbp(' ') };
 	print_strings(eout, fields);
 	eout << endl;
@@ -99,7 +98,7 @@ void process_folio(folio &f, set<string> &epic_names, etranas_t &es, ostream &eo
 		eout << "Zeros:" << endl;
 		int i = 0;
 		for(auto z :zeros) {
-			eout << pright(z, 8) ;
+			eout << pad_right(z, 8) ;
 			i++;
 			if(i%10 == 0) eout << endl;
 		}
