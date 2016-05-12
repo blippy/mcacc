@@ -37,7 +37,7 @@ string pad_right(string s, int n) { return s + nchars(' ', n - s.size()); }
 	return res;
 }*/
 
-string pad_left(string s, int n) { return nchars(' ', n-s.size()); }
+string pad_left(string s, int n) { return nchars(' ', n-s.size()) + s; }
 /*{
 	string res = "";
 	for(int i=0; i< n- s.size(); i++) { res += " "; }
