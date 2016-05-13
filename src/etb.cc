@@ -15,11 +15,6 @@ OUT: accs.rep etb.rep
 #include "common.h"
 #include "parse.h"
 #include "types.h"
-//#include "vitag.h"
-
-//using namespace std;
-
-
 
 msvs_t mkmap(const char *filename, int k)
 {
@@ -71,7 +66,7 @@ int etb_main()
 			aout << setw(7) << p[0];
 			aout << setw(11) << p[1];
 			aout << setw(7) << p[2];
-			aout << setw(30) << p[5];
+			aout << setw(30) << p[4];
 			int pennies = stoi(p[3]);
 			aout << fixed << setw(12) << setprecision(2) << (double(pennies) /100);
 			total += pennies;
@@ -83,7 +78,6 @@ int etb_main()
 
 			eout << k << "\t" ;
 			eout << fixed <<  setprecision(2) << (double(total) /100);
-			//std::vector <std::string> n = nacc_map[k];
 			strings n;
 			try {
 				n = nacc_map.at(k);

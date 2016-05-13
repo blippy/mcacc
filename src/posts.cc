@@ -41,8 +41,7 @@ int posts_main()
 		auto push = [ &e = e, &ps1 = ps1](string acc, string str, int amount) {
 			strings p;
 			if(amount == 0) return;
-			p = {acc, e.dstamp, str, to_string(amount),
-				"C", str + ":" + e.sym};
+			p = {acc, e.dstamp, str, to_string(amount), str + ":" + e.sym};
 			ps1.push_back(p);
 		};
 
