@@ -28,12 +28,3 @@ vecvec_t read_registered_dsv(dsv_e dsv)
 	return rows;
 }
 
-string interspersing(string inter, vector<string> strings)
-{
-	string res = "";
-	for(auto it = strings.begin(); it != strings.end(); it++) {
-		res += *it;
-		if(it< strings.end()-1) res += inter;
-	}
-	return res;
-}

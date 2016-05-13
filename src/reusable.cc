@@ -31,19 +31,9 @@ string nchars(char c, int num)
 }
 // pad right to n characters
 string pad_right(string s, int n) { return s + nchars(' ', n - s.size()); }
-/*{
-	string res = s;
-	for(int i = 0; i < n-s.size(); i++) res += " ";
-	return res;
-}*/
 
 string pad_left(string s, int n) { return nchars(' ', n-s.size()) + s; }
-/*{
-	string res = "";
-	for(int i=0; i< n- s.size(); i++) { res += " "; }
-	res += s;
-	return res;
-}*/
+
 /** format a double N as a string to DP decimal places
  Includes required are #include <sstream> [sic]
  * */
@@ -56,3 +46,12 @@ string format_num(double n, int dp)
 	return s.str();
 }
 
+std::string intercalate(std::string inter, std::vector<std::string> strings)
+{
+	string res = "";
+	for(auto it = strings.begin(); it != strings.end(); it++) {
+		res += *it;
+		if(it< strings.end()-1) res += inter;
+	}
+	return res;
+}

@@ -20,7 +20,6 @@ enum dsv_e { etransa };
 
 vecvec_t read_registered_dsv(dsv_e dsv);
 
-string interspersing(string inter, vector<string> strings);
 
 int eaug_main();
 //int dsv_main();

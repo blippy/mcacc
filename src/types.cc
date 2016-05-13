@@ -50,7 +50,7 @@ string ret_str(string s) { return pad_left(s, 6); }
 
 void print_strings(ostream &ost, const strings &strs)
 {
-	auto line = interspersing(" ", strs);
+	auto line = intercalate(" ", strs);
 	ost << line << endl;
 }
 

@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
 
 #include "common.h"
 #include "autotypes.h"
+#include "reusable.h"
 
 using std::string;
 using std::vector;
@@ -17,20 +19,23 @@ int posts_main()
 	s1("ntran.dsv", fname);
 	auto ns = vecvec(fname);
 	for(auto n:ns) {
+		if(n.size() != 5) { 
+			string msg("posts_main(): Expected 5 arguments in: ");
+			msg += "{" + intercalate(", ", n) + "}";
+			throw std::range_error(msg); 
+		}
 		int  amount = enpennies(n[3], true);
 		if(amount ==0) continue;
 		string amountstr = to_string(amount);
-		ps1.push_back({n[1], n[0], n[2], amountstr, n[4], n[5]});
+		ps1.push_back({n[1], n[0], n[2], amountstr, n[4]});
 		amountstr = to_string(-amount);
-		ps1.push_back({n[2], n[0], n[1], amountstr, n[4], n[5]});
+		ps1.push_back({n[2], n[0], n[1], amountstr, n[4]});
 	}
 
-	//s3("etrans-aug.dsv", fname);
 	etranas_t es = load_etranas();
 	for(auto e: es) {
 		string folio = e.folio;
 		string sym = e.sym;
-		//vector<string> p;
 		strings p;
 
 		auto push = [ &e = e, &ps1 = ps1](string acc, string str, int amount) {
@@ -41,20 +46,10 @@ int posts_main()
 			ps1.push_back(p);
 		};
 
-		//string amount = to_string(-e.cost);
-		//p = {folio, e.dstamp, "pCost", amount, "C", "pCost:", sym};
-		//ps1.push_back(p);
 		push(folio, "pCost", -e.cost);
-
-		//amount = to_string(e.to);
-		//p = {folio + "_c", e.dstamp, "pVcd", amount, "C", "pVcd:", sym};
-		//ps1.push_back(p);
 		push(folio + "_c", "pVcd", e.vto);
 		push(folio + "_g", "pPdp", -e.profit);
 		push("opn", "pbd", -e.prior_year_profit);
-
-		//amount = to_string(e.p
-
 	}
 
 	std::sort(ps1.begin(), ps1.end());
