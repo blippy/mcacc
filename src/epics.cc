@@ -14,8 +14,6 @@
 void underline(ostream &ost, char c)
 { 
 	auto fields = strings {pad_ticker(c), pad_gbp(c), pad_gbp(c), pad_gbp(c), pad_gbp(c), ret_str(c) };
-	//auto line = interspersing(" ", fields);
-	//ost << line << endl;
 	print_strings(ost, fields);
 }
 struct folio {
@@ -59,7 +57,6 @@ void process_folio(folio &f, set<string> &epic_names, etranas_t &es, ostream &eo
 			switch(f.ftype) {
 				case 0: match = match && (e.folio == f.name); break;
 				case 1: match = match && (e.folio != "ut"); break;
-					//case 2: match = true;
 			}
 			if(!match) continue;
 
@@ -67,7 +64,6 @@ void process_folio(folio &f, set<string> &epic_names, etranas_t &es, ostream &eo
 			if(e.buy) {tqty += e.qty; tcost += e.cost;}
 			else { double ucost = tcost/tqty; tqty += e.qty; tcost += ucost * e.qty;}
 
-			//cout << e.end_dstamp <<endl;
 			vbefore += e.vbefore;
 			vflow += e.flow;
 			vprofit += e.profit;
@@ -75,11 +71,8 @@ void process_folio(folio &f, set<string> &epic_names, etranas_t &es, ostream &eo
 		}
 
 		if(tqty == 0) { zeros.insert(k) ; continue; }
-		//tcost /= 100;
 		double ucost = tcost/tqty;
 		double value = uvalue * tqty;
-		//vector<string> fields = intersperse " " { k, to_gbp(ucost), to_gbp(uvalue), to_gbp(tcost), to_gbp(value) };
-		//cout << k << "\t" << tqty <<"\t" << ucost << "\t" << uvalue << "\t" << tcost << "\t" << value <<endl;
 
 		fields = {pad_right(k, 7), to_gbp(tcost), to_gbp(value) , ret_str(value, tcost), 
 			to_gbx(tqty), to_gbx(ucost), to_gbx(uvalue)};
@@ -152,10 +145,7 @@ int epics_main()
 		pad_gbp("VTO"), ret_str("VRET")};
 	print_strings(pout, fields);
 
-	for(auto f:folios){
-		//cout << f.name << endl;
-		process_folio(f, keys, es, eout, pout);
-	}
+	for(auto f:folios){ process_folio(f, keys, es, eout, pout); }
 
 	print_indices(pout);
 
