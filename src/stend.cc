@@ -80,19 +80,15 @@ void scan_inputs(vecvec_t &yahoos)
 	
 }
 
-// TODO use tie
 bool ysorter(vector<string> a, vector<string> b)
 {
-	if(a[0] != b[0]) return a[0] < b[0];
-	if(a[1] != b[1]) return a[1] < b[1];
-	return a[2] < b[2];
+	return std::tie(a[0], a[1], a[2]) < std::tie(b[0], b[1], b[2]);
 }
 
 void reorder(vecvec_t &yahoos)
 {
 	// ticker belongs at the beginning
 	for(auto &y :yahoos) {
-		//auto y0 = y;
 		string ticker = y[2];
 		y.erase( y.begin()+2, y.begin()+3);
 		y.insert(y.begin(), ticker);
