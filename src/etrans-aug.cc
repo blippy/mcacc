@@ -77,7 +77,9 @@ int eaug_main()
 	
 		
 	}
-	prin_vecvec(etrans, "\t", "\n", "s3/etrans-aug.dsv");
+
+	s3("etrans-aug.dsv", fname);
+	prin_vecvec(etrans, "\t", "\n", fname.c_str());
 
 	// output in rec format
 	s3("etrans-aug.rec", fname);

@@ -23,8 +23,8 @@ stage1 () {
 		cat $fname
 		echo # take care of file without line end
 	done < <(ls ~/.mca/inputs/*.txt) | dos2unix | mcacc dsv
-	echo `date` > 1
-	cd -
+	#echo `date` > 1
+	#cd -
 }
 
 download=0
@@ -42,19 +42,6 @@ stage2 () {
 
 stage3 () {
 	rm -f s3/*
-	
-	# perform processing of yahoos
-	#mcacc yproc
-	#mcacc stend
-	#mcacc eaug
-
-	# additional processing
-	#mcacc posts
-	#mcacc etb
-
-	# make reports
-	#mcacc epics
-	#mcacc cgt
 
 	mcacc stage3a
 	cd $s3
