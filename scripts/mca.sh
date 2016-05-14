@@ -10,8 +10,6 @@ cd $w
 clean () { # stage 0
 	mkdir -p ~/.mca/{text,yahoo,work/{s1,s2,s3}}
 	cp ~/repos/mcacc/mca.htm ~/.mca
-	#rm -f *rec *txt all.txt *.dsv *.rep *~ *.csv *.sc
-	#rm -f dsv endpoint
 	rm -f $s1/* $s2/* $s3/*
 }
 
@@ -44,9 +42,9 @@ stage3 () {
 	rm -f s3/*
 
 	mcacc stage3a
-	cd $s3
+	#cd $s3
 	financials.sh
-	cd -
+	#cd -
 	returns.sh
 	snap.sh
 	if [[ "$download" == "1" ]]; then cat $s3/snap.rep ; fi
