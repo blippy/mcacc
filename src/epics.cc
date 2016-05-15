@@ -32,7 +32,7 @@ vector<folio> folios = {
 	{"total", 2}
 };
 
-void process_folio(folio &f, set<string> &epic_names, etranas_t &es, ostream &eout, ostream &pout)
+void process_folio(folio &f, set<string> &epic_names, const etranas_t& es, ostream &eout, ostream &pout)
 {
 	eout << f.name << endl;
 	set<string> zeros;
@@ -125,9 +125,9 @@ void print_indices(ostream &pout)
 		print_strings(pout, fields);
 	}
 }
-int epics_main()
+int epics_main(const etranas_t& es)
 {
-	etranas_t es = load_etranas();
+	//etranas_t es = load_etranas();
 	assert(std::is_sorted(es.begin(), es.end()));
 
 	set<string> keys;

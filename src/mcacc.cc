@@ -192,15 +192,12 @@ int dsv_extract()
 
 
 
-void cgt()
+void cgt(const etranas_t& es)
 {
 	cout << "mcacc cgt" << endl;
 
-	// TODO allow possibility of passing in
-	etranas_t es = load_etranas(); 
 	string start_date, end_date;
 	get_period(start_date, end_date);
-	//cout << start_date << endl;
 	
 	std::set<string> tickers;
 	for(auto e: es) {
@@ -220,26 +217,20 @@ void stage3a()
 	yproc_main();
 	stend_main();
 	eaug_main();
-	posts_main();
+
+	// TODO this shoould be able to be passed in from eaug. Check ordering, though
+	etranas_t es = load_etranas();
+
+	posts_main(es);
 	etb_main();
-	epics_main();
-	cgt();
+	epics_main(es);
+	cgt(es);
 }
 
 // command dispatch table
 typedef struct dte { string cmd ; function<void()> fn ; } dte;
 const auto ditab = vector<dte> {
-	//{"cgt" , cgt },
 	{"dsv", dsv_extract},
-		/*
-	{"eaug", eaug_main},
-	{"epics", epics_main},
-	{"etb", etb_main},
-	{"posts", posts_main},
-	{"stend", stend_main},
-	{"yproc", yproc_main}
-	*/
-
 	{"stage3a", stage3a}
 };
 
@@ -259,7 +250,6 @@ int main(int argc, char *argv[])
 	if(argc>1) {
 		string cmd;
 	       	cmd = argv[1];
-		//cout << "Command is: " << cmd << endl;
 		dispatch(cmd);
 
 	} else {

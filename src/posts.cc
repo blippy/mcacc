@@ -11,7 +11,7 @@
 using std::string;
 using std::vector;
 
-int posts_main()
+int posts_main(const etranas_t& es)
 {
 	vecvec_t ps1; 
 
@@ -32,7 +32,7 @@ int posts_main()
 		ps1.push_back({n[2], n[0], n[1], amountstr, n[4]});
 	}
 
-	etranas_t es = load_etranas();
+	//etranas_t es = load_etranas();
 	for(auto e: es) {
 		string folio = e.folio;
 		string sym = e.sym;

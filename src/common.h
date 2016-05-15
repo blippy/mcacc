@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "parse.h"
+#include "autotypes.h"
 
 // create a filename that is based in the stage N directory
 void sn(int n, const char *name, std::string &outname);
@@ -22,10 +23,9 @@ vecvec_t read_registered_dsv(dsv_e dsv);
 
 
 int eaug_main();
-//int dsv_main();
-int epics_main();
+int epics_main(const etranas_t& es);
 int etb_main();
-int posts_main();
+int posts_main(const etranas_t& es);
 int stend_main();
 int yproc_main();
 
