@@ -55,6 +55,21 @@ void print_strings(ostream &ost, const strings &strs)
 }
 
 
+
+PeriodTiming period::when (const std::string &dstamp) const
+{
+	if(dstamp < start_date) return perBefore;
+	if(dstamp > end_date) return perAfter;
+	return perDuring;
+}
+
+bool period::during(const std::string &dstamp) const
+{
+	return when(dstamp) == perDuring;
+}
+
+
+
 void stend_c::from_vec(strings &row)
 {
 	ticker = row[0];

@@ -37,8 +37,8 @@ void prin_msvs(msvs_t &m)
 
 int etb_main()
 {
-	std::string start_date, end_date;
-        get_period(start_date, end_date);
+	//std::string start_date, end_date;
+        //get_period(start_date, end_date);
 
 	std::string fname;
 	s3("posts.dsv", fname);

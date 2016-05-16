@@ -46,6 +46,8 @@ puth "
 #define AUTOTYPES_H
 $warning
 
+#include <string>
+#include <vector>
 #include \"types.h\"
 
 typedef struct etrana {"
@@ -53,18 +55,17 @@ typedef struct etrana {"
 
 foreach row $struct {
 	lassign $row type name conv
+	if { $type == "string" } { set type "std::string" }
 	puth "\t$type\t$name;"
 }
 
 puth "} etrana ;
 
 bool operator<(const etrana& lhs, const etrana& rhs);
-//bool operator<(const etrana& rhs);
-//void from_vec(std::vector<std::string> &row);
 
 void convert(const strings &str, etrana& e);
 bool same_ticker(etrana a, etrana b);
-typedef vector<etrana> etranas_t;
+typedef std::vector<etrana> etranas_t;
 etranas_t load_etranas();
 extern strings etrana_fieldnames;
 
@@ -102,6 +103,7 @@ foreach row $struct {
 		default { set converter "*** ERROR" }
 	}
 
+	if { $name == "string" } { set name "std::string"  }
 	putcc "\te.$name\t= $converter;"
 	incr i
 }

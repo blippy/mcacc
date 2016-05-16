@@ -78,25 +78,25 @@ fin:
 }
 
 
-void get_period(string &start, string &end)
+period get_period()
 {
+	period p;
 	string fname;
 	s1("period.dsv", fname);
-	//fin.open("s1/period.dsv", ifstream::in);
 	string line;
 
-	start = "0000-01-01";
-	end   = "3000-12-31";
+	//start = "0000-01-01";
+	//end   = "3000-12-31";
 	ifstream fin;
 	fin.open(fname, ifstream::in);
 	while(getline(fin, line)) {
 		vector<string> fields = tokenize_line(line);
-		start = fields[0];
-		end = fields[1];
+		p.start_date = fields[0];
+		p.end_date = fields[1];
 	}
 	fin.close();
 
-	//cerr << start << " " << end << endl ;
+	return p;
 }
 
 

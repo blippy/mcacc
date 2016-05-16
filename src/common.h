@@ -22,11 +22,11 @@ enum dsv_e { etransa };
 vecvec_t read_registered_dsv(dsv_e dsv);
 
 
-int eaug_main();
+int eaug_main(const period& p);
 int epics_main(const etranas_t& es);
 int etb_main();
 int posts_main(const etranas_t& es);
-int stend_main();
+int stend_main(const period& p);
 int yproc_main();
 
 #endif

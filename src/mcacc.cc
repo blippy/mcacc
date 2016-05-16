@@ -192,18 +192,16 @@ int dsv_extract()
 
 
 
-void cgt(const etranas_t& es)
+void cgt(const etranas_t& es, const period &per)
 {
 	cout << "mcacc cgt" << endl;
 
-	string start_date, end_date;
-	get_period(start_date, end_date);
+	//string start_date, end_date;
+	//get_period(start_date, end_date);
 	
 	std::set<string> tickers;
 	for(auto e: es) {
-		bool during =  start_date  <= e.dstamp && e.dstamp <=  end_date; // TODO promote to etrana
-		//if(during && ! e.buy) cout << "+ " << e.ticker << " " << e.qty << endl;
-		if(e.taxable && during && ! e.buy) tickers.insert(e.ticker);
+		if(e.taxable && per.during(e.dstamp)  && ! e.buy) tickers.insert(e.ticker);
 	}
 
 	for(auto & t: tickers) {
@@ -215,8 +213,11 @@ void cgt(const etranas_t& es)
 void stage3a()
 {
 	yproc_main();
-	stend_main();
-	eaug_main();
+
+	period p = get_period();
+
+	stend_main(p);
+	eaug_main(p);
 
 	// TODO this shoould be able to be passed in from eaug. Check ordering, though
 	etranas_t es = load_etranas();
@@ -224,7 +225,7 @@ void stage3a()
 	posts_main(es);
 	etb_main();
 	epics_main(es);
-	cgt(es);
+	cgt(es, p);
 }
 
 // command dispatch table

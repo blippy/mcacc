@@ -97,7 +97,7 @@ void reorder(vecvec_t &yahoos)
 	sort(yahoos.begin(), yahoos.end(), ysorter);
 }
 	
-void output(vecvec_t tbl)
+void output(vecvec_t tbl, const period& per)
 {
 
 	ofstream fout;
@@ -106,8 +106,8 @@ void output(vecvec_t tbl)
 	fout.open(fname);
 	std::string line;
 
-	string start_date, end_date;
-	get_period(start_date, end_date); 
+	//string start_date, end_date;
+	//get_period(start_date, end_date); 
 	string yr0  = "0000-00-00";
 	string p0  = "0.00";
 	string start_dstamp = yr0;
@@ -129,8 +129,12 @@ void output(vecvec_t tbl)
 		// normal
 		string dstamp = tbl[i][1];
 		string price  = tbl[i][4];
-		if(dstamp < start_date) { start_dstamp = dstamp ; start_price = price;}
-		if(dstamp <= end_date) { end_dstamp = dstamp ; end_price = price;}	
+
+		//if(dstamp < start_date) { start_dstamp = dstamp ; start_price = price;}
+		//if(dstamp <= end_date) { end_dstamp = dstamp ; end_price = price;}	
+		PeriodTiming pt = per.when(dstamp);
+		if(pt == perBefore) { start_dstamp = dstamp ; start_price = price;}
+		if(pt != perAfter)  { end_dstamp = dstamp ; end_price = price;}
 
 		// end of group
 		if(i +1 == tbl.size() || tbl[i+1][0] != tbl[i][0]) {
@@ -144,7 +148,7 @@ void output(vecvec_t tbl)
 	fout.close();
 }
 
-int stend_main()
+int stend_main(const period& per)
 {
 	//cout << "TODO: stend: utilise etran-generated prices" << endl;
 	vecvec_t yahoos;
@@ -152,6 +156,6 @@ int stend_main()
 	scan_inputs(yahoos);
 	reorder(yahoos);
 	//prin_vecvec(yahoos);
-	output(yahoos);
+	output(yahoos, per);
 	return EXIT_SUCCESS;
 }

@@ -17,11 +17,11 @@ void pbdais(vector<string> &v, double d)
 	v.push_back(to_intstring(d));
 }
 
-int eaug_main()
+int eaug_main(const period &per)
 {
 	string fname;
-	string start_date, end_date;
-	get_period(start_date, end_date);
+	//string start_date, end_date;
+	//get_period(start_date, end_date);
 
 
 	stends_t stends = load_stends();
@@ -57,6 +57,7 @@ int eaug_main()
 		double cost = bround(100.0* sgn * stod(e[6]));
 		e[6] = to_intstring(cost); // replace it with signed pennies
 
+		/*
 		double vflow = (dstamp >= start_date && dstamp <= end_date) ?
 			cost : 0;
 		double vbefore =0, profit_bd = 0;
@@ -66,6 +67,25 @@ int eaug_main()
 		}
 
 		double vto = (dstamp <= end_date) ?  bround(qty * s.end_price) : 0;
+		*/
+	
+		double vbefore = 0, vflow = 0, profit_bd = 0;
+		double vto = bround(qty * s.end_price);
+		switch(per.when(dstamp)) {
+			case perBefore:
+				vbefore = bround(qty * s.start_price);
+				profit_bd = vbefore - cost;
+				break;
+			case perDuring:
+				vflow = cost;
+				break;
+			case perAfter:
+				vto = 0;
+		}
+
+
+
+
 		double vprofit = vto - vbefore - vflow;
 
 

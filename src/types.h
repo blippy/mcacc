@@ -7,30 +7,30 @@
 #include <map>
 
 //#include "autotypes.h"
-#include "parse.h"
+//#include "parse.h"
 
 typedef double pennies_t;
 typedef std::vector<std::string> strings;
 
 
-string to_gbp(pennies_t p);
-string to_gbx(pennies_t p);
+std::string to_gbp(pennies_t p);
+std::string to_gbx(pennies_t p);
 
 
 double enpennies(std::string s, bool round = false);
 typedef std::string dstamp_t;
 
-string pad_ticker(string ticker);
-string pad_ticker(char c);
+std::string pad_ticker(std::string ticker);
+std::string pad_ticker(char c);
 
-string pad_gbp(char c); 
-string pad_gbp(string s);
-string ret_str(double r);
-string ret_str(double num, double denom); 
-string ret_str(char c);
-string ret_str(string s);
+std::string pad_gbp(char c); 
+std::string pad_gbp(std::string s);
+std::string ret_str(double r);
+std::string ret_str(double num, double denom); 
+std::string ret_str(char c);
+std::string ret_str(std::string s);
 
-void print_strings(ostream &ost, const strings &strs);
+void print_strings(std::ostream &ost, const strings &strs);
 
 
 
@@ -47,7 +47,17 @@ class stend_c {
 };
 
 
-typedef std::map<string, stend_c> stends_t;
+enum PeriodTiming { perBefore, perDuring, perAfter };
+class period {
+	public:
+		period() {};
+		std::string start_date = "000-01-01";
+		std::string end_date = "3000-12-31";
+		PeriodTiming when(const std::string &dstamp) const;
+		bool during(const std::string &dstamp) const;		
+};
+
+typedef std::map<std::string, stend_c> stends_t;
 stends_t load_stends();
 
 #endif

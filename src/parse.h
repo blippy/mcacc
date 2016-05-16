@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "types.h"
 using namespace std;
 
 
@@ -13,7 +14,9 @@ typedef vector<vector<string> > vecvec_t;
 
 extern const char white[];
 
-void get_period(string &start, string &end);
+//void get_period(string &start, string &end);
+period get_period();
+
 string trim(string &str);
 vector<string> tokenize_line(string &input);
 
