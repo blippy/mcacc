@@ -6,15 +6,12 @@ OUT: s3/stend.dsv
 
 */
 
-//#include <filesystem>
 #include <algorithm>
 #include <stdlib.h>
 #include <fstream>
 #include <iostream> // for ifstream
-//#include <string>
 #include <unordered_map>
 #include <assert.h>
-//#include <glob.h>
 #include <dirent.h>
 #include <set>
 
@@ -106,8 +103,6 @@ void output(vecvec_t tbl, const period& per)
 	fout.open(fname);
 	std::string line;
 
-	//string start_date, end_date;
-	//get_period(start_date, end_date); 
 	string yr0  = "0000-00-00";
 	string p0  = "0.00";
 	string start_dstamp = yr0;
@@ -130,8 +125,6 @@ void output(vecvec_t tbl, const period& per)
 		string dstamp = tbl[i][1];
 		string price  = tbl[i][4];
 
-		//if(dstamp < start_date) { start_dstamp = dstamp ; start_price = price;}
-		//if(dstamp <= end_date) { end_dstamp = dstamp ; end_price = price;}	
 		PeriodTiming pt = per.when(dstamp);
 		if(pt == perBefore) { start_dstamp = dstamp ; start_price = price;}
 		if(pt != perAfter)  { end_dstamp = dstamp ; end_price = price;}
@@ -150,12 +143,11 @@ void output(vecvec_t tbl, const period& per)
 
 int stend_main(const period& per)
 {
-	//cout << "TODO: stend: utilise etran-generated prices" << endl;
+	/* 17-May-2016: I confirm that this uses prices generated from etrans */
 	vecvec_t yahoos;
 	scan_cache(yahoos);
 	scan_inputs(yahoos);
 	reorder(yahoos);
-	//prin_vecvec(yahoos);
 	output(yahoos, per);
 	return EXIT_SUCCESS;
 }
