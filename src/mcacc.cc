@@ -103,7 +103,7 @@ a snapshot of gains
 	for(auto c : comms) { 
 		//cout << c[1];
 		if(c[3] =="USD") {
-			string ticker = c[4];
+			string ticker = c[0];
 			//cout << ticker <<endl;
 			usds.insert(ticker);
 		}
@@ -247,6 +247,8 @@ void dispatch(string cmd)
 
 int main(int argc, char *argv[])
 {
+
+	cout << "Version: " << VERSION << '\n';
 
 	if(argc>1) {
 		string cmd;

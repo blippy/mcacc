@@ -23,7 +23,7 @@ do
 	#echo $URL
 	curl -s -L $URL >> yfetch.csv &
 	#echo $URL >>yftech.csv &
-done < <(awk '$2 == "W" { print $5}' $s1/comm.dsv)
+done < <(awk '$2 == "W" { print $1}' $s1/comm.dsv)
 
 wait
 
