@@ -1,11 +1,4 @@
-divert(-1)
-dnl just define header name
-define(`upcase', `translit(`$*', `a-z', `A-Z')')
-include(nacc.m4)
-define(H_FILE, upcase(defn(`NAME'))`_H')
-define(`NAME_T', `defn(`NAME')_t')
-define(`NAME_S', `defn(`NAME')_ts')
-divert
+include(common.m4)
 `#'ifndef H_FILE
 `#'define H_FILE
 /* This header file was automatically created. Do not edit */
@@ -19,10 +12,16 @@ define(`sfield', `$2 $1;')
 define(`endstruct', `} NAME_T;')
 divert
 
+#include <map>
+#include <string>
+#include <vector>
 
-include(nacc.m4)
+dnl include(nacc.m4)
 
+include(SRC_M4)
+
+CONTAINER
 NAME_S load();
-save(const NAME_S &xs);
+void save(const NAME_S &xs);
 
 `#'endif

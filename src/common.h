@@ -29,4 +29,6 @@ int posts_main(const etranas_t& es);
 int stend_main(const period& p);
 int yproc_main();
 
+void conv(double& d, std::string s);
+void conv(std::string& dest, std::string src);
 #endif

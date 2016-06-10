@@ -1,4 +1,6 @@
 .deps/
 autotypes.cc
 autotypes.h
+nacc.cc
+nacc.hpp
 

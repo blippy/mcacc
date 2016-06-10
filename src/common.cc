@@ -28,3 +28,5 @@ vecvec_t read_registered_dsv(dsv_e dsv)
 	return rows;
 }
 
+void conv(double& d, std::string s) { d = stod(s); }
+void conv(std::string& dest, std::string src) { dest = src; }

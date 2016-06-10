@@ -9,5 +9,6 @@ defstruct
 	sfield(desc, STRING, 20)
 endstruct()
 
-// container type
-typedef std::map<std::string, NAME_T> NAME_S 
+define(`CONTAINER', `typedef std::map<std::string, NAME_T> NAME_S;')
+define(`MAPKEY', `acc')
+
