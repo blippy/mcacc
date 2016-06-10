@@ -248,7 +248,7 @@ void dispatch(string cmd)
 int main(int argc, char *argv[])
 {
 
-	cout << "Version: " << VERSION << '\n';
+	cout << "mcacc " << VERSION << '\n';
 
 	if(argc>1) {
 		string cmd;
