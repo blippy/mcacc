@@ -21,35 +21,23 @@ stage1 () {
 		cat $fname
 		echo # take care of file without line end
 	done < <(ls ~/.mca/inputs/*.txt) | dos2unix | mcacc dsv
-	#echo `date` > 1
-	#cd -
 }
 
 download=0
 
 stage2 () {
-	cd $s2
-	rm -f *
+	rm -f $s2/*
 	mcacc stage2
-	#mca-yfetch.sh
-	#echo -n `date --iso` > dstamp
-	#echo -n `date  +"%H:%M:%S"` >tstamp
-	cd -
 	download=1
-	echo "Finished stage 2"
 }
 
 stage3 () {
 	rm -f s3/*
-
 	mcacc stage3a
-	#cd $s3
 	financials.sh
-	#cd -
 	returns.sh
 	snap.sh
 	if [[ "$download" == "1" ]]; then cat $s3/snap.rep ; fi
-	 
 }
 
 usage () {
