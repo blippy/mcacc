@@ -30,9 +30,10 @@ download=0
 stage2 () {
 	cd $s2
 	rm -f *
-	mca-yfetch.sh
-	echo -n `date --iso` > dstamp
-	echo -n `date  +"%H:%M:%S"` >tstamp
+	mcacc stage2
+	#mca-yfetch.sh
+	#echo -n `date --iso` > dstamp
+	#echo -n `date  +"%H:%M:%S"` >tstamp
 	cd -
 	download=1
 	echo "Finished stage 2"

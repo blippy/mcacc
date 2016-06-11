@@ -21,7 +21,7 @@ dnl include(nacc.m4)
 include(SRC_M4)
 
 CONTAINER
-NAME_S load();
+void load(NAME_S & results);
 void save(const NAME_S &xs);
 
 `#'endif

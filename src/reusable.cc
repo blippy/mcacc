@@ -6,6 +6,7 @@
 
 
 using std::ifstream;
+using std::ofstream;
 using std::stringstream;
 
 bool file_exists(const string& filename)
@@ -21,6 +22,21 @@ string slurp(const char *filename)
 	sstr << in.rdbuf();
 	in.close();
     	return sstr.str();
+}
+
+void spit(const char *filename, const char *content)
+{
+	ofstream out;
+	out.open(filename, ofstream::trunc);
+	out << content;
+	out.close();
+
+}
+
+
+void spit(const std::string& filename, const std::string& content)
+{ 
+	spit(filename.c_str(), content.c_str());
 }
 
 string nchars(char c, int num) 

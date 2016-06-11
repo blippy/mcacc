@@ -1,3 +1,4 @@
+#include <ctime>
 #include <algorithm>
 #include <fstream>
 #include <functional>
@@ -17,6 +18,8 @@
 #include "parse.h"
 #include "reusable.h"
 #include "autotypes.h"
+#include "comm.hpp"
+#include "yahoo.hpp"
 
 using std::cerr;
 using std::cout;
@@ -83,8 +86,45 @@ vecvec_t commasep(string  &filename)
         return res;
 }
 
+template<typename T>
+void print(const vector<T>& vs)
+{
+	for(auto& v: vs) cout << v << "\n" ;
+}
+
+void stage2()
+{
+	comm_ts the_comms;
+	load(the_comms);
+
+	strings tickers;
+	for(auto& cm:the_comms) {
+		auto &c = cm.second;
+		if(c.down == "W") tickers.push_back(c.ticker);
+	}
+
+	string fname;
+	string usd;
+	strings retrs = fetch_tickers(tickers, usd);
+	s2("usd.csv", fname);
+	spit(fname, usd);
+	s2("yfetch.csv", fname);
+	spit(fname, intercalate("", retrs));
+
+
+	std::time_t t = std::time(nullptr);
+	char buffer[80];
+	strftime(buffer, 80, "%Y-%m-%d", std::localtime(&t));
+	s2("dstamp", fname);
+	spit(fname, buffer);
+	strftime(buffer, 80, "%H:%M:%S", std::localtime(&t));
+	s2("tstamp", fname);
+	spit(fname, buffer);
+
+}
+
 bool yorder (vector<string> a, vector<string> b) { return a[0] < b[0];}
-int yproc_main() 
+int yproc_main(const comm_ts & the_comms) 
 {
 
 /*
@@ -95,21 +135,16 @@ NB Further processing will pick up the generated yahoo file from the cache
 (in ~/.mca), but it is still useful to have s3/yproc.dsv for creating
 a snapshot of gains
 */
-	string fname;
 
-	s1("comm.dsv", fname);
-	vecvec_t comms = commasep(fname);
-	set<string> usds; // those comms which are in USD
-	for(auto c : comms) { 
-		//cout << c[1];
-		if(c[3] =="USD") {
-			string ticker = c[0];
-			//cout << ticker <<endl;
-			usds.insert(ticker);
-		}
+
+	set<string> usds; // those comms which are in UDB
+	for(auto &cm: the_comms) {
+		auto & c = cm.second;
+		if(c.unit == "USD") 
+			usds.insert(c.ticker);
 	}
 
-
+	string fname;
 	s2("usd.csv", fname); 
 	if(! file_exists(fname)) {
 		cout << "INFO: yproc_main(): " 
@@ -212,7 +247,9 @@ void cgt(const etranas_t& es, const period &per)
 
 void stage3a()
 {
-	yproc_main();
+	comm_ts the_comms;
+	load(the_comms);
+	yproc_main(the_comms);
 
 	period p = get_period();
 
@@ -232,6 +269,7 @@ void stage3a()
 typedef struct dte { string cmd ; function<void()> fn ; } dte;
 const auto ditab = vector<dte> {
 	{"dsv", dsv_extract},
+	{"stage2", stage2},
 	{"stage3a", stage3a}
 };
 

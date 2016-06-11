@@ -12,18 +12,18 @@ divert
 
 #include <common.h>
 
-NAME_S load()
+void load(NAME_S & results)
 {
-	NAME_S results;
+	//NAME_S results;
 	std::string filename;
 	s1("NAME.dsv", filename);
 	vecvec_t vvs = vecvec(filename);
 	for(auto& vs: vvs) {
 		NAME_T astruct; 
-include(nacc.m4)
+include(SRC_M4)
 		results[astruct.MAPKEY] = astruct;
 	}
-	return results;
+	//return results;
 
 }
 

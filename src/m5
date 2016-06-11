@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+NAME=$1
+m4 -D NAME=$NAME hpp.m4 > $NAME.hpp
+m4 -D NAME=$NAME cc.m4 > $NAME.cc
