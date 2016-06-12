@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <iostream>
 #include <stdlib.h>
 #include <vector>
@@ -6,12 +7,13 @@
 
 #include "common.h"
 #include "autotypes.h"
+#include "nacc.hpp"
 #include "reusable.h"
 
 using std::string;
 using std::vector;
 
-int posts_main(const etranas_t& es)
+int posts_main(const etranas_t& es, const period& per, const nacc_ts& the_naccs)
 {
 	vecvec_t ps1; 
 
@@ -24,16 +26,32 @@ int posts_main(const etranas_t& es)
 			msg += "{" + intercalate(", ", n) + "}";
 			throw std::range_error(msg); 
 		}
+		std::string dstamp = n[0];
+		if(dstamp > per.end_date) {
+			//cout << "Dropping: ";
+			//print(n);
+			continue;
+			assert(false); // we should never get here
+		}
 		int  amount = enpennies(n[3], true);
 		if(amount ==0) continue;
 		string amountstr = to_string(amount);
-		ps1.push_back({n[1], n[0], n[2], amountstr, n[4]});
+
+		std::string dr = n[1];		
+		std::string cr = n[2];
+		if(dstamp < per.start_date) {
+			dr = the_naccs.at(dr).alt;
+			cr = the_naccs.at(cr).alt;
+		}
+		std::string desc = n[4];
+		ps1.push_back({dr, dstamp, cr, amountstr, desc});
 		amountstr = to_string(-amount);
-		ps1.push_back({n[2], n[0], n[1], amountstr, n[4]});
+		ps1.push_back({cr, dstamp, dr, amountstr, desc});
 	}
 
 	//etranas_t es = load_etranas();
 	for(auto e: es) {
+		if(e.dstamp > per.end_date) continue;
 		string folio = e.folio;
 		string sym = e.sym;
 		strings p;

@@ -35,18 +35,16 @@ void prin_msvs(msvs_t &m)
 	}
 }
 
-int etb_main()
+int etb_main(const nacc_ts& the_naccs)
 {
-	//std::string start_date, end_date;
-        //get_period(start_date, end_date);
 
 	std::string fname;
 	s3("posts.dsv", fname);
         vecvec_t posts = vecvec(fname);
 	int total;
 
-	s1("nacc.dsv", fname);
-	msvs_t nacc_map = mkmap(fname, 0);
+	//s1("nacc.dsv", fname);
+	//msvs_t nacc_map = mkmap(fname, 0);
 
 	ofstream aout, eout;
 	s3("accs.rep", fname);
@@ -78,15 +76,16 @@ int etb_main()
 
 			eout << k << "\t" ;
 			eout << fixed <<  setprecision(2) << (double(total) /100);
-			strings n;
 			try {
-				n = nacc_map.at(k);
+				//n = nacc_map.at(k);
+				double scale = the_naccs.at(k).scale;
+				eout << "\t" << scale;
+
 			} catch (std::out_of_range& err) {
 				cerr << "etb_main() couldn't look up key " << k << " in naccs" << endl;
 				throw err;
 			}
 
-			eout << "\t" << n.at(3);
 			eout << endl;
 	}
 	eout.close();

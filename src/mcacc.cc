@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <ctime>
 #include <algorithm>
 #include <fstream>
@@ -19,6 +20,7 @@
 #include "reusable.h"
 #include "autotypes.h"
 #include "comm.hpp"
+#include "nacc.hpp"
 #include "yahoo.hpp"
 
 using std::cerr;
@@ -86,11 +88,13 @@ vecvec_t commasep(string  &filename)
         return res;
 }
 
+/*
 template<typename T>
 void print(const vector<T>& vs)
 {
 	for(auto& v: vs) cout << v << "\n" ;
 }
+*/
 
 void stage2()
 {
@@ -258,9 +262,10 @@ void stage3a()
 
 	// TODO this shoould be able to be passed in from eaug. Check ordering, though
 	etranas_t es = load_etranas();
-
-	posts_main(es);
-	etb_main();
+	nacc_ts the_naccs;
+	load(the_naccs);
+	posts_main(es, p, the_naccs);
+	etb_main(the_naccs);
 	epics_main(es);
 	cgt(es, p);
 }
