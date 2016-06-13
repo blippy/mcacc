@@ -10,6 +10,8 @@
 #include "autotypes.h"
 #include "nacc.hpp"
 
+std::string rootdir();
+std::string workdir();
 // create a filename that is based in the stage N directory
 void sn(int n, const char *name, std::string &outname);
 

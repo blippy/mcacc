@@ -15,6 +15,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "assets.hpp"
 #include "common.h"
 #include "parse.h"
 #include "reusable.h"
@@ -88,13 +89,13 @@ vecvec_t commasep(string  &filename)
         return res;
 }
 
-/*
-template<typename T>
-void print(const vector<T>& vs)
+void stage0()
 {
-	for(auto& v: vs) cout << v << "\n" ;
+	string htm = get_html();
+	string fname = rootdir() + "/mcacc.htm";
+	//cout << fname << "\n" << htm << "\n" ;
+	spit(fname, htm.c_str());
 }
-*/
 
 void stage2()
 {
@@ -203,9 +204,14 @@ a snapshot of gains
 	}
 	yout.close();
 
-	string yout_name = "/home/mcarter/.mca/yahoo/" + dstamp + ".txt";
-	string cmd = string("cp /home/mcarter/.mca/work/s3/yproc.dsv ") + yout_name;
-	system(cmd.c_str());
+	//string yout_name = "/home/mcarter/.mca/yahoo/" + dstamp + ".txt";
+	string yout_name = rootdir() + "/yahoo/" + dstamp + ".txt";
+	//string cmd = string("cp /home/mcarter/.mca/work/s3/yproc.dsv ") + yout_name;
+	s3("yproc.dsv", fname);
+	string content = slurp(fname.c_str()); // TODO write a verson of slurp that takes a string
+	spit(yout_name, content);
+	//string in_name = string("cp /home/mcarter/.mca/work/s3/yproc.dsv ") + yout_name;
+	//system(cmd.c_str());
 
 	return EXIT_SUCCESS;
 }
@@ -274,6 +280,7 @@ void stage3a()
 typedef struct dte { string cmd ; function<void()> fn ; } dte;
 const auto ditab = vector<dte> {
 	{"dsv", dsv_extract},
+	{"stage0", stage0},
 	{"stage2", stage2},
 	{"stage3a", stage3a}
 };

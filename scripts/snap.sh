@@ -3,7 +3,7 @@
 #IN: s3/etrans-aug.dsv s3/yproc.dsv
 #OUT: s3/snap*
 
-w=~/.mca/work
+w=~/.mcacc/work
 s2=$w/s2
 s3=$w/s3
 

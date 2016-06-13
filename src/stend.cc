@@ -29,7 +29,7 @@ using namespace std;
 void scan_cache(vecvec_t &yahoos)
 {
 
-	string ydir = "/home/mcarter/.mca/yahoo";
+	string ydir = rootdir() + "/yahoo";
 	auto dirp = opendir(ydir.c_str());
 	struct dirent *dp;
 	set<string> filenames;

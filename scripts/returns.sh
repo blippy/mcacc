@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-w=~/.mca/work
+w=~/.mcacc/work
 s3=$w/s3
 
 #getrc () { dsv --get -r $1 -c $2 $s3/portfolios.rep ;}
@@ -19,7 +19,7 @@ ftas=$(getrc 14 5)
 
 SCOUT=$s3/returns.sc
 
-cp ~/.mca/inputs/rettmpl.sc $SCOUT
+cp ~/.mcacc/inputs/rettmpl.sc $SCOUT
 echo "let minepc = $mine" >> $SCOUT
 echo "let asxpc  = $ftas" >> $SCOUT
 
