@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
-w=~/.mcacc/work
+root=`mcacc --root`
+w=$root/work
 s3=$w/s3
 
-#getrc () { dsv --get -r $1 -c $2 $s3/portfolios.rep ;}
 
 getrc () {
 	sed "$1q;d" $s3/portfolios.rep | awk -v col=$2 '{print $col}'
-	#echo "rown = $rown"
 }
 
 
@@ -19,7 +18,7 @@ ftas=$(getrc 14 5)
 
 SCOUT=$s3/returns.sc
 
-cp ~/.mcacc/inputs/rettmpl.sc $SCOUT
+cp $root/inputs/rettmpl.sc $SCOUT
 echo "let minepc = $mine" >> $SCOUT
 echo "let asxpc  = $ftas" >> $SCOUT
 

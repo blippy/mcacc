@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-w=~/.mcacc/work
+root=`mcacc --root`
+w=$root/work
 s1=$w/s1
 s2=$w/s2
 s3=$w/s3
@@ -9,8 +10,7 @@ cd $w
 
 clean () { # stage 0
 	# TODO make into mcacc stage0
-	mkdir -p ~/.mca/{text,yahoo,work/{s1,s2,s3}}
-	cp ~/repos/mcacc/mca.htm ~/.mca
+	mkdir -p $root/{text,yahoo,work/{s1,s2,s3}}
 	rm -f $s1/* $s2/* $s3/*
 }
 
@@ -21,7 +21,7 @@ stage1 () {
 	do
 		cat $fname
 		echo # take care of file without line end
-	done < <(ls ~/.mca/inputs/*.txt) | dos2unix | mcacc dsv
+	done < <(ls $root/inputs/*.txt) | dos2unix | mcacc dsv
 }
 
 download=0
@@ -81,7 +81,7 @@ case $1 in
 	-3) stage3 ;;
 	-d) set -x ;;
 	-h | --help) usage ; exit 0;;
-	-w) lynx ~/.mcacc/mcacc.htm ;;
+	-w) lynx $root/mcacc.htm ;;
 	--) break ;;
 	*) echo "Unknown option. Try using -h" ; exit 1;;
 esac

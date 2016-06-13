@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-s3=~/.mcacc/work/s3
+root=`mcacc --root`
+s3=$root/work/s3
 SCTMP=$s3/financials.sc
 
 
-cp ~/.mcacc/inputs/fitmpl.sc $SCTMP
+cp $root/inputs/fitmpl.sc $SCTMP
 
 
 awk '

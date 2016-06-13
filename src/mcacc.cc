@@ -204,14 +204,10 @@ a snapshot of gains
 	}
 	yout.close();
 
-	//string yout_name = "/home/mcarter/.mca/yahoo/" + dstamp + ".txt";
 	string yout_name = rootdir() + "/yahoo/" + dstamp + ".txt";
-	//string cmd = string("cp /home/mcarter/.mca/work/s3/yproc.dsv ") + yout_name;
 	s3("yproc.dsv", fname);
 	string content = slurp(fname.c_str()); // TODO write a verson of slurp that takes a string
 	spit(yout_name, content);
-	//string in_name = string("cp /home/mcarter/.mca/work/s3/yproc.dsv ") + yout_name;
-	//system(cmd.c_str());
 
 	return EXIT_SUCCESS;
 }
@@ -276,9 +272,21 @@ void stage3a()
 	cgt(es, p);
 }
 
+void print_version()
+{
+	cout << "mcacc " << VERSION << '\n';
+}
+
+void print_rootdir()
+{
+	cout << rootdir() << "\n";
+}
+
 // command dispatch table
 typedef struct dte { string cmd ; function<void()> fn ; } dte;
 const auto ditab = vector<dte> {
+	{"--root", print_rootdir},
+	{"--version", print_version},
 	{"dsv", dsv_extract},
 	{"stage0", stage0},
 	{"stage2", stage2},
@@ -298,7 +306,6 @@ void dispatch(string cmd)
 int main(int argc, char *argv[])
 {
 
-	cout << "mcacc " << VERSION << '\n';
 
 	if(argc>1) {
 		string cmd;

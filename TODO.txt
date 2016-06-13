@@ -1,9 +1,2 @@
 * stage0 processing still incomplete
 
-* process command arguments using boost
-
-* only print version when asked: -v, --version
-
-* add a new argument: --root to print root output dir
-
-* all shell scripts are to use `mcacc --root` to determine root dir
