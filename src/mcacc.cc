@@ -15,6 +15,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <boost/filesystem.hpp>
+
 #include "assets.hpp"
 #include "common.h"
 #include "parse.h"
@@ -30,6 +32,8 @@ using std::endl;
 using std::function;
 using std::string;
 using std::vector;
+
+namespace fsys = boost::filesystem;
 
 
 
@@ -89,12 +93,26 @@ vecvec_t commasep(string  &filename)
         return res;
 }
 
+// TODO add to reusable
+// remove directory contents
+// http://stackoverflow.com/questions/14610185/how-to-avoid-removing-directory-on-remove-all-with-boost-libraries
+void rmfiles(std::string fname)
+{
+	fsys::path path_to_remove(fname.c_str());
+	for (fsys::directory_iterator end_dir_it, it(path_to_remove); it!=end_dir_it; ++it) {
+		fsys::remove_all(it->path());
+	}
+
+}
+
 void stage0()
 {
 	string htm = get_html();
 	string fname = rootdir() + "/mcacc.htm";
-	//cout << fname << "\n" << htm << "\n" ;
 	spit(fname, htm.c_str());
+	rmfiles(sndir(1));
+	rmfiles(sndir(2));
+	rmfiles(sndir(3));
 }
 
 void stage2()

@@ -40,6 +40,7 @@ string rootdir()
 		fsys::create_directory(s + "/s1");
 		fsys::create_directory(s + "/s2");
 		fsys::create_directory(s + "/s3");
+		fsys::create_directory(root + "/yahoo");
 		created = true;
 	}
 	return root;
@@ -47,11 +48,18 @@ string rootdir()
 
 std::string workdir() { return rootdir() + "/work" ; }
 
+
+std::string sndir(int n)
+{
+	return workdir() + "/s" + to_string(n);
+}
+
 // create a filename that is based in the stage N directory
 void sn(int n, const char *name, string &outname) 
 {
-	outname = workdir();
-	outname +=  "/s" +  to_string(n)  + "/" + name;
+	//outname = workdir();
+	//outname +=  "/s" +  to_string(n)  + "/" + name;
+	outname = sndir(n) + "/" + name;
 }
 
 void s1(const char *name, string &outname) { sn(1, name, outname);}

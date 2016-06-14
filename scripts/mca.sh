@@ -9,9 +9,7 @@ cd $w
 
 
 clean () { # stage 0
-	# TODO make into mcacc stage0
-	mkdir -p $root/{text,yahoo,work/{s1,s2,s3}}
-	rm -f $s1/* $s2/* $s3/*
+	mcacc stage0
 }
 
 stage1 () {

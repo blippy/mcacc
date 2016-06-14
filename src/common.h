@@ -12,6 +12,7 @@
 
 std::string rootdir();
 std::string workdir();
+std::string sndir(int n);
 // create a filename that is based in the stage N directory
 void sn(int n, const char *name, std::string &outname);
 
