@@ -1,2 +1,1 @@
-#ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
 SUBDIRS = scripts src
