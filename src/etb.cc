@@ -12,6 +12,11 @@ OUT: accs.rep etb.rep
 #include <vector>
 #include <functional>
 
+//#include "autosprintf.h"
+//using gnu::autosprintf;
+#include <boost/format.hpp>
+
+
 #include "common.h"
 #include "parse.h"
 #include "types.h"
@@ -74,19 +79,21 @@ int etb_main(const nacc_ts& the_naccs)
 
 			aout << endl;
 
-			eout << k << "\t" ;
-			eout << fixed <<  setprecision(2) << (double(total) /100);
+			//eout << k << "\t" ;
+			//eout << fixed <<  setprecision(2) << (double(total) /100);
+			double scale;
 			try {
-				//n = nacc_map.at(k);
-				double scale = the_naccs.at(k).scale;
-				eout << "\t" << scale;
+				scale = the_naccs.at(k).scale;
+				//eout << "\t" << scale;
 
 			} catch (std::out_of_range& err) {
 				cerr << "etb_main() couldn't look up key " << k << " in naccs" << endl;
 				throw err;
 			}
 
-			eout << endl;
+			//eout << endl;
+			//eout << gnu::autosprintf("%6.6s %12.2s %sd %012d\n", k, double(total)/100, scale, total);
+			eout << boost::format("%-6.6s %12.2f %2.0f %+010d\n") % k % (double(total)/100) % scale % total;
 	}
 	eout.close();
 	aout.close();

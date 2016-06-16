@@ -1,7 +1,7 @@
 bin_PROGRAMS = mcacc 
 BUILT_SOURCES = assets_mcacc_htm.xxd autotypes.cc autotypes.h \
 		comm.hpp comm.cc nacc.hpp nacc.cc
-mcacc_LDADD = -lpthread -lboost_system -lboost_filesystem
+mcacc_LDADD = -lpthread -lboost_system -lboost_filesystem 
 mcacc_SOURCES = assets.cc common.cc epics.cc etb.cc \
 		etrans-aug.cc \
 		mcacc.cc \
