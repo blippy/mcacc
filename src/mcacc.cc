@@ -23,6 +23,7 @@
 #include "reusable.h"
 #include "autotypes.h"
 #include "comm.hpp"
+#include "gaap.hpp"
 #include "nacc.hpp"
 #include "yahoo.hpp"
 
@@ -286,6 +287,7 @@ void stage3a()
 	load(the_naccs);
 	posts_main(es, p, the_naccs);
 	etb_main(the_naccs);
+	gaap_main(the_naccs);
 	epics_main(es);
 	cgt(es, p);
 }

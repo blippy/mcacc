@@ -1,11 +1,12 @@
 bin_PROGRAMS = mcacc 
 BUILT_SOURCES = assets_mcacc_htm.xxd autotypes.cc autotypes.h \
 		comm.hpp comm.cc 
-mcacc_LDADD = -lpthread -lboost_system -lboost_filesystem 
+mcacc_LDADD = -lpthread -lboost_system -lboost_filesystem  -lasprintf
 mcacc_SOURCES = assets.cc common.cc epics.cc etb.cc \
 		etrans-aug.cc \
+		gaap.cc \
 		mcacc.cc \
-		nacc. cc \
+		nacc.cc \
 		parse.cc posts.cc \
 		reusable.cc stend.cc types.cc yahoo.cc \
 		$(BUILT_SOURCES)
