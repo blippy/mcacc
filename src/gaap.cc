@@ -1,5 +1,6 @@
 #include <map>
 #include <iostream>
+#include <locale.h>
 #include "autosprintf.h"
 
 #include "parse.h"
@@ -15,7 +16,8 @@ void emit(ostream& ofs, const string& title, pennies_t value)
 	char sgn = ' ';
 	if (value<0) { sgn = '-' ; value = -value;}
 	double bal = round2(double(value)/double(100));
-	ofs << gnu::autosprintf("%10.10s %10.2f%c", title.c_str() , bal, sgn);
+	setlocale(LC_NUMERIC, "");
+	ofs << gnu::autosprintf("%10.10s %'10.2f%c", title.c_str() , bal, sgn);
 	ofs << endl;
 
 
