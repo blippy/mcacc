@@ -30,7 +30,7 @@ vecvec_t read_registered_dsv(dsv_e dsv);
 int eaug_main(const period& p);
 int epics_main(const etranas_t& es);
 //int etb_main();
-int etb_main(const nacc_ts& the_naccs);
+int etb_main(nacc_ts& the_naccs);
 //int posts_main(const etranas_t& es);
 int posts_main(const etranas_t& es, const period& per, 
 	const nacc_ts& the_naccs);

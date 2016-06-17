@@ -1,8 +1,6 @@
 .deps/
 autotypes.cc
 autotypes.h
-nacc.cc
-nacc.hpp
 comm.cc
 comm.hpp
 assets_mcacc_htm.xxd

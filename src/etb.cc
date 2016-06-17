@@ -11,9 +11,8 @@ OUT: accs.rep etb.rep
 #include <string>
 #include <vector>
 #include <functional>
+#include <stdexcept>
 
-//#include "autosprintf.h"
-//using gnu::autosprintf;
 #include <boost/format.hpp>
 
 
@@ -21,7 +20,7 @@ OUT: accs.rep etb.rep
 #include "parse.h"
 #include "types.h"
 
-msvs_t mkmap(const char *filename, int k)
+/*msvs_t mkmap(const char *filename, int k)
 {
 	msvs_t m;
 	vecvec_t vvs = vecvec(filename);
@@ -39,17 +38,18 @@ void prin_msvs(msvs_t &m)
 		std::cout << (it->second)[0];
 	}
 }
+*/
 
-int etb_main(const nacc_ts& the_naccs)
+int etb_main(nacc_ts& the_naccs)
 {
+
+	//reset the account balances
+	for(auto& n:the_naccs) n.second.bal = 0;
 
 	std::string fname;
 	s3("posts.dsv", fname);
         vecvec_t posts = vecvec(fname);
 	int total;
-
-	//s1("nacc.dsv", fname);
-	//msvs_t nacc_map = mkmap(fname, 0);
 
 	ofstream aout, eout;
 	s3("accs.rep", fname);
@@ -77,23 +77,28 @@ int etb_main(const nacc_ts& the_naccs)
 			aout << endl;
 		}
 
-			aout << endl;
+		aout << endl;
 
-			//eout << k << "\t" ;
-			//eout << fixed <<  setprecision(2) << (double(total) /100);
-			double scale;
-			try {
-				scale = the_naccs.at(k).scale;
-				//eout << "\t" << scale;
+		if(the_naccs.count(k) == 0) {
+			string msg =  "etb_main() couldn't look up key "s + k + " in naccs";
+			throw std::out_of_range(msg);
+		}
 
-			} catch (std::out_of_range& err) {
-				cerr << "etb_main() couldn't look up key " << k << " in naccs" << endl;
-				throw err;
-			}
+		nacc_t& a_nacc = the_naccs.at(k);
+		/*
+		try {
+			a_nacc= the_naccs.at(k);
 
-			//eout << endl;
-			//eout << gnu::autosprintf("%6.6s %12.2s %sd %012d\n", k, double(total)/100, scale, total);
-			eout << boost::format("%-6.6s %12.2f %2.0f %+010d\n") % k % (double(total)/100) % scale % total;
+		} catch (std::out_of_range& err) {
+			cerr << "etb_main() couldn't look up key " << k << " in naccs" << endl;
+			throw err;
+		}
+		*/
+
+		double scale = a_nacc.scale;
+		eout << boost::format("%-6.6s %12.2f %2.0f %+010d\n") % k % (double(total)/100) % scale % total;
+		a_nacc.bal = total;
+
 	}
 	eout.close();
 	aout.close();
