@@ -1,6 +1,7 @@
 bin_PROGRAMS = mcacc 
 BUILT_SOURCES = assets_mcacc_htm.xxd
-mcacc_LDADD = -lpthread -lboost_system -lboost_filesystem  -lasprintf
+mcacc_LDADD = -lpthread -lboost_system -lboost_filesystem
+#-lasprintf
 mcacc_SOURCES = assets.cc \ 
 		comm.cc common.cc \
 		epics.cc etb.cc etran.cc etrans-aug.cc \

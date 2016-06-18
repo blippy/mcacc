@@ -1,11 +1,18 @@
+/*
+ * 18-Jun-2016 Can't use autosprintf on cygwin
+ * */
+
 #include <map>
 #include <iostream>
 #include <locale.h>
-#include "autosprintf.h"
+//#include "autosprintf.h"
+#include <string.h>
 
 #include "parse.hpp"
 #include "reusable.hpp"
 #include "gaap.hpp"
+
+
 
 using namespace std;
 
@@ -17,8 +24,11 @@ void emit(ostream& ofs, const string& title, pennies_t value)
 	if (value<0) { sgn = '-' ; value = -value;}
 	double bal = round2(double(value)/double(100));
 	setlocale(LC_NUMERIC, "");
-	ofs << gnu::autosprintf("%10.10s %'10.2f%c", title.c_str() , bal, sgn);
-	ofs << endl;
+	char buf[80];
+	snprintf(buf, sizeof(buf), "%10.10s %'10.2f%c", title.c_str() , bal, sgn);
+	//ofs << gnu::autosprintf("%10.10s %'10.2f%c", title.c_str() , bal, sgn);
+	//ofs << endl;
+	ofs << buf << endl;
 
 
 }
