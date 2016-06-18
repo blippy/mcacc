@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <unordered_map>
 
-#include "autotypes.hpp"
+#include "etran.hpp"
 #include "common.hpp"
 #include "parse.hpp"
 #include "types.hpp"

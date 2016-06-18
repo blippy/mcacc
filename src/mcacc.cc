@@ -21,7 +21,7 @@
 #include "common.hpp"
 #include "parse.hpp"
 #include "reusable.hpp"
-#include "autotypes.hpp"
+#include "etran.hpp"
 #include "comm.hpp"
 #include "gaap.hpp"
 #include "nacc.hpp"
@@ -51,9 +51,12 @@ bool operator>(const etrana &a, const etrana &b)
 	return std::tie(a.sym, a.dstamp) > std::tie(b.sym, b.dstamp);
 }
 
+// TODO belongs in etran.cc
 etranas_t load_etranas()
 {
-	vecvec_t rows = read_registered_dsv(etransa);
+	std::string filename;
+        s3("etrans-aug.dsv", filename);
+	vecvec_t rows = vecvec(filename);
 	etranas_t res;
 	for(vs_t &r: rows) { 
 		etrana e;

@@ -1,14 +1,12 @@
 #pragma once
-//#ifndef COMMON_H
-//#define COMMON_H
 
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
 
+#include "etran.hpp"
 #include "parse.hpp"
-#include "autotypes.hpp"
 #include "nacc.hpp"
 
 std::string rootdir();
@@ -23,16 +21,14 @@ void s3(const char *name, std::string &outname);
 
 typedef std::map<std::string, std::vector<std::string> > msvs_t;
 
-enum dsv_e { etransa };
+//enum dsv_e { etransa };
 
-vecvec_t read_registered_dsv(dsv_e dsv);
+//vecvec_t read_registered_dsv(dsv_e dsv);
 
 
 int eaug_main(const period& p);
 int epics_main(const etranas_t& es);
-//int etb_main();
 int etb_main(nacc_ts& the_naccs);
-//int posts_main(const etranas_t& es);
 int posts_main(const etranas_t& es, const period& per, 
 	const nacc_ts& the_naccs);
 int stend_main(const period& p);
@@ -48,4 +44,3 @@ void print(const std::vector<T>& xs)
 	std::cout << std::endl;
 }
 
-//#endif

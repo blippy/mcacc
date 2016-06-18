@@ -1,9 +1,9 @@
 bin_PROGRAMS = mcacc 
-BUILT_SOURCES = assets_mcacc_htm.xxd autotypes.cc autotypes.h \
-		comm.hpp comm.cc 
+BUILT_SOURCES = assets_mcacc_htm.xxd
 mcacc_LDADD = -lpthread -lboost_system -lboost_filesystem  -lasprintf
-mcacc_SOURCES = assets.cc common.cc epics.cc etb.cc \
-		etrans-aug.cc \
+mcacc_SOURCES = assets.cc \ 
+		comm.cc common.cc \
+		epics.cc etb.cc etran.cc etrans-aug.cc \
 		gaap.cc \
 		mcacc.cc \
 		nacc.cc \
@@ -13,14 +13,6 @@ mcacc_SOURCES = assets.cc common.cc epics.cc etb.cc \
 
 CLEANFILES = $(BUILT_SOURCES)
 
-autotypes.cc autotypes.hpp : autotypes.tcl
-	tclsh autotypes.tcl
-
-#nacc.hpp nacc.cc: nacc.m4 hpp.m4 cc.m4 common.m4
-#	./m5 nacc
-
-comm.hpp comm.cc : comm.m4 hpp.m4 cc.m4 common.m4
-	./m5 comm
 
 assets_mcacc_htm.xxd : ../assets/mcacc.htm
 	xxd -i $^ $@

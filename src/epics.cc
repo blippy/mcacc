@@ -8,7 +8,7 @@
 #include <set>
 
 #include "common.hpp"
-#include "autotypes.hpp"
+//#include "autotypes.hpp"
 #include "reusable.hpp"
 
 using namespace std;

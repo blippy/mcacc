@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 #include "common.hpp"
-#include "autotypes.hpp"
+#include "etran.hpp"
 #include "nacc.hpp"
 #include "reusable.hpp"
 
