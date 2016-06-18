@@ -18,24 +18,26 @@
 #include <boost/filesystem.hpp>
 
 #include "assets.hpp"
-#include "common.h"
-#include "parse.h"
-#include "reusable.h"
-#include "autotypes.h"
+#include "common.hpp"
+#include "parse.hpp"
+#include "reusable.hpp"
+#include "autotypes.hpp"
 #include "comm.hpp"
 #include "gaap.hpp"
 #include "nacc.hpp"
 #include "yahoo.hpp"
 
+/*
 using std::cerr;
 using std::cout;
 using std::endl;
 using std::function;
 using std::string;
 using std::vector;
+*/
 
 namespace fsys = boost::filesystem;
-
+using namespace std;
 
 
 

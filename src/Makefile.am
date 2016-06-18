@@ -13,7 +13,7 @@ mcacc_SOURCES = assets.cc common.cc epics.cc etb.cc \
 
 CLEANFILES = $(BUILT_SOURCES)
 
-autotypes.cc autotypes.h : autotypes.tcl
+autotypes.cc autotypes.hpp : autotypes.tcl
 	tclsh autotypes.tcl
 
 #nacc.hpp nacc.cc: nacc.m4 hpp.m4 cc.m4 common.m4

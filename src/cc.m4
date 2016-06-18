@@ -10,7 +10,7 @@ define(`sfield', `	conv(astruct.$1, vs.at(FN)); define(`FN', incr(FN))')
 define(`endstruct', `')
 divert
 
-#include <common.h>
+#include <common.hpp>
 
 void load(NAME_S & results)
 {

@@ -8,10 +8,11 @@
 #include <algorithm>
 #include <sstream>
 
-#include "common.h"
-#include "types.h"
-#include "reusable.h"
+#include "common.hpp"
+#include "types.hpp"
+#include "reusable.hpp"
 
+using namespace std;
 
 double enpennies(std::string s, bool round)	
 {

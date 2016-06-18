@@ -3,10 +3,12 @@
 #include <stdlib.h>
 #include <unordered_map>
 
-#include "autotypes.h"
-#include "common.h"
-#include "parse.h"
-#include "types.h"
+#include "autotypes.hpp"
+#include "common.hpp"
+#include "parse.hpp"
+#include "types.hpp"
+
+using namespace std;
 
 
 string to_intstring(double d) { return to_string(int(d)); }

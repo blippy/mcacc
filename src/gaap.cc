@@ -3,8 +3,8 @@
 #include <locale.h>
 #include "autosprintf.h"
 
-#include "parse.h"
-#include "reusable.h"
+#include "parse.hpp"
+#include "reusable.hpp"
 #include "gaap.hpp"
 
 using namespace std;

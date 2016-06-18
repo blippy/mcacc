@@ -2,12 +2,13 @@
 #include <sstream>
 #include <unistd.h>
 
-#include "reusable.h"
+#include "reusable.hpp"
 
 
 using std::ifstream;
 using std::ofstream;
 using std::stringstream;
+using std::string;
 
 bool file_exists(const string& filename)
 {

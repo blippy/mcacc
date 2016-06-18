@@ -1,13 +1,14 @@
-#ifndef COMMON_H
-#define COMMON_H
+#pragma once
+//#ifndef COMMON_H
+//#define COMMON_H
 
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
 
-#include "parse.h"
-#include "autotypes.h"
+#include "parse.hpp"
+#include "autotypes.hpp"
 #include "nacc.hpp"
 
 std::string rootdir();
@@ -47,4 +48,4 @@ void print(const std::vector<T>& xs)
 	std::cout << std::endl;
 }
 
-#endif
+//#endif

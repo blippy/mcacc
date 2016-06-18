@@ -26,7 +26,7 @@ set struct {
 
 # header file
 set h 0
-set h [open "autotypes.h" w]
+set h [open "autotypes.hpp" w]
 
 proc puth {str} {
 	upvar 1 h hdr
@@ -42,13 +42,14 @@ set warning "
 
 # write preamble of file
 puth "
-#ifndef AUTOTYPES_H
-#define AUTOTYPES_H
+//#ifndef AUTOTYPES_H
+//#define AUTOTYPES_H
+#pragma once
 $warning
 
 #include <string>
 #include <vector>
-#include \"types.h\"
+#include \"types.hpp\"
 
 typedef struct etrana {"
 
@@ -69,7 +70,7 @@ typedef std::vector<etrana> etranas_t;
 etranas_t load_etranas();
 extern strings etrana_fieldnames;
 
-#endif
+//#endif
 "
 close $h
 
@@ -86,7 +87,7 @@ proc putcc {str} {
 putcc "
 $warning
 
-#include \"autotypes.h\"
+#include \"autotypes.hpp\"
 
 void convert(const strings &strs, etrana& e)
 {

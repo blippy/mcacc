@@ -1,6 +1,6 @@
 #include "nacc.hpp"
 
-#include <common.h>
+#include "common.hpp"
 
 void load(nacc_ts & results)
 {

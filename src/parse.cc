@@ -12,8 +12,8 @@ created 19-Feb-2016
 //#include <set>
 //#include <vector>
 
-#include "common.h"
-#include "parse.h"
+#include "common.hpp"
+#include "parse.hpp"
 
 using namespace std;
 

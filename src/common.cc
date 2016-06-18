@@ -4,8 +4,9 @@
 #include <boost/filesystem.hpp>
 namespace fsys = boost::filesystem;
 
-#include "common.h"
+#include "common.hpp"
 
+using namespace std;
 
 // TODO reusuable
 // http://stackoverflow.com/questions/4891006/how-to-create-a-folder-in-the-home-directory

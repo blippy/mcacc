@@ -16,29 +16,11 @@ OUT: accs.rep etb.rep
 #include <boost/format.hpp>
 
 
-#include "common.h"
-#include "parse.h"
-#include "types.h"
+#include "common.hpp"
+#include "parse.hpp"
+#include "types.hpp"
 
-/*msvs_t mkmap(const char *filename, int k)
-{
-	msvs_t m;
-	vecvec_t vvs = vecvec(filename);
-	for(auto vs : vvs) m[vs[k]] = vs;
-	return m;
-}
-msvs_t mkmap(std::string &filename, int k) { return mkmap(filename.c_str(), k); }
-
-void prin_msvs(msvs_t &m)
-{
-	std::cout << "prin_msvs:" ;
-	for(auto it = m.begin(); it != m.end(); ++it) {
-		std::cout << ".";
-		std::cout << it->first;
-		std::cout << (it->second)[0];
-	}
-}
-*/
+using namespace std;
 
 int etb_main(nacc_ts& the_naccs)
 {
@@ -85,15 +67,6 @@ int etb_main(nacc_ts& the_naccs)
 		}
 
 		nacc_t& a_nacc = the_naccs.at(k);
-		/*
-		try {
-			a_nacc= the_naccs.at(k);
-
-		} catch (std::out_of_range& err) {
-			cerr << "etb_main() couldn't look up key " << k << " in naccs" << endl;
-			throw err;
-		}
-		*/
 
 		double scale = a_nacc.scale;
 		eout << boost::format("%-6.6s %12.2f %2.0f %+010d\n") % k % (double(total)/100) % scale % total;

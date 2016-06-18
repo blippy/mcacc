@@ -1,11 +1,12 @@
-#ifndef NACC_H
-#define NACC_H
+#pragma once
+//#ifndef NACC_H
+//#define NACC_H
 
 #include <map>
 #include <string>
 #include <vector>
 
-#include "types.h"
+#include "types.hpp"
 
 
 
@@ -27,4 +28,4 @@ typedef std::map<std::string, nacc_t> nacc_ts;
 void load(nacc_ts & results);
 void save(const nacc_ts &xs);
 
-#endif
+//#endif

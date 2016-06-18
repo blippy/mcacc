@@ -5,13 +5,14 @@
 #include <algorithm>
 #include <stdexcept>
 
-#include "common.h"
-#include "autotypes.h"
+#include "common.hpp"
+#include "autotypes.hpp"
 #include "nacc.hpp"
-#include "reusable.h"
+#include "reusable.hpp"
 
-using std::string;
-using std::vector;
+//using std::string;
+//using std::vector;
+using namespace std;
 
 int posts_main(const etranas_t& es, const period& per, const nacc_ts& the_naccs)
 {

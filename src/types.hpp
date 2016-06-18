@@ -1,5 +1,6 @@
-#ifndef TYPES_H
-#define TYPES_H
+#pragma once
+//#ifndef TYPES_H
+//#define TYPES_H
 
 #include <cstdio>
 #include <string>
@@ -60,4 +61,4 @@ class period {
 typedef std::map<std::string, stend_c> stends_t;
 stends_t load_stends();
 
-#endif
+//#endif

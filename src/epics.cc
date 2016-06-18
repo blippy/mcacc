@@ -7,9 +7,11 @@
 #include <vector>
 #include <set>
 
-#include "common.h"
-#include "autotypes.h"
-#include "reusable.h"
+#include "common.hpp"
+#include "autotypes.hpp"
+#include "reusable.hpp"
+
+using namespace std;
 
 void underline(ostream &ost, char c)
 { 

@@ -15,10 +15,10 @@ OUT: s3/stend.dsv
 #include <dirent.h>
 #include <set>
 
-#include "common.h"
-#include "parse.h"
-#include "types.h"
-#include "reusable.h"
+#include "common.hpp"
+#include "parse.hpp"
+#include "types.hpp"
+#include "reusable.hpp"
 
 //namespace fs = std::filesystem;
 
