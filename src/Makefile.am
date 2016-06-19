@@ -18,5 +18,7 @@ CLEANFILES = $(BUILT_SOURCES)
 assets_mcacc_htm.xxd : ../assets/mcacc.htm
 	xxd -i $^ $@
 
+assets.cc : assets_mcacc_htm.xxd
+
 #tags :
 #	ctags -R *
