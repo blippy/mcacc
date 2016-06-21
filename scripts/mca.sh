@@ -8,19 +8,26 @@ s3=$w/s3
 cd $w
 
 
-clean () { # stage 0
-	mcacc stage0
+#clean () { # stage 0
+#	mcacc stage0
+#}
+
+#stage1 () {
+#	rm -f $s1/*
+#	cd $s1
+#	while read fname
+#	do
+#		cat $fname
+#		echo # take care of file without line end
+#	done < <(ls $root/inputs/*.txt) | dos2unix | mcacc dsv
+#}
+
+
+function stage1  {
+	#rm -f $s1/*
+	(cd $root/inputs; ./derive)
 }
 
-stage1 () {
-	rm -f $s1/*
-	cd $s1
-	while read fname
-	do
-		cat $fname
-		echo # take care of file without line end
-	done < <(ls $root/inputs/*.txt) | dos2unix | mcacc dsv
-}
 
 download=0
 
@@ -67,13 +74,13 @@ params="$(getopt -o dh0123e:vw -l exclude:,help,verbose --name "$(basename -- "$
 #fi
 
 eval set -- "$params"
-echo "$params"
+#echo "$params"
 unset params
 
 while true
 do
 case $1 in
-	-0) clean  ;;
+	-0) mcacc stage0  ;;
 	-1) stage1 ;; 
 	-2) stage2 ;;
 	-3) stage3 ;;
