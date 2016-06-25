@@ -295,6 +295,7 @@ void cgt(const etranas_t& es, const period &per)
 	}
 
 	for(auto & t: tickers) {
+		// NB take care of leak-1 entries, which confuse the issue
 		cout << t << endl; // TODO it's here that we need to do something with the hit tickers
 	}
 	cout << "TODO: cgt - pending something interesting to report" << endl;

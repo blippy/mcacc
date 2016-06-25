@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -119,10 +120,10 @@ void write_etrana(ofstream& ofs, const etrana& e)
 int eaug_main(const period &per)
 {
 	string fname;
+	etranas_t aes;
 
 	s1("etran.dsv", fname);
 	vecvec_t etrans = vecvec(fname);
-	etranas_t aes;
 	for(vs_t &e: etrans) {
 		etrana cooked;
 		cooked.taxable = e[0] == "T";
@@ -136,7 +137,24 @@ int eaug_main(const period &per)
 		aes.push_back(cooked);
 	}
 
-	// TODO NOW incorporate leak-1
+	s1("leak-1.dsv", fname);
+	vecvec_t leak_1s = vecvec(fname);
+	for(auto& x: leak_1s) {
+		etrana cooked;
+		cooked.taxable = x[0] == "T";
+		cooked.dstamp = x[1];
+		cooked.buy = false; // we're always assuming a sell at theis stage
+		cooked.folio = x[2];
+		cooked.sym = x[3];
+		cooked.qty = -stod(x[4]);
+		cooked.cost = 0;
+		// skip description, as there's nowhere to put it
+		aes.push_back(cooked);
+	}
+
+
+	// sort, just to be sure
+	sort(begin(aes), end(aes));
 	
 	// do the actual processing
 	stends_t stends = load_stends();
