@@ -14,6 +14,7 @@ OUT: s3/stend.dsv
 #include <assert.h>
 #include <dirent.h>
 #include <set>
+#include <stdexcept>
 
 #include "common.hpp"
 #include "parse.hpp"
@@ -53,6 +54,9 @@ void scan_cache(vecvec_t &yahoos)
 
 }
 
+
+//string to_string(etran
+
 void scan_inputs(vecvec_t &yahoos)
 {
 	string fname;
@@ -64,6 +68,14 @@ void scan_inputs(vecvec_t &yahoos)
 	s1("etran.dsv", fname);
 	vecvec_t etrans = vecvec(fname);
 	for(auto e: etrans) {
+		if(e.size() != 7) {
+			string msg("stend/scan_inputs() expecting exactly 7 arguments for an etran.");
+			for(auto& f:e) msg += " <" + f + ">";
+			//msg += "\n";
+			throw std::runtime_error(msg);
+		}
+
+
 		string dstamp = e[1];
 		string tstamp = "03:00:00";
 		double qty  = stod(e[5]);

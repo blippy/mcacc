@@ -25,6 +25,8 @@ string slurp(const char *filename)
     	return sstr.str();
 }
 
+std::string slurp(const std::string filename) { return slurp(filename.c_str());}
+
 void spit(const char *filename, const char *content)
 {
 	ofstream out;

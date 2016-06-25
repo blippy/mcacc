@@ -9,6 +9,7 @@
 
 bool file_exists(const std::string &filename);
 std::string slurp(const char *filename);
+std::string slurp(const std::string filename);
 void spit(const char *filename, const char *content);
 void spit(const std::string& filename, const std::string& content);
 

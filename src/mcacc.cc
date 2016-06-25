@@ -11,6 +11,7 @@
 #include <string>
 //#include <tuple>
 #include <vector>
+#include <stdexcept>
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -83,7 +84,19 @@ etranas_t load_etranas()
 }
 
 
+strings commasepstr(const string& line)
+{
+	//strings result;
+	string line1 = line;
+//	for(auto& c:line) {
+//		char c1 = c;
+//		if(c1 == ',') c1 = ' ';
 
+
+		for(auto it = line1.begin(); it != line1.end(); ++it) {
+			if(*it == ',') *it = ' '; }
+                return tokenize_line(line1);
+}	
 vecvec_t commasep(string  &filename)
 {
         vecvec_t res;
@@ -91,9 +104,7 @@ vecvec_t commasep(string  &filename)
         string line;
         fin.open(filename.c_str(), ifstream::in);
         while(getline(fin, line)) {
-		for(auto it = line.begin(); it != line.end(); ++it) {
-			if(*it == ',') *it = ' '; }
-                vector<string> fields = tokenize_line(line);
+		strings fields = commasepstr(line);
                 if(fields.size() >0) res.push_back(fields);
         }
         return res;
@@ -153,8 +164,11 @@ void stage2()
 }
 
 bool yorder (vector<string> a, vector<string> b) { return a[0] < b[0];}
-int yproc_main(const comm_ts & the_comms) 
-{
+
+
+
+void yproc_main(const comm_ts & the_comms)
+{	
 
 /*
 IN: s1/comm.dsv s2/dstamp s2/ystamp s2/yfetch.csv s2/usd.csv
@@ -175,13 +189,15 @@ a snapshot of gains
 
 	string fname;
 	s2("usd.csv", fname); 
-	if(! file_exists(fname)) {
-		cout << "INFO: yproc_main(): " 
-			<< "File s2/usd.csv does not exist. Quitting\n";
-		return EXIT_SUCCESS;
-	}
-	vecvec_t usdv = commasep(fname);
-	double rox = 100.0 * stod(usdv[0][1]);
+	if(! file_exists(fname)) 
+		throw runtime_error("File s2/usd.csv does not exist.");
+
+	string file_contents = slurp(fname);
+	strings usdv = commasepstr(file_contents);
+	string rox_str;
+	try { rox_str = usdv.at(1); } // TODO needs checking to see if it's pulling out right value
+	catch (const out_of_range& ex) { throw runtime_error("Couldn't decompose <"s + file_contents + ">"); }
+	double rox = 100.0 * stod(rox_str);
 	//cout << rox;
 
 
@@ -233,6 +249,15 @@ a snapshot of gains
 	string content = slurp(fname.c_str()); // TODO write a verson of slurp that takes a string
 	spit(yout_name, content);
 
+}
+
+int yproc_main_nox(const comm_ts & the_comms) 
+{
+	try {
+		yproc_main(the_comms);
+	} catch (const runtime_error& ex) {
+		cerr << "ERR-101 (Non-fatal): USD decoding: " << ex.what() << endl;
+	}
 	return EXIT_SUCCESS;
 }
 
@@ -279,7 +304,7 @@ void stage3a()
 {
 	comm_ts the_comms;
 	load(the_comms);
-	yproc_main(the_comms);
+	yproc_main_nox(the_comms);
 
 	period p = get_period();
 

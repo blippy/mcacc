@@ -32,7 +32,7 @@ int etb_main(nacc_ts& the_naccs);
 int posts_main(const etranas_t& es, const period& per, 
 	const nacc_ts& the_naccs);
 int stend_main(const period& p);
-int yproc_main();
+//int yproc_main_nox();
 
 void conv(double& d, std::string s);
 void conv(std::string& dest, std::string src);
