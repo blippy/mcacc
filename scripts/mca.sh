@@ -43,6 +43,7 @@ stage3 () {
 	financials.sh
 	returns.sh
 	snap.sh
+	paste $s3/gaap-0.rep $s1/gaap-1.rep >$s3/gaap.rep
 	if [[ "$download" == "1" ]]; then cat $s3/snap.rep ; fi
 }
 

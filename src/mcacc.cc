@@ -318,7 +318,7 @@ void stage3a()
 	load(the_naccs);
 	posts_main(es, p, the_naccs);
 	etb_main(the_naccs);
-	gaap_main(the_naccs);
+	gaap_main(the_naccs, p);
 	epics_main(es);
 	cgt(es, p);
 }

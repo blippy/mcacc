@@ -4,6 +4,6 @@
 
 #include "nacc.hpp"
 
-void gaap_main(const nacc_ts& the_naccs);
+void gaap_main(const nacc_ts& the_naccs, const period& per);
 
 //#endif

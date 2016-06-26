@@ -126,7 +126,12 @@ void subtotal(ostream* ofs, const string& title, pennies_t value)
 
 }
 
-void gaap_main(const nacc_ts& the_naccs)
+void write_period(const string& s)
+{
+	(*m_ofs) << nchars(' ', 11) << s << endl;
+}
+
+void gaap_main(const nacc_ts& the_naccs, const period& per)
 {
 	m_naccs = the_naccs;
 
@@ -142,10 +147,15 @@ void gaap_main(const nacc_ts& the_naccs)
 
 
 	string fname;
-	s3("gaap.rep", fname);
+	s3("gaap-0.rep", fname);
 	ofstream ofs;
 	ofs.open(fname.c_str(), ofstream::out);
 	m_ofs = &ofs;
+
+	write_period(per.start_date);
+	write_period(per.end_date);
+	ofs << endl;
+
 	section inco = section("Income").adds({"div", "int", "wag"});
 	section exps = section("Expenses").adds( {"amz", "car", "chr", "cmp", "hol", "isp", "msc", "mum"});
 	section mygains = section("Folio Gain").adds( {"hal_g", "hl_g", "igg_g", "tdi_g", "tdn_g"});
