@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <set>
 #include <string>
-//#include <tuple>
 #include <vector>
 #include <stdexcept>
 
@@ -28,14 +27,6 @@
 #include "nacc.hpp"
 #include "yahoo.hpp"
 
-/*
-using std::cerr;
-using std::cout;
-using std::endl;
-using std::function;
-using std::string;
-using std::vector;
-*/
 
 namespace fsys = boost::filesystem;
 using namespace std;
@@ -202,23 +193,18 @@ a snapshot of gains
 
 
 	s2("dstamp", fname);
-	string dstamp = slurp(fname.c_str());
-	//cout << "*" << dstamp << "*" << endl;
+	string dstamp = slurp(fname);
 	s2("tstamp", fname);
-	string tstamp = slurp(fname.c_str());
-	//cout << "*" << tstamp << "*" << endl;
+	string tstamp = slurp(fname);
 	string dtstamp = dstamp + "\t" + tstamp;
 	
 	s2("yfetch.csv", fname);
 	vecvec_t yfetch = commasep(fname);
 
-	//cout << yout_name << endl;
 	ofstream yout;
 	s3("yproc.dsv", fname);
 	yout.open(fname);
-	//prin_vecvec1(yfetch);
 	sort(yfetch.begin(), yfetch.end(), yorder);
-	//prin_vecvec1(yfetch);
 	for(auto y: yfetch) {
 		yout << "yahoo " << dtstamp << "\t" ;
 		string ticker = y[0];
@@ -246,7 +232,7 @@ a snapshot of gains
 
 	string yout_name = rootdir() + "/yahoo/" + dstamp + ".txt";
 	s3("yproc.dsv", fname);
-	string content = slurp(fname.c_str()); // TODO write a verson of slurp that takes a string
+	string content = slurp(fname);
 	spit(yout_name, content);
 
 }
