@@ -6,6 +6,7 @@
 //using namespace std {
 
 typedef struct ntran_t {
+	std::string dstamp;
 	std::string dr;
 	std::string cr;
 	pennies_t amount;

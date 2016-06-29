@@ -16,6 +16,19 @@
 //using std::vector;
 using namespace std;
 
+void push(post_ts &ps, const string& dstamp, const string& ticker, string acc, string str, int amount)
+{
+	post_t p;
+	if(amount == 0) return;
+	p.dstamp = dstamp;
+	p.dr = acc;
+	p.cr = str;
+	p.amount = amount;
+	p.desc = str + ":" + ticker;
+	//p = {acc, e.dstamp, str, to_string(amount), str + ":" + e.ticker};
+	ps.push_back(p);
+}
+
 //int posts_main(const etranas_t& es, const period& per, const nacc_ts& the_naccs)
 int posts_main(const inputs_t& inputs)
 {
@@ -65,9 +78,9 @@ int posts_main(const inputs_t& inputs)
 		p.dstamp = n.dstamp;
 		p.dr = n.dr;
 		p.cr = n.cr;
-		if(dstamp < inputs.p.start_date) {
-			p.dr = inputs.naccs.at(dr).alt;
-			p.cr = inputs.naccs.at(cr).alt;
+		if(n.dstamp < inputs.p.start_date) {
+			p.dr = inputs.naccs.at(p.dr).alt;
+			p.cr = inputs.naccs.at(p.cr).alt;
 		}
 		p.desc = n.desc;
 		ps.push_back(p);
@@ -79,22 +92,16 @@ int posts_main(const inputs_t& inputs)
 	}
 	//etranas_t es = load_etranas();
 	for(auto& e: inputs.etrans) {
-		if(e.dstamp > per.end_date) continue;
+		if(e.dstamp > inputs.p.end_date) continue;
 		//string folio = e.folio;
 		//string sym = e.ticker;
 		//post p;
 
-		auto push = [ &e = e, &ps = ps](string acc, string str, int amount) {
-			post_t p;
-			if(amount == 0) return;
-			p = {acc, e.dstamp, str, to_string(amount), str + ":" + e.ticker};
-			ps.push_back(p);
-		};
 
-		push(folio, "pCost", -e.cost);
-		push(folio + "_c", "pVcd", e.vto);
-		push(folio + "_g", "pPdp", -e.profit);
-		push("opn", "pbd", -e.prior_year_profit);
+		push(ps, e.dstamp, e.ticker, e.folio,        "pCost", -e.cost);
+		push(ps, e.dstamp, e.ticker, e.folio + "_c", "pVcd", e.vto);
+		push(ps, e.dstamp, e.ticker, e.folio + "_g", "pPdp", -e.profit);
+		push(ps, e.dstamp, e.ticker, "opn",          "pbd", -e.prior_year_profit);
 	}
 
 	//std::sort(ps1.begin(), ps1.end());
