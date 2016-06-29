@@ -1,8 +1,3 @@
-/*
-IN: posts.dsv
-OUT: accs.rep etb.rep
-*/
-
 #include <set>
 #include <fstream>
 #include <iomanip>

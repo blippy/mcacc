@@ -22,19 +22,12 @@ void s3(const char *name, std::string &outname);
 
 typedef std::map<std::string, std::vector<std::string> > msvs_t;
 
-//enum dsv_e { etransa };
-
-//vecvec_t read_registered_dsv(dsv_e dsv);
-
 
 int eaug_main(const period& p);
 int epics_main(const etran_ts& es);
 int etb_main(nacc_ts& the_naccs);
-//int posts_main(const etranas_t& es, const period& per, 
-//	const nacc_ts& the_naccs);#
 int posts_main(const inputs_t inputs);
 int stend_main(const period& p);
-//int yproc_main_nox();
 
 void conv(double& d, std::string s);
 void conv(std::string& dest, std::string src);
