@@ -5,9 +5,10 @@
 #include <string>
 #include <vector>
 
-#include "etran.hpp"
+//#include "etran.hpp"
 #include "parse.hpp"
-#include "nacc.hpp"
+//#include "nacc.hpp"
+#include "inputs.hpp"
 
 std::string rootdir();
 std::string workdir();
@@ -27,10 +28,11 @@ typedef std::map<std::string, std::vector<std::string> > msvs_t;
 
 
 int eaug_main(const period& p);
-int epics_main(const etranas_t& es);
+int epics_main(const etran_ts& es);
 int etb_main(nacc_ts& the_naccs);
-int posts_main(const etranas_t& es, const period& per, 
-	const nacc_ts& the_naccs);
+//int posts_main(const etranas_t& es, const period& per, 
+//	const nacc_ts& the_naccs);#
+int posts_main(const inputs_t inputs);
 int stend_main(const period& p);
 //int yproc_main_nox();
 

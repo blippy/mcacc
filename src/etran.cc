@@ -1,6 +1,41 @@
 #include "etran.hpp"
 
-void convert(const strings &strs, etrana& e)
+/*
+etran_ts load_etrans()
+{
+	std::string filename;
+        s3("etrans-aug.dsv", filename);
+	vecvec_t rows = vecvec(filename);
+	etran_ts res;
+	for(vs_t &r: rows) { 
+		etrana e;
+		//e.from_vec(r);
+		convert(r, e);
+		res.push_back(e);
+	}
+	
+
+	// cubie seems to have problems with sorting, so I'll write my own algo: insertion sort
+	// https://en.wikipedia.org/wiki/Insertion_sort
+	for(int i=0; i< res.size(); i++) {
+		etrana x = res[i];
+		int j = i-1;
+		//while(j>=0 && etrana_gt(res[j],x)) {
+		while(j>=0 && res[j] > x) {
+			res[j+1] = res[j];
+			j -= 1;
+		}
+		res[j+1] = x;
+	}
+
+	// Input should already be sorted, so no need to do it
+
+	return res;
+}
+*/
+
+/*
+void convert(const strings &strs, etran_t& e)
 {
 
 	e.taxable	= strs[0] == "T";
@@ -46,4 +81,4 @@ strings etrana_fieldnames = {
 	"vto"
 
 };
-
+*/

@@ -6,6 +6,7 @@ mcacc_SOURCES = assets.cc \
 		comm.cc common.cc \
 		epics.cc etb.cc etran.cc etrans-aug.cc \
 		gaap.cc \
+		inputs.cc \
 		mcacc.cc \
 		nacc.cc \
 		parse.cc posts.cc \

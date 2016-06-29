@@ -4,16 +4,19 @@
 #include <vector>
 #include "types.hpp"
 
-typedef struct etrana {
+typedef struct etran_t {
 	bool	taxable;
 	dstamp_t	dstamp;
 	bool	buy;
 	std::string	folio;
-	std::string	sym;
+	//std::string	sym;
 	double	qty;
 	pennies_t	cost;
-	pennies_t	ucost;
 	std::string	ticker;
+	bool regular = true ; // leaks should set this to false
+
+	// derived fields:
+	pennies_t	ucost; // TODO check this has been derived
 	dstamp_t	start_dstamp;
 	pennies_t	start_price;
 	dstamp_t	end_dstamp;
@@ -23,13 +26,14 @@ typedef struct etrana {
 	pennies_t	flow;
 	pennies_t	profit;
 	pennies_t	vto;
-} etrana ;
+} etran_t ;
 
-bool operator<(const etrana& lhs, const etrana& rhs);
+bool operator<(const etran_t& lhs, const etran_t& rhs);
 
-void convert(const strings &str, etrana& e);
-bool same_ticker(etrana a, etrana b);
-typedef std::vector<etrana> etranas_t;
-etranas_t load_etranas();
-extern strings etrana_fieldnames;
+//void convert(const strings &str, etran_t& e);
+bool same_ticker(etran_t a, etran_t b);
+typedef std::vector<etran_t> etran_ts;
+//etranas_t load_etranas();
+//extern strings etrana_fieldnames;
 
+//etran_ts load_etrans();

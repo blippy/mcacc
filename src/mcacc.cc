@@ -26,6 +26,7 @@
 #include "gaap.hpp"
 #include "nacc.hpp"
 #include "yahoo.hpp"
+#include "inputs.hpp"
 
 
 namespace fsys = boost::filesystem;
@@ -33,46 +34,16 @@ using namespace std;
 
 
 
-bool operator<(const etrana& lhs, const etrana& rhs)
+bool operator<(const etran_t& lhs, const etran_t& rhs)
 {
-	return std::tie(lhs.sym, lhs.dstamp) < std::tie(rhs.sym, rhs.dstamp);
+	return std::tie(lhs.ticker, lhs.dstamp) < std::tie(rhs.ticker, rhs.dstamp);
 }
 
-bool operator>(const etrana &a, const etrana &b)
+bool operator>(const etran_t &a, const etran_t &b)
 {
-	return std::tie(a.sym, a.dstamp) > std::tie(b.sym, b.dstamp);
+	return std::tie(a.ticker, a.dstamp) > std::tie(b.ticker, b.dstamp);
 }
 
-// TODO belongs in etran.cc
-etranas_t load_etranas()
-{
-	std::string filename;
-        s3("etrans-aug.dsv", filename);
-	vecvec_t rows = vecvec(filename);
-	etranas_t res;
-	for(vs_t &r: rows) { 
-		etrana e;
-		//e.from_vec(r);
-		convert(r, e);
-		res.push_back(e);
-	}
-	
-
-	// cubie seems to have problems with sorting, so I'll write my own algo: insertion sort
-	// https://en.wikipedia.org/wiki/Insertion_sort
-	for(int i=0; i< res.size(); i++) {
-		etrana x = res[i];
-		int j = i-1;
-		//while(j>=0 && etrana_gt(res[j],x)) {
-		while(j>=0 && res[j] > x) {
-			res[j+1] = res[j];
-			j -= 1;
-		}
-		res[j+1] = x;
-	}
-
-	return res;
-}
 
 
 strings commasepstr(const string& line)
@@ -268,7 +239,7 @@ int dsv_extract()
 
 
 
-void cgt(const etranas_t& es, const period &per)
+void cgt(const etran_ts& es, const period &per)
 {
 	cout << "mcacc cgt" << endl;
 
@@ -289,24 +260,27 @@ void cgt(const etranas_t& es, const period &per)
 
 void stage3a()
 {
-	comm_ts the_comms;
-	load(the_comms);
-	yproc_main_nox(the_comms);
+	inputs_t inps = read_inputs();
+	cout << "TODO NOW, as I'm aborting prematurely\n";
+	exit(0);
 
-	period p = get_period();
+	//comm_ts the_comms;
+	//load(the_comms);
+	yproc_main_nox(inps.comms);
+
+	period p = inps.p;
 
 	stend_main(p);
 	eaug_main(p);
 
-	// TODO this shoould be able to be passed in from eaug. Check ordering, though
-	etranas_t es = load_etranas();
-	nacc_ts the_naccs;
-	load(the_naccs);
-	posts_main(es, p, the_naccs);
-	etb_main(the_naccs);
-	gaap_main(the_naccs, p);
-	epics_main(es);
-	cgt(es, p);
+	//etranas_t es = load_etranas();
+	//nacc_ts the_naccs;
+	//load(the_naccs);
+	posts_main(inps);
+	etb_main(inps.naccs);
+	gaap_main(inps.naccs, p);
+	epics_main(inps.etrans);
+	cgt(inps.etrans, p);
 }
 
 void print_version()

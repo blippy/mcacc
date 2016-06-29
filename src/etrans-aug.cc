@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include <unordered_map>
 
+#include "inputs.hpp"
 #include "reusable.hpp"
-#include "etran.hpp"
+//#include "etran.hpp"
 #include "common.hpp"
 #include "parse.hpp"
 #include "types.hpp"
@@ -13,56 +14,32 @@
 using namespace std;
 
 
-string to_intstring(double d) { return to_string(int(d)); }
+//string to_intstring(double d) { return to_string(int(d)); }
 
-/*
-// push back double as integer string 
-void pbdais(vector<string> &v, double d)
-{
-	v.push_back(to_intstring(d));
-}
-*/
 
-void augment(etrana& e, const stends_t& stends, const period& per)
+void augment(const inputs_t& inputs, etran_t& e) // etrana& e, const stends_t& stends, const period& per)
 {
-	//for(auto &e: aes) {
-	//string ticker = e[4];
-	stend_c s;
-	try {s = stends.at(e.sym);}
+	stend_c s; //tends = inputs.stends;
+	try {s = inputs.stends.at(e.ticker);}
 	catch (const std::out_of_range& oor) {		 
 		cerr << "WARN: Creating a fake stend for " 
-			<< e.sym << endl;
-		auto v = strings { e.sym, "X" , "0", "X", "0" };
+			<< e.ticker << endl;
+		auto v = strings { e.ticker, "X" , "0", "X", "0" };
 		s.from_vec(v);
 	}
 
-	//double unit = stod(e[6])*100.0/stof(e[5]);
 	e.ucost = e.cost/e.qty;
-	//e.push_back(to_string(unit));
-	//e.push_back(s.ticker);
-	//e.push_back(s.start_dstamp);
 	e.start_dstamp = s.start_dstamp;
-	//e.push_back(to_string(s.start_price));
 	e.start_price = s.start_price;
-	//e.push_back(s.end_dstamp);
 	e.end_dstamp = s.end_dstamp;
-	//e.push_back(to_string(s.end_price));
 	e.end_price = s.end_price;
 
-	//double sgn = e[2] == "B" ? 1 : -1;
-	//double qty = sgn * stod(e[5]);
-	//e[5] = to_string(qty); // adjust for sign change
-	//string dstamp = e[1];
-
-	//double cost = bround(100.0* sgn * stod(e[6]));
-	//e[6] = to_intstring(cost); // replace it with signed pennies
-
 	double qty = e.qty;
-	//double vbefore = 0, vflow = 0, profit_bd = 0;
 	e.vbefore = 0;
 	e.flow = 0;
 	e.prior_year_profit = 0;
 	e.vto = bround(qty * s.end_price);
+	const period& per = inputs.p;
 	switch(per.when(e.dstamp)) {
 		case perBefore:
 			e.vbefore = bround(qty * s.start_price);
@@ -75,23 +52,10 @@ void augment(etrana& e, const stends_t& stends, const period& per)
 			e.vto = 0;
 	}
 
-
-
-
 	e.profit = e.vto - e.vbefore - e.flow;
-
-
-	//pbdais(e, profit_bd);
-	//pbdais(e, vbefore);
-	//pbdais(e, vflow);
-	//pbdais(e, vprofit);
-	//pbdais(e, vto);
-
-
-	
 }
 
-void write_etrana(ofstream& ofs, const etrana& e)
+void write_etran(ofstream& ofs, const etran_t& e)
 {
 	auto out = [&ofs](auto v) { ofs << v << '\t' ;};
 	auto dout = [&out](double d, int dp) { out(format_num(d, dp)); };
@@ -100,11 +64,11 @@ void write_etrana(ofstream& ofs, const etrana& e)
 	out(e.dstamp); // 2
 	out(e.buy? 'B' : 'S'); // 3
 	out(e.folio); // 4
-	out(e.sym); // 5
+	out(e.ticker); // 5
 	dout(e.qty, 6); // 6
 	iout(e.cost); // 7
 	dout(e.ucost, 6); // 8
-	out(e.sym); // 9
+	out(e.ticker); // 9
 	out(e.start_dstamp); // 10
 	dout(e.start_price, 6); // 11
 	out(e.end_dstamp); // 12
@@ -117,15 +81,18 @@ void write_etrana(ofstream& ofs, const etrana& e)
 	ofs << endl;
 }
 
-int eaug_main(const period &per)
+int eaug_main(inputs_t& inputs) //const period &per)
 {
 	string fname;
-	etranas_t aes;
+	for(auto& e:inputs.etrans) augment(inputs, e);
 
+	//etran_ts& aes =  inputs.etrans;
+
+	/* TODO not sure if we need this
 	s1("etran.dsv", fname);
 	vecvec_t etrans = vecvec(fname);
 	for(vs_t &e: etrans) {
-		etrana cooked;
+		etran_t cooked;
 		cooked.taxable = e[0] == "T";
 		cooked.dstamp = e[1];
 		cooked.buy = e[2] == "B";
@@ -136,7 +103,10 @@ int eaug_main(const period &per)
 		cooked.cost = bround(100.0* sgn * stod(e[6]));
 		aes.push_back(cooked);
 	}
+	*/
 
+
+	/* TODO not sure if we need this
 	s1("leak-1.dsv", fname);
 	vecvec_t leak_1s = vecvec(fname);
 	for(auto& x: leak_1s) {
@@ -151,37 +121,25 @@ int eaug_main(const period &per)
 		// skip description, as there's nowhere to put it
 		aes.push_back(cooked);
 	}
+	*/
 
 
 	// sort, just to be sure
-	sort(begin(aes), end(aes));
+	// 2016-06-29 shouldn't be necessary as the inputs should have already been sorted
+	//sort(begin(aes), end(aes));
 	
 	// do the actual processing
-	stends_t stends = load_stends();
-	for(auto& e:aes) augment(e, stends, per);
+	//stends_t stends = load_stends();
+	for(auto& e:inputs.etrans) augment(inputs, e);
 
 	// save
 	s3("etrans-aug.dsv", fname);
-	//prin_vecvec(etrans, "\t", "\n", fname.c_str());
 	ofstream ofs;
 	ofs.open(fname);
-	for(auto& e:aes) write_etrana(ofs, e);
+	for(auto& e:inputs.etrans) write_etran(ofs, e);
 	ofs.close();
 
 
-	// output in rec format
-	/*
-	s3("etrans-aug.rec", fname);
-	std::ofstream ofs;
-	ofs.open(fname, std::ofstream::out);
-	for(auto e:etrans) { 
-		for(int i=0 ; i < etrana_fieldnames.size(); i++) {
-			ofs << etrana_fieldnames[i] << ": " ;
-			ofs << e[i] << endl;
-		}
-		ofs << endl;
-	}
-	*/
 	
 	return EXIT_SUCCESS;
 }
