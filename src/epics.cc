@@ -10,6 +10,8 @@
 #include "common.hpp"
 //#include "autotypes.hpp"
 #include "reusable.hpp"
+#include "stend.hpp"
+#include "epics.hpp"
 
 using namespace std;
 
@@ -111,23 +113,25 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 
 }
 
-void print_indices(ostream &pout)
+void print_indices(stend_ts& stends, ostream &pout)
 {
 	pout << endl;
 	string fname;
-	s3("stend.dsv", fname);
-	stends_t stends = load_stends();
+	//s3("stend.dsv", fname);
+	//stends_t stends = load_stends();
 
 	auto indices = strings {"^FTSE", "^FTMC", "^FTAS"};
-	for(auto i:indices){
-		double sp = stends[i].start_price;
-		double ep = stends[i].end_price;
+	for(string& i:indices){
+		stend_t s = stends[i];
+		double sp = s.start_price;
+		double ep = s.end_price;
 		double chg = ep - sp;
 		auto fields = strings { pad_ticker(i), to_gbx(sp), pad_gbp(' '), to_gbx(chg), to_gbx(ep), ret_str(ep, sp)};
 		print_strings(pout, fields);
 	}
 }
-int epics_main(const etran_ts& es)
+
+void epics_main(const etran_ts& es, stend_ts& stends)
 {
 	//etranas_t es = load_etranas();
 	// TODO determine sorting requirements
@@ -152,9 +156,8 @@ int epics_main(const etran_ts& es)
 
 	for(auto f:folios){ process_folio(f, keys, es, eout, pout); }
 
-	print_indices(pout);
+	print_indices(stends, pout);
 
 	eout.close();
 	pout.close();
-	return EXIT_SUCCESS;
 }

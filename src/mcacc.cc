@@ -265,7 +265,7 @@ void stage3a()
 
 	period p = inps.p;
 
-	stend_main(p);
+	stend_ts stends = stend_main(inps);
 	eaug_main(inps);
 
 	//etranas_t es = load_etranas();
@@ -274,7 +274,7 @@ void stage3a()
 	post_ts posts = posts_main(inps);
 	etb_main(inps.naccs, posts);
 	gaap_main(inps.naccs, p);
-	epics_main(inps.etrans);
+	epics_main(inps.etrans, stends);
 	cgt(inps.etrans, p);
 }
 

@@ -19,13 +19,15 @@ using namespace std;
 
 void augment(const inputs_t& inputs, etran_t& e) // etrana& e, const stends_t& stends, const period& per)
 {
-	stend_c s; //tends = inputs.stends;
+	stend_t s; //tends = inputs.stends;
 	try {s = inputs.stends.at(e.ticker);}
 	catch (const std::out_of_range& oor) {		 
 		cerr << "WARN: Creating a fake stend for " 
 			<< e.ticker << endl;
 		auto v = strings { e.ticker, "X" , "0", "X", "0" };
-		s.from_vec(v);
+		//s.from_vec(v);
+		cerr << "etrans-aug.cc:augment(). I give up with fatal exit" << endl;
+		exit(EXIT_FAILURE);
 	}
 
 	e.ucost = e.cost/e.qty;

@@ -1,7 +1,6 @@
 /* calculate the start and end prices for yahoo
 created 16-Feb-2016
 
-IN: s1/yahoo.dsv (any order)
 OUT: s3/stend.dsv
 
 */
@@ -20,13 +19,15 @@ OUT: s3/stend.dsv
 #include "parse.hpp"
 #include "types.hpp"
 #include "reusable.hpp"
+#include "stend.hpp"
+//#endif
 
 //namespace fs = std::filesystem;
 
 using namespace std;
 
 #define SEP '\t'
-
+/*
 void scan_cache(vecvec_t &yahoos)
 {
 
@@ -53,9 +54,8 @@ void scan_cache(vecvec_t &yahoos)
 	}
 
 }
+*/
 
-
-//string to_string(etran
 
 void scan_inputs(vecvec_t &yahoos)
 {
@@ -153,13 +153,15 @@ void output(vecvec_t tbl, const period& per)
 	fout.close();
 }
 
-int stend_main(const period& per)
+stend_ts stend_main(const inputs_t& inputs)
 {
-	/* 17-May-2016: I confirm that this uses prices generated from etrans */
+	// TODO possibly doesn't pick up from s2
+	stend_ts stends;
+	cerr << "TODO stend_main()\n";
 	vecvec_t yahoos;
-	scan_cache(yahoos);
+	//scan_cache(yahoos);
 	scan_inputs(yahoos);
 	reorder(yahoos);
 	output(yahoos, per);
-	return EXIT_SUCCESS;
+	return stends;
 }

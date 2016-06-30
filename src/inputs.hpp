@@ -4,6 +4,7 @@
 #include "etran.hpp"
 #include "nacc.hpp"
 #include "ntran.hpp"
+//#include "stend.hpp"
 #include "yahoo.hpp"
 
 typedef struct inputs_t {
@@ -12,7 +13,7 @@ typedef struct inputs_t {
 	nacc_ts naccs;
 	ntran_ts ntrans;
 	period p;
-	stends_t stends;
+	//stend_ts stends;
 	yahoo_ts yahoos;
 } inputs_t;
 

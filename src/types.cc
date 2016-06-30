@@ -70,7 +70,7 @@ bool period::during(const std::string &dstamp) const
 }
 
 
-
+/*
 void stend_c::from_vec(strings &row)
 {
 	ticker = row[0];
@@ -94,3 +94,4 @@ stends_t load_stends()
 	}
 	return smap;
 }
+*/
