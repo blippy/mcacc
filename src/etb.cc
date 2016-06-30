@@ -14,18 +14,19 @@
 #include "common.hpp"
 #include "parse.hpp"
 #include "types.hpp"
+#include "posts.hpp"
 
 using namespace std;
 
-int etb_main(nacc_ts& the_naccs)
+void etb_main(nacc_ts& the_naccs, const post_ts& posts)
 {
 
 	//reset the account balances
 	for(auto& n:the_naccs) n.second.bal = 0;
 
 	std::string fname;
-	s3("posts.dsv", fname);
-        vecvec_t posts = vecvec(fname);
+	//s3("posts.dsv", fname);
+        //vecvec_t posts = vecvec(fname);
 	int total;
 
 	ofstream aout, eout;
@@ -35,19 +36,20 @@ int etb_main(nacc_ts& the_naccs)
 	eout.open(fname);
 
 	set<string> keys;
-	for(auto p:posts) {keys.insert(p[0]); }
+	for(auto p:posts) {keys.insert(p.dr); }
 
 	for(auto k: keys) {
 		total = 0;
 
 		for(auto p:posts){
-			if(p[0] != k) continue;
+			if(p.dr != k) continue;
 			// normal case
-			aout << setw(7) << p[0];
-			aout << setw(11) << p[1];
-			aout << setw(7) << p[2];
-			aout << setw(30) << p[4];
-			int pennies = stoi(p[3]);
+			aout << setw(7) << p.dr;
+			aout << setw(11) << p.dstamp;
+			aout << setw(7) << p.cr;
+			aout << setw(30) << p.desc;
+			//int pennies = stoi(p[3]);
+			pennies_t pennies = p.amount;
 			aout << fixed << setw(12) << setprecision(2) << (double(pennies) /100);
 			total += pennies;
 			aout << setw(12) << setprecision(2) << (double(total)/100);

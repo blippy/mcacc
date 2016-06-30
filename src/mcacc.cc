@@ -21,12 +21,13 @@
 #include "common.hpp"
 #include "parse.hpp"
 #include "reusable.hpp"
-#include "etran.hpp"
-#include "comm.hpp"
+//#include "etran.hpp"
+//#include "comm.hpp"
 #include "gaap.hpp"
-#include "nacc.hpp"
-#include "yahoo.hpp"
+//#include "nacc.hpp"
+//#include "yahoo.hpp"
 #include "inputs.hpp"
+#include "posts.hpp"
 
 
 namespace fsys = boost::filesystem;
@@ -48,16 +49,10 @@ bool operator>(const etran_t &a, const etran_t &b)
 
 strings commasepstr(const string& line)
 {
-	//strings result;
 	string line1 = line;
-//	for(auto& c:line) {
-//		char c1 = c;
-//		if(c1 == ',') c1 = ' ';
-
-
-		for(auto it = line1.begin(); it != line1.end(); ++it) {
-			if(*it == ',') *it = ' '; }
-                return tokenize_line(line1);
+	for(auto it = line1.begin(); it != line1.end(); ++it) {
+		if(*it == ',') *it = ' '; }
+	return tokenize_line(line1);
 }	
 vecvec_t commasep(string  &filename)
 {
@@ -261,8 +256,8 @@ void cgt(const etran_ts& es, const period &per)
 void stage3a()
 {
 	inputs_t inps = read_inputs();
-	cout << "TODO NOW, as I'm aborting prematurely\n";
-	exit(0);
+	//cout << "TODO NOW, as I'm aborting prematurely\n";
+	//exit(0);
 
 	//comm_ts the_comms;
 	//load(the_comms);
@@ -271,13 +266,13 @@ void stage3a()
 	period p = inps.p;
 
 	stend_main(p);
-	eaug_main(p);
+	eaug_main(inps);
 
 	//etranas_t es = load_etranas();
 	//nacc_ts the_naccs;
 	//load(the_naccs);
-	posts_main(inps);
-	etb_main(inps.naccs);
+	post_ts posts = posts_main(inps);
+	etb_main(inps.naccs, posts);
 	gaap_main(inps.naccs, p);
 	epics_main(inps.etrans);
 	cgt(inps.etrans, p);

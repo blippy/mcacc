@@ -81,7 +81,7 @@ void write_etran(ofstream& ofs, const etran_t& e)
 	ofs << endl;
 }
 
-int eaug_main(inputs_t& inputs) //const period &per)
+void eaug_main(inputs_t& inputs) //const period &per)
 {
 	string fname;
 	for(auto& e:inputs.etrans) augment(inputs, e);
@@ -138,9 +138,5 @@ int eaug_main(inputs_t& inputs) //const period &per)
 	ofs.open(fname);
 	for(auto& e:inputs.etrans) write_etran(ofs, e);
 	ofs.close();
-
-
-	
-	return EXIT_SUCCESS;
 }
 

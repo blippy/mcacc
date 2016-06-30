@@ -130,7 +130,10 @@ void print_indices(ostream &pout)
 int epics_main(const etran_ts& es)
 {
 	//etranas_t es = load_etranas();
-	assert(std::is_sorted(es.begin(), es.end()));
+	// TODO determine sorting requirements
+	//assert(std::is_sorted(es.begin(), es.end()));
+	//if(!std::is_sorted(es.begin(), es.end()))
+	//	std::sort(es.begin(), es.end());
 
 	set<string> keys;
 	for(auto e:es) { keys.insert(e.ticker);}

@@ -84,6 +84,21 @@ void insert_LVL03(inputs_t& inputs, const strings& fields)
 	}
 }
 
+void insert_yahoo(inputs_t& inputs, const strings& fields)
+{
+	yahoo_t y;
+	y.dstamp = fields[2];
+	y.dstamp = fields[3];
+	y.ticker = fields[4];
+	y.rox = stod(fields[5]);
+	y.price = stod(fields[6]);
+	y.chg = stod(fields[7]);
+	y.chgpc = stod(fields[8]);
+	y.currency = fields[9];
+	y.desc = fields[10];
+	inputs.yahoos.push_back(y);
+}
+
 
 void set_period(inputs_t& inputs, const strings& fields)
 {
@@ -120,7 +135,7 @@ inputs_t read_inputs()
 				set_period(inputs, row);
 				break;
 			case 5: // LVL05
-				TODO();
+				insert_yahoo(inputs, row);
 				break;
 			default:
 				cerr << "Unhandled level number " << level << " in inputs.cc/read_inputs()\n";

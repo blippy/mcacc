@@ -24,7 +24,7 @@ void push(post_ts &ps, const string& dstamp, const string& ticker, string acc, s
 	ps.push_back(p);
 }
 
-int posts_main(const inputs_t& inputs)
+post_ts posts_main(const inputs_t& inputs)
 {
 
 	post_ts ps;
@@ -54,6 +54,5 @@ int posts_main(const inputs_t& inputs)
 		push(ps, e.dstamp, e.ticker, "opn",          "pbd", -e.prior_year_profit);
 	}
 
-
-	return EXIT_SUCCESS;
+	return ps;
 }

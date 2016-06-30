@@ -15,3 +15,4 @@ typedef struct post_t {
 
 typedef std::vector<post_t> post_ts;
 
+post_ts posts_main(const inputs_t& inputs);

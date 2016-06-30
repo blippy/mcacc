@@ -9,6 +9,7 @@
 #include "parse.hpp"
 //#include "nacc.hpp"
 #include "inputs.hpp"
+#include "posts.hpp"
 
 std::string rootdir();
 std::string workdir();
@@ -23,10 +24,10 @@ void s3(const char *name, std::string &outname);
 typedef std::map<std::string, std::vector<std::string> > msvs_t;
 
 
-int eaug_main(const period& p);
 int epics_main(const etran_ts& es);
 int etb_main(nacc_ts& the_naccs);
-int posts_main(const inputs_t inputs);
+void eaug_main(inputs_t& inputs);
+void etb_main(nacc_ts& the_naccs, const post_ts& posts);
 int stend_main(const period& p);
 
 void conv(double& d, std::string s);
