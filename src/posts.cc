@@ -40,8 +40,11 @@ post_ts posts_main(const inputs_t& inputs)
 			p.dr = inputs.naccs.at(p.dr).alt;
 			p.cr = inputs.naccs.at(p.cr).alt;
 		}
+		p.amount = n.amount;
 		p.desc = n.desc;
 		ps.push_back(p);
+
+		std::swap(p.dr, p.cr);
 		p.amount = -p.amount;
 		ps.push_back(p);
 	}
