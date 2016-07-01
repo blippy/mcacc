@@ -18,7 +18,7 @@ typedef struct yahoo_t {
 } yahoo_t;
 
 //typedef std::vector<yahoo_t> yahoo_ts;
-typedef std::multimap<std::string, yahoo_t> yahoo_ts;
+typedef std::map<std::string, std::vector<yahoo_t> > yahoo_ts;
 
 // TODO LOW is fetch_tickers used any more?
 std::vector<std::string> fetch_tickers(const std::vector<std::string>& tickers, std::string& usd);

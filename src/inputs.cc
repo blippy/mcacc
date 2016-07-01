@@ -88,7 +88,7 @@ void insert_yahoo(inputs_t& inputs, const strings& fields)
 {
 	yahoo_t y;
 	y.dstamp = fields[2];
-	y.dstamp = fields[3];
+	y.tstamp = fields[3];
 	y.ticker = fields[4];
 	y.rox = stod(fields[5]);
 	y.price = stod(fields[6]);
@@ -96,7 +96,12 @@ void insert_yahoo(inputs_t& inputs, const strings& fields)
 	y.chgpc = stod(fields[8]);
 	y.currency = fields[9];
 	y.desc = fields[10];
-	inputs.yahoos.emplace(y.ticker, y);
+
+	auto& ys = inputs.yahoos;
+	//inputs.yahoos.emplace(y.ticker, y);
+	if(ys.find(y.ticker) == ys.end())
+		ys[y.ticker] = vector<yahoo_t> {};
+	ys[y.ticker].push_back(y);
 }
 
 

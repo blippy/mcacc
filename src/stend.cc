@@ -21,7 +21,7 @@ OUT: s3/stend.dsv
 #include "types.hpp"
 #include "reusable.hpp"
 #include "stend.hpp"
-//#endif
+//#include "yahoo.hpp"
 
 //namespace fs = std::filesystem;
 
@@ -160,16 +160,24 @@ stend_ts stend_main(const inputs_t& inputs, period& per)
 	stend_ts stends;
 	//for(auto& y:inputs.yahoos) 
 	cout << "TODO I am testing stend_main()\n";
-	cout << inputs.yahoos.count("TAST.L") << endl;
+//	cout << inputs.yahoos.count("TAST.L") << endl;
 //	for(auto& it= inputs.yahoos.lower_bound("TAST.L"); ;) 
 //			it <inputs.yahoos.upper_bound("TAST.L"); ++it)
-auto rng = inputs.yahoos.equal_range("TAST.L");
-auto it = rng.first.begin();
+//auto rng = inputs.yahoos.equal_range("TAST.L");
+//auto it = rng.first.begin();
 //cout << (rng.first);
-	{
-		cout << "." ;
-	}
 
+	auto ys = inputs.yahoos;
+	//std::vector<yahoo_t> ys1 = ys.find("TAST.L");
+	auto it = ys.find("TAST.L");
+	if(it == ys.end()) {
+		cerr << "TODO stend_main() is fatally confused\n";
+		exit(EXIT_FAILURE);
+	}
+	vector<yahoo_t> ys1 = it->second;
+	for(auto& y:ys1) {
+		cout << y.ticker << " " << y.dstamp << " " << y.price << endl;
+	}
 
 	cerr << "TODO stend_main()\n";
 	vecvec_t yahoos;
