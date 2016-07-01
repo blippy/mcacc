@@ -7,11 +7,11 @@
 
 
 typedef struct stend_t {
-		std::string ticker;
-		dstamp_t start_dstamp;
-		pennies_t start_price;
-		dstamp_t end_dstamp;
-		pennies_t end_price;
+		std::string ticker = "UNKNOWN";
+		dstamp_t start_dstamp = "0000-00-00";
+		pennies_t start_price = 0;
+		dstamp_t end_dstamp = "3000-12-31";
+		pennies_t end_price = 0;
 } stend_t;
 
 typedef std::map<std::string, stend_t> stend_ts;

@@ -26,10 +26,11 @@ void augment(const inputs_t& inputs, etran_t& e, const stend_ts& stends) // etra
 	catch (const std::out_of_range& oor) {		 
 		cerr << "WARN: Creating a fake stend for " 
 			<< e.ticker << endl;
-		auto v = strings { e.ticker, "X" , "0", "X", "0" };
+		s.ticker = e.ticker;
+		//auto v = strings { e.ticker, "X" , "0", "X", "0" };
 		//s.from_vec(v);
-		cerr << "etrans-aug.cc:augment(). I give up with fatal exit" << endl;
-		exit(EXIT_FAILURE);
+		//cerr << "etrans-aug.cc:augment(). I give up with fatal exit" << endl;
+		//exit(EXIT_FAILURE);
 	}
 
 	e.ucost = e.cost/e.qty;
