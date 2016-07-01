@@ -18,7 +18,7 @@ typedef std::map<std::string, stend_t> stend_ts;
 //stends_t load_stends();
 
 
-stend_ts stend_main(const inputs_t& inputs);
+stend_ts stend_main(const inputs_t& inputs, period& per);
 
 /*
 class stend_c {

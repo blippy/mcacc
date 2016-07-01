@@ -28,6 +28,9 @@
 //#include "yahoo.hpp"
 #include "inputs.hpp"
 #include "posts.hpp"
+#include "stend.hpp"
+#include "etrans-aug.hpp"
+#include "epics.hpp"
 
 
 namespace fsys = boost::filesystem;
@@ -265,8 +268,8 @@ void stage3a()
 
 	period p = inps.p;
 
-	stend_ts stends = stend_main(inps);
-	eaug_main(inps);
+	stend_ts stends = stend_main(inps, p);
+	eaug_main(inps, stends);
 
 	//etranas_t es = load_etranas();
 	//nacc_ts the_naccs;

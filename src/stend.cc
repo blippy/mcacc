@@ -153,7 +153,7 @@ void output(vecvec_t tbl, const period& per)
 	fout.close();
 }
 
-stend_ts stend_main(const inputs_t& inputs)
+stend_ts stend_main(const inputs_t& inputs, period& per)
 {
 	// TODO possibly doesn't pick up from s2
 	stend_ts stends;

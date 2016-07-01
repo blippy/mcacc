@@ -10,6 +10,8 @@
 #include "common.hpp"
 #include "parse.hpp"
 #include "types.hpp"
+//#include "stend.hpp"
+#include "etrans-aug.hpp"
 
 using namespace std;
 
@@ -17,10 +19,10 @@ using namespace std;
 //string to_intstring(double d) { return to_string(int(d)); }
 
 
-void augment(const inputs_t& inputs, etran_t& e) // etrana& e, const stends_t& stends, const period& per)
+void augment(const inputs_t& inputs, etran_t& e, const stend_ts& stends) // etrana& e, const stends_t& stends, const period& per)
 {
 	stend_t s; //tends = inputs.stends;
-	try {s = inputs.stends.at(e.ticker);}
+	try {s = stends.at(e.ticker);}
 	catch (const std::out_of_range& oor) {		 
 		cerr << "WARN: Creating a fake stend for " 
 			<< e.ticker << endl;
@@ -83,10 +85,10 @@ void write_etran(ofstream& ofs, const etran_t& e)
 	ofs << endl;
 }
 
-void eaug_main(inputs_t& inputs) //const period &per)
+void eaug_main(inputs_t& inputs, const stend_ts& stends) //const period &per)
 {
 	string fname;
-	for(auto& e:inputs.etrans) augment(inputs, e);
+	for(auto& e:inputs.etrans) augment(inputs, e, stends);
 
 	//etran_ts& aes =  inputs.etrans;
 
@@ -132,7 +134,7 @@ void eaug_main(inputs_t& inputs) //const period &per)
 	
 	// do the actual processing
 	//stends_t stends = load_stends();
-	for(auto& e:inputs.etrans) augment(inputs, e);
+	//for(auto& e:inputs.etrans) augment(inputs, e);
 
 	// save
 	s3("etrans-aug.dsv", fname);
