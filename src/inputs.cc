@@ -96,7 +96,7 @@ void insert_yahoo(inputs_t& inputs, const strings& fields)
 	y.chgpc = stod(fields[8]);
 	y.currency = fields[9];
 	y.desc = fields[10];
-	inputs.yahoos.push_back(y);
+	inputs.yahoos.emplace(y.ticker, y);
 }
 
 

@@ -12,6 +12,7 @@ OUT: s3/stend.dsv
 #include <unordered_map>
 #include <assert.h>
 #include <dirent.h>
+#include <map>
 #include <set>
 #include <stdexcept>
 
@@ -56,7 +57,7 @@ void scan_cache(vecvec_t &yahoos)
 }
 */
 
-
+/*
 void scan_inputs(vecvec_t &yahoos)
 {
 	string fname;
@@ -88,7 +89,7 @@ void scan_inputs(vecvec_t &yahoos)
 	}
 	
 }
-
+*/
 bool ysorter(vector<string> a, vector<string> b)
 {
 	return std::tie(a[0], a[1], a[2]) < std::tie(b[0], b[1], b[2]);
@@ -157,10 +158,23 @@ stend_ts stend_main(const inputs_t& inputs, period& per)
 {
 	// TODO possibly doesn't pick up from s2
 	stend_ts stends;
+	//for(auto& y:inputs.yahoos) 
+	cout << "TODO I am testing stend_main()\n";
+	cout << inputs.yahoos.count("TAST.L") << endl;
+//	for(auto& it= inputs.yahoos.lower_bound("TAST.L"); ;) 
+//			it <inputs.yahoos.upper_bound("TAST.L"); ++it)
+auto rng = inputs.yahoos.equal_range("TAST.L");
+auto it = rng.first.begin();
+//cout << (rng.first);
+	{
+		cout << "." ;
+	}
+
+
 	cerr << "TODO stend_main()\n";
 	vecvec_t yahoos;
 	//scan_cache(yahoos);
-	scan_inputs(yahoos);
+	//scan_inputs(yahoos);
 	reorder(yahoos);
 	output(yahoos, per);
 	return stends;
