@@ -27,7 +27,7 @@ OUT: s3/stend.dsv
 
 using namespace std;
 
-#define SEP '\t'
+//#define SEP '\t'
 /*
 void scan_cache(vecvec_t &yahoos)
 {
@@ -90,6 +90,7 @@ void scan_inputs(vecvec_t &yahoos)
 	
 }
 */
+/*
 bool ysorter(vector<string> a, vector<string> b)
 {
 	return std::tie(a[0], a[1], a[2]) < std::tie(b[0], b[1], b[2]);
@@ -153,13 +154,18 @@ void output(vecvec_t tbl, const period& per)
 
 	fout.close();
 }
+*/
 
+bool ticker_sorter(yahoo_t a, yahoo_t b)
+{
+	tie(a.ticker, a.dstamp, a.tstamp) < tie(b.ticker, b.dstamp, b.tstamp);
+}
 stend_ts stend_main(const inputs_t& inputs, period& per)
 {
 	// TODO possibly doesn't pick up from s2
 	stend_ts stends;
 	//for(auto& y:inputs.yahoos) 
-	cout << "TODO I am testing stend_main()\n";
+//	cout << "TODO I am testing stend_main()\n";
 //	cout << inputs.yahoos.count("TAST.L") << endl;
 //	for(auto& it= inputs.yahoos.lower_bound("TAST.L"); ;) 
 //			it <inputs.yahoos.upper_bound("TAST.L"); ++it)
@@ -169,6 +175,29 @@ stend_ts stend_main(const inputs_t& inputs, period& per)
 
 	auto ys = inputs.yahoos;
 	//std::vector<yahoo_t> ys1 = ys.find("TAST.L");
+	for(auto& y:ys) {
+		stend_t s;
+		s.ticker = y.first;
+		//cout << y.first << endl;
+		auto& vals = y.second;
+		sort(begin(vals), end(vals), ticker_sorter);
+		for(auto& v:vals) {
+			if(v.dstamp<per.start_date) {
+				s.start_dstamp = v.dstamp;
+				s.start_price = v.price;
+			}
+			if(v.dstamp<=per.end_date) {
+				s.end_dstamp = v.dstamp;
+				s.end_price = v.price;
+			}
+
+
+			//cout << v.dstamp << " " << v.price << endl;
+		}
+		stends[s.ticker] = s;
+	}
+
+	/*
 	auto it = ys.find("TAST.L");
 	if(it == ys.end()) {
 		cerr << "TODO stend_main() is fatally confused\n";
@@ -178,12 +207,12 @@ stend_ts stend_main(const inputs_t& inputs, period& per)
 	for(auto& y:ys1) {
 		cout << y.ticker << " " << y.dstamp << " " << y.price << endl;
 	}
-
+*/
 	cerr << "TODO stend_main()\n";
-	vecvec_t yahoos;
+	//vecvec_t yahoos;
 	//scan_cache(yahoos);
 	//scan_inputs(yahoos);
-	reorder(yahoos);
-	output(yahoos, per);
+	//reorder(yahoos);
+	//output(yahoos, per);
 	return stends;
 }
