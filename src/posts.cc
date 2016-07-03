@@ -12,6 +12,16 @@
 
 using namespace std;
 
+bool operator<(post_t a, post_t b)
+{
+	return std::tie(a.dr, a.dstamp) < std::tie(b.dr, b.dstamp);
+}
+/*bool operator<(post_t a, post_t b)
+{
+	return std::tie(a.dr, a.dstamp) < std::tie(b.cr, b.dstamp);
+}
+*/
+
 void push(post_ts &ps, const string& dstamp, const string& ticker, string acc, string str, int amount)
 {
 	post_t p;
@@ -57,5 +67,6 @@ post_ts posts_main(const inputs_t& inputs)
 		push(ps, e.dstamp, e.ticker, "opn",          "pbd", -e.prior_year_profit);
 	}
 
+	sort(begin(ps), end(ps));
 	return ps;
 }

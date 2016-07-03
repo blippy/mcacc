@@ -37,11 +37,12 @@ etran_t mketran(const strings& fields)
 	etran_t e;
 	e.taxable = fields[8] == "T";
 	e.dstamp = fields[1];
-	e.buy = fields[7] == "B";
+	e.sgn = fields[7] =="B"? 1 : -1;
+	e.buy = e.sgn == 1;
 	e.folio = fields[2];
 	e.ticker = fields[3];
-	e.qty= stod(fields[5]);
-	e.cost= stod(fields[6]);
+	e.qty= e.sgn * stod(fields[5]);
+	e.cost= e.sgn * enpennies(fields[6]);
 	e.regular = true;
 	//e.ticker= fields[3];
 	return e;

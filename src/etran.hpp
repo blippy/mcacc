@@ -7,6 +7,7 @@
 typedef struct etran_t {
 	bool	taxable;
 	dstamp_t	dstamp;
+	double sgn;
 	bool	buy;
 	std::string	folio;
 	//std::string	sym;

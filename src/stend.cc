@@ -184,7 +184,7 @@ stend_ts stend_main(const inputs_t& inputs, period& per)
 		for(auto& v:vals) {
 			if(v.dstamp<per.start_date) {
 				s.start_dstamp = v.dstamp;
-				s.start_price = v.price;
+				s.start_price = v.price ;
 			}
 			if(v.dstamp<=per.end_date) {
 				s.end_dstamp = v.dstamp;
