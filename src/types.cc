@@ -14,10 +14,10 @@
 
 using namespace std;
 
-double enpennies(std::string s, bool round)	
+double enpennies(std::string s)
 {
 	double p= 100.0* stod(s);
-	if(round) p = bround(p);
+	p = bround(p);
 	return p;
 }
 string to_gbx(pennies_t p)

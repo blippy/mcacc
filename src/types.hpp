@@ -10,7 +10,7 @@ typedef std::vector<std::string> strings;
 std::string to_gbp(pennies_t p);
 std::string to_gbx(pennies_t p);
 
-double enpennies(std::string s, bool round = false);
+double enpennies(std::string s);
 typedef std::string dstamp_t;
 
 std::string pad_ticker(std::string ticker);

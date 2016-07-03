@@ -1,0 +1,5 @@
+etran needs to generate an automatic stend
+
+mcacc should generate the ledger data; otherwise it's too slow
+
+/usr/include/boost/network/protocol/http/client.hpp
