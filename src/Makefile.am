@@ -10,8 +10,11 @@ mcacc_SOURCES = assets.cc \
 		mcacc.cc \
 		nacc.cc \
 		parse.cc posts.cc \
-		reusable.cc stend.cc types.cc yahoo.cc \
-		$(BUILT_SOURCES)
+		reusable.cc stend.cc types.cc \
+		wiegley.cc \
+		yahoo.cc
+
+mcacc_SOURCES += $(BUILT_SOURCES)
 
 CLEANFILES = $(BUILT_SOURCES)
 

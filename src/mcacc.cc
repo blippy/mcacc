@@ -32,6 +32,7 @@
 #include "stend.hpp"
 #include "etrans-aug.hpp"
 #include "epics.hpp"
+#include "wiegley.hpp"
 
 
 namespace fsys = boost::filesystem;
@@ -283,6 +284,7 @@ void main_processing(variables_map vm)
 	gaap_main(inps.naccs, p);
 	epics_main(inps.etrans, stends);
 	cgt(inps.etrans, p);
+	wiegley(inps);
 }
 
 void print_version()

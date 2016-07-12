@@ -12,7 +12,7 @@ typedef struct etran_t {
 	std::string	folio;
 	//std::string	sym;
 	double	qty;
-	pennies_t	cost;
+	pennies_t	cost = 0;
 	std::string	ticker;
 	bool regular = true ; // leaks should set this to false
 
