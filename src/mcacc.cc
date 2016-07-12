@@ -94,10 +94,10 @@ void stage0()
 	rmfiles(sndir(3));
 }
 
-void stage2()
+void download(const inputs_t& inputs)
 {
-	comm_ts the_comms;
-	load(the_comms);
+	const comm_ts& the_comms = inputs.comms;
+	//load(the_comms);
 
 	strings tickers;
 	for(auto& cm:the_comms) {
@@ -263,7 +263,7 @@ void main_processing(variables_map vm)
 	inputs_t inps = read_inputs();
 
 	if(vm.count("snap")) {
-		puts("TODO snampshot");
+		download(inps);
 	}
 
 	//comm_ts the_comms;
@@ -350,6 +350,11 @@ int main(int argc, char *argv[])
 	}
 
 	if(vm.count("help")) return EXIT_SUCCESS;
+
+	if(vm.count("root")) {
+		print_rootdir();
+		return EXIT_SUCCESS;
+	}
 
 	if(vm.count("version")) {
 		print_version();
