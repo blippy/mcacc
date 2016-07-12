@@ -16,6 +16,7 @@
 #include <unistd.h>
 
 #include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
 
 #include "assets.hpp"
 #include "common.hpp"
@@ -35,6 +36,7 @@
 
 namespace fsys = boost::filesystem;
 using namespace std;
+using namespace boost::program_options;
 
 
 
@@ -256,11 +258,13 @@ void cgt(const etran_ts& es, const period &per)
 	cout << "TODO: cgt - pending something interesting to report" << endl;
 }
 
-void stage3a()
+void main_processing(variables_map vm)
 {
 	inputs_t inps = read_inputs();
-	//cout << "TODO NOW, as I'm aborting prematurely\n";
-	//exit(0);
+
+	if(vm.count("snap")) {
+		puts("TODO snampshot");
+	}
 
 	//comm_ts the_comms;
 	//load(the_comms);
@@ -291,6 +295,7 @@ void print_rootdir()
 	cout << rootdir() << "\n";
 }
 
+/*
 // command dispatch table
 typedef struct dte { string cmd ; function<void()> fn ; } dte;
 const auto ditab = vector<dte> {
@@ -311,18 +316,60 @@ void dispatch(string cmd)
 	cerr << "Command not understood: " << cmd << endl;
 	exit(EXIT_FAILURE);
 }
+*/
+
+variables_map process_options(int argc, char *argv[])
+{
+	//options res;
+	options_description desc{"Options"};
+	desc.add_options()
+		("help,h", "Help")
+		("root", "Print root directory")
+		("version", "Version")
+		("stage0, 0", "Stage 0")
+		("snap,s", "Snapshot");
+	variables_map vm;
+	store(parse_command_line(argc, argv, desc), vm);
+	notify(vm);
+
+	if(vm.count("help")) cout << desc << "\n";
+
+	return vm;
+}
 
 int main(int argc, char *argv[])
 {
 
+	variables_map vm;
 
+	try {
+		vm = process_options(argc, argv);
+
+	} catch (const error &ex) {
+		cerr << ex.what() << "\n";
+	}
+
+	if(vm.count("help")) return EXIT_SUCCESS;
+
+	if(vm.count("version")) {
+		print_version();
+		return EXIT_SUCCESS;
+	}
+
+
+	if(vm.count("stage0")) stage0();
+
+	main_processing(vm);
+
+/*
 	if(argc>1) {
 		string cmd;
-	       	cmd = argv[1];
+		cmd = argv[1];
 		dispatch(cmd);
 
 	} else {
 		cout << "No command specified" << endl;
 	}
+	*/
 	return EXIT_SUCCESS;
 }
