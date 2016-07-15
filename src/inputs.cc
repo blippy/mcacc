@@ -79,13 +79,13 @@ void insert_LVL03(inputs_t& inputs, const strings& fields)
 	} else if (subtype == "NTRAN-1") {
 		inputs.ntrans.push_back(mkntran(fields));
 	} else {
-		cerr << "inputs.cc:read_inputs()/LVL03 couldn't understand type ";
+		cerr << "inputs.cc:insert_LVL03() couldn't understand type ";
 		cerr << subtype << ". Fatal exit." << endl;
 		exit(EXIT_FAILURE);
 	}
 }
 
-void insert_yahoo(inputs_t& inputs, const strings& fields)
+yahoo_t make_yahoo(inputs_t& inputs, const strings& fields)
 {
 	yahoo_t y;
 	y.dstamp = fields[2];
@@ -97,14 +97,28 @@ void insert_yahoo(inputs_t& inputs, const strings& fields)
 	y.chgpc = stod(fields[8]);
 	y.currency = fields[9];
 	y.desc = fields[10];
+	return y;
+
+}
+
+void insert_LVL05(inputs_t& inputs, const strings& fields)
+{
+	string subtype = fields[1];
+	yahoo_t y = make_yahoo(inputs, fields);	
+	if(subtype == "PRICE-1") {
+		y.price = y.price /y.rox;
+		y.rox =1;
+	} else if (subtype != "YAHOO-1") {
+		cerr << "inputs.cc:insert_LVL05() couldn't understand type ";
+		cerr << subtype << ". Fatal exit." << endl;
+		exit(EXIT_FAILURE);
+	}
 
 	auto& ys = inputs.yahoos;
-	//inputs.yahoos.emplace(y.ticker, y);
 	if(ys.find(y.ticker) == ys.end())
 		ys[y.ticker] = vector<yahoo_t> {};
 	ys[y.ticker].push_back(y);
 }
-
 
 void set_period(inputs_t& inputs, const strings& fields)
 {
@@ -141,7 +155,8 @@ inputs_t read_inputs()
 				set_period(inputs, row);
 				break;
 			case 5: // LVL05
-				insert_yahoo(inputs, row);
+				//insert_yahoo(inputs, row);
+				insert_LVL05(inputs, row);
 				break;
 			default:
 				cerr << "Unhandled level number " << level << " in inputs.cc/read_inputs()\n";
