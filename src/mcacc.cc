@@ -328,7 +328,7 @@ variables_map process_options(int argc, char *argv[])
 		("help,h", "Help")
 		("root", "Print root directory")
 		("version", "Version")
-		("stage0, 0", "Stage 0")
+		(",0", "Stage 0")
 		("snap,s", "Snapshot");
 	variables_map vm;
 	store(parse_command_line(argc, argv, desc), vm);

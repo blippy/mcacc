@@ -33,13 +33,20 @@ download=0
 
 stage2 () {
 	rm -f $s2/*
-	mcacc stage2
+	#mcacc stage2
 	download=1
 }
 
 stage3 () {
 	rm -f s3/*
-	mcacc stage3a
+	args=
+	if [ $download == "1" ]
+	then
+		args=-s
+		echo requested download
+	fi
+
+	mcacc $args
 	financials.sh
 	returns.sh
 	snap.sh
