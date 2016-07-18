@@ -17,6 +17,7 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
+//#include <boost/program_options/parsers.hpp>
 
 #include "assets.hpp"
 #include "common.hpp"
@@ -37,7 +38,7 @@
 
 namespace fsys = boost::filesystem;
 using namespace std;
-using namespace boost::program_options;
+namespace po = boost::program_options;
 
 
 
@@ -85,7 +86,7 @@ void rmfiles(std::string fname)
 
 }
 
-void stage0()
+void clean()
 {
 	string htm = get_html();
 	string fname = rootdir() + "/mcacc.htm";
@@ -153,7 +154,7 @@ a snapshot of gains
 	string fname;
 	s2("usd.csv", fname); 
 	if(! file_exists(fname)) 
-		throw runtime_error("File s2/usd.csv does not exist.");
+		throw runtime_error("ERR-102 (fatal): File s2/usd.csv does not exist.");
 
 	string file_contents = slurp(fname);
 	strings usdv = commasepstr(file_contents);
@@ -259,16 +260,23 @@ void cgt(const etran_ts& es, const period &per)
 	cout << "TODO: cgt - pending something interesting to report" << endl;
 }
 
-void main_processing(variables_map vm)
+void main_processing(po::variables_map vm)
 {
+
+	if(vm.count("clean")) clean();
+
+	if(vm.count("pre")>0) {
+		string pre = vm["pre"].as<string>();
+		system(pre.c_str()); // TODO LOW check return status
+		//cout << "Pre cmd is " << pre << "\n";
+	}
+
 	inputs_t inps = read_inputs();
 
 	if(vm.count("snap")) {
 		download(inps);
 	}
 
-	//comm_ts the_comms;
-	//load(the_comms);
 	yproc_main_nox(inps.comms);
 
 	period p = inps.p;
@@ -276,9 +284,6 @@ void main_processing(variables_map vm)
 	stend_ts stends = stend_main(inps, p);
 	eaug_main(inps, stends);
 
-	//etranas_t es = load_etranas();
-	//nacc_ts the_naccs;
-	//load(the_naccs);
 	post_ts posts = posts_main(inps);
 	etb_main(inps.naccs, posts);
 	gaap_main(inps.naccs, p);
@@ -320,19 +325,30 @@ void dispatch(string cmd)
 }
 */
 
-variables_map process_options(int argc, char *argv[])
+po::variables_map process_options(int argc, char *argv[])
 {
 	//options res;
-	options_description desc{"Options"};
+	po::options_description desc{"Options"};
 	desc.add_options()
 		("help,h", "Help")
+		("pre", po::value<string>(), "Preprocess command")
 		("root", "Print root directory")
 		("version", "Version")
-		(",0", "Stage 0")
-		("snap,s", "Snapshot");
-	variables_map vm;
-	store(parse_command_line(argc, argv, desc), vm);
-	notify(vm);
+		("clean", "Clean up the working folders")
+		("snap,s", "Snapshot")
+	;
+	po::variables_map vm;
+
+	po::store(po::parse_command_line(argc, argv, desc), vm);
+
+	string cfg_name = "/home/mcarter/.mcacc/mcacc.ini"; // TODO generalise
+	ifstream ifs;
+	ifs.open(cfg_name.c_str());
+	po::store(po::parse_config_file(ifs, desc), vm); 
+	ifs.close();
+
+	po::notify(vm);
+
 
 	if(vm.count("help")) cout << desc << "\n";
 
@@ -342,12 +358,12 @@ variables_map process_options(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
 
-	variables_map vm;
+	po::variables_map vm;
 
 	try {
 		vm = process_options(argc, argv);
 
-	} catch (const error &ex) {
+	} catch (const exception &ex) {
 		cerr << ex.what() << "\n";
 	}
 
@@ -364,7 +380,6 @@ int main(int argc, char *argv[])
 	}
 
 
-	if(vm.count("stage0")) stage0();
 
 	main_processing(vm);
 

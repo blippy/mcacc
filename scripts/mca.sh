@@ -23,35 +23,39 @@ cd $w
 #}
 
 
-function stage1  {
-	#rm -f $s1/*
-	(cd $root/inputs; ./derive)
-}
+#function stage1  {
+#	#rm -f $s1/*
+#	(cd $root/inputs; ./derive)
+#}
 
 
-download=0
+clean=
+snap=
 
-stage2 () {
-	rm -f $s2/*
-	#mcacc stage2
-	download=1
-}
+#stage2 () {
+#	rm -f $s2/*
+#	#mcacc stage2
+#	download=1
+#}
 
 stage3 () {
 	rm -f s3/*
-	args=
-	if [ $download == "1" ]
+	args="$clean $snap"
+	if [ "$snap" == "--snap" ]
 	then
-		args=-s
+		rm -f $s2/*
+		#args=-s
 		echo requested download
 	fi
 
-	mcacc $args
+	cmd="mcacc $args"
+	echo "Running command: $cmd"
+	$cmd
 	financials.sh
 	returns.sh
 	snap.sh
 	paste $s3/gaap-0.rep $s1/gaap-1.rep >$s3/gaap.rep
-	if [[ "$download" == "1" ]]; then cat $s3/snap.rep ; fi
+	if [[ "$snap" == "--snap" ]]; then cat $s3/snap.rep ; fi
 }
 
 usage () {
@@ -74,7 +78,7 @@ EOF
 # parse command-line parameters
 # long form param parsing here:
 # http://is.gd/X3rOuU
-params="$(getopt -o dh0123e:vw -l exclude:,help,verbose --name "$(basename -- "$0")" -- "$@")"
+params="$(getopt -o dh023e:vw -l exclude:,help,verbose --name "$(basename -- "$0")" -- "$@")"
 
 #if [ $? -ne 0 ]
 #then
@@ -88,9 +92,9 @@ unset params
 while true
 do
 case $1 in
-	-0) mcacc stage0  ;;
-	-1) stage1 ;; 
-	-2) stage2 ;;
+	-0) clean=--clean  ;;
+	#-1) stage1 ;; 
+	-2) snap=--snap ;;
 	-3) stage3 ;;
 	-d) set -x ;;
 	-h | --help) usage ; exit 0;;
