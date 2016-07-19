@@ -1,2 +1,2 @@
-dist_bin_SCRIPTS = financials.sh  mca.sh  returns.sh  snap.sh
+dist_bin_SCRIPTS = financials.sh  mcacc-reports.sh  returns.sh  snap.sh
 
