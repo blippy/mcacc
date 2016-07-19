@@ -39,23 +39,24 @@ snap=
 #}
 
 stage3 () {
-	rm -f s3/*
+	#rm -f s3/*
 	args="$clean $snap"
-	if [ "$snap" == "--snap" ]
-	then
-		rm -f $s2/*
-		#args=-s
-		echo requested download
-	fi
+	#if [ "$snap" == "--snap" ]
+	#then
+	#	rm -f $s2/*
+	#	#args=-s
+	#	echo requested download
+	#fi
 
 	cmd="mcacc $args"
 	echo "Running command: $cmd"
 	$cmd
-	financials.sh
-	returns.sh
-	snap.sh
-	paste $s3/gaap-0.rep $s1/gaap-1.rep >$s3/gaap.rep
-	if [[ "$snap" == "--snap" ]]; then cat $s3/snap.rep ; fi
+	# follow is taken care of by mcacc-reports.sh
+	#financials.sh
+	#returns.sh
+	#snap.sh
+	#paste $s3/gaap-0.rep $s1/gaap-1.rep >$s3/gaap.rep
+	#if [[ "$snap" == "--snap" ]]; then cat $s3/snap.rep ; fi
 }
 
 usage () {

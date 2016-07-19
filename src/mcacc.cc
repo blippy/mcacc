@@ -290,6 +290,8 @@ void main_processing(po::variables_map vm)
 	epics_main(inps.etrans, stends);
 	cgt(inps.etrans, p);
 	wiegley(inps);
+
+	system("mcacc-reports.sh");
 }
 
 void print_version()
