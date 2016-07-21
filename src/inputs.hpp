@@ -18,3 +18,4 @@ typedef struct inputs_t {
 } inputs_t;
 
 inputs_t read_inputs();
+void insert_yahoo(const yahoo_t& y, inputs_t& inputs);

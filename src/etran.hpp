@@ -4,6 +4,8 @@
 #include <vector>
 #include "types.hpp"
 
+enum Etype { unknown, leak, regular };
+
 typedef struct etran_t {
 	bool	taxable;
 	dstamp_t	dstamp;
@@ -14,10 +16,10 @@ typedef struct etran_t {
 	double	qty;
 	pennies_t	cost = 0;
 	std::string	ticker;
-	bool regular = true ; // leaks should set this to false
+	Etype typ = unknown;
 
 	// derived fields:
-	pennies_t	ucost; // TODO check this has been derived
+	pennies_t	ucost; 
 	dstamp_t	start_dstamp;
 	pennies_t	start_price;
 	dstamp_t	end_dstamp;
@@ -31,10 +33,5 @@ typedef struct etran_t {
 
 bool operator<(const etran_t& lhs, const etran_t& rhs);
 
-//void convert(const strings &str, etran_t& e);
 bool same_ticker(etran_t a, etran_t b);
 typedef std::vector<etran_t> etran_ts;
-//etranas_t load_etranas();
-//extern strings etrana_fieldnames;
-
-//etran_ts load_etrans();

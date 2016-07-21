@@ -43,17 +43,15 @@ etran_t mketran(const strings& fields)
 	e.ticker = fields[3];
 	e.qty= e.sgn * stod(fields[5]);
 	e.cost= e.sgn * enpennies(fields[6]);
-	e.regular = true;
-	//e.ticker= fields[3];
+	e.typ = regular;
 	return e;
 }
 
 etran_t mkleak_1(const strings& fields)
 {
-	// TODO LEAK-1 should avaoid making a stend, which I think it does automatically
 	etran_t e = mketran(fields);
-	e.buy = false;;
-	e.regular = false;
+	e.buy = false;
+	e.typ = leak;
 	return e;
 }
 
@@ -101,6 +99,13 @@ yahoo_t make_yahoo(inputs_t& inputs, const strings& fields)
 
 }
 
+void insert_yahoo(const yahoo_t& y, inputs_t& inputs)
+{
+	auto& ys = inputs.yahoos;
+	if(ys.find(y.ticker) == ys.end())
+		ys[y.ticker] = vector<yahoo_t> {};
+	ys[y.ticker].push_back(y);
+}
 void insert_LVL05(inputs_t& inputs, const strings& fields)
 {
 	string subtype = fields[1];
@@ -114,10 +119,7 @@ void insert_LVL05(inputs_t& inputs, const strings& fields)
 		exit(EXIT_FAILURE);
 	}
 
-	auto& ys = inputs.yahoos;
-	if(ys.find(y.ticker) == ys.end())
-		ys[y.ticker] = vector<yahoo_t> {};
-	ys[y.ticker].push_back(y);
+	insert_yahoo(y, inputs);
 }
 
 void set_period(inputs_t& inputs, const strings& fields)

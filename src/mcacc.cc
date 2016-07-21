@@ -17,7 +17,9 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
-//#include <boost/program_options/parsers.hpp>
+//#include <boost/algorithm/string/classification.hpp>
+//#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include "assets.hpp"
 #include "common.hpp"
@@ -96,7 +98,7 @@ void clean()
 	rmfiles(sndir(3));
 }
 
-void download(const inputs_t& inputs)
+void download(inputs_t& inputs)
 {
 	const comm_ts& the_comms = inputs.comms;
 	//load(the_comms);
@@ -116,15 +118,32 @@ void download(const inputs_t& inputs)
 	spit(fname, intercalate("", retrs));
 
 
-	std::time_t t = std::time(nullptr);
-	char buffer[80];
-	strftime(buffer, 80, "%Y-%m-%d", std::localtime(&t));
-	s2("dstamp", fname);
-	spit(fname, buffer);
-	strftime(buffer, 80, "%H:%M:%S", std::localtime(&t));
-	s2("tstamp", fname);
-	spit(fname, buffer);
 
+	std::time_t t = std::time(nullptr);
+	char dstamp[80], tstamp[80];
+	strftime(dstamp, 80, "%Y-%m-%d", std::localtime(&t));
+	s2("dstamp", fname);
+	spit(fname, dstamp);
+	strftime(tstamp, 80, "%H:%M:%S", std::localtime(&t));
+	s2("tstamp", fname);
+	spit(fname, tstamp);
+
+	// TODO LOW This is incorrect for commodities not downloaded in pennies
+	for(auto& line: retrs) {
+		strings fields;
+		boost::split(fields, line, boost::is_any_of(","), boost::token_compress_on);
+		yahoo_t y;
+		y.dstamp = dstamp;
+		y.tstamp = tstamp;
+		y.ticker = fields[0]; 
+		boost::erase_all(y.ticker, "\"");
+		//cout << "tocker = " << y.ticker << endl;
+		y.price = stod(fields[1]); //enpennies(fields[1]); //stod(fields[1])/100;
+		y.chg = stod(fields[2]); // enpennies(fields[2]); //stod(fields[2])/100;
+		y.chgpc = y.chg / (y.price - y.chg) * 100;
+		insert_yahoo(y, inputs);
+
+	}
 }
 
 bool yorder (vector<string> a, vector<string> b) { return a[0] < b[0];}
