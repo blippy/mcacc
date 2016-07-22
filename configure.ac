@@ -1,6 +1,6 @@
 
 AC_PREREQ([2.69])
-AC_INIT([mca], [2.0], [alt.mcarter@gmail.com])
+AC_INIT([mca], [3.1], [alt.mcarter@gmail.com])
 AC_CONFIG_SRCDIR([src/mcacc.cc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
