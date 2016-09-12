@@ -133,7 +133,7 @@ inputs_t read_inputs()
 	inputs_t inputs;
 
 	string fname;
-	s1("derive-2", fname);
+	s1("derive-2.txt", fname);
 	vecvec_t mat = vecvec(fname);
 
 	for(auto& row:mat) {
