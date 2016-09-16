@@ -88,11 +88,16 @@ void rmfiles(std::string fname)
 
 }
 
-void clean()
+void init()
 {
 	string htm = get_html();
 	string fname = rootdir() + "/mcacc.htm";
 	spit(fname, htm.c_str());
+}
+
+void clean()
+{
+	init();
 	rmfiles(sndir(1));
 	rmfiles(sndir(2));
 	rmfiles(sndir(3));
@@ -282,6 +287,7 @@ void cgt(const etran_ts& es, const period &per)
 void main_processing(po::variables_map vm)
 {
 
+	if(vm.count("init")) init();
 	if(vm.count("clean")) clean();
 
 	if(vm.count("pre")>0) {
@@ -323,40 +329,19 @@ void print_rootdir()
 	cout << rootdir() << "\n";
 }
 
-/*
-// command dispatch table
-typedef struct dte { string cmd ; function<void()> fn ; } dte;
-const auto ditab = vector<dte> {
-	{"--root", print_rootdir},
-	{"--version", print_version},
-	{"dsv", dsv_extract},
-	{"stage0", stage0},
-	{"stage2", stage2},
-	{"stage3a", stage3a}
-};
-
-void dispatch(string cmd)
-{
-	for(auto d : ditab) {
-		if(d.cmd == cmd) { d.fn() ; return ; }
-	}
-
-	cerr << "Command not understood: " << cmd << endl;
-	exit(EXIT_FAILURE);
-}
-*/
 
 po::variables_map process_options(int argc, char *argv[])
 {
 	//options res;
 	po::options_description desc{"Options"};
 	desc.add_options()
+		("clean", "Clean up the working folders")
 		("help,h", "Help")
+		("init", "Initialise working folders if necessary, and without cleaning")
 		("pre", po::value<string>(), "Preprocess command")
 		("root", "Print root directory")
-		("version", "Version")
-		("clean", "Clean up the working folders")
 		("snap,s", "Snapshot")
+		("version,v", "Version")
 	;
 	po::variables_map vm;
 
