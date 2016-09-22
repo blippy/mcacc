@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+// private
 std::string run(const char* cmd)
 {
         FILE *in;
@@ -21,6 +22,7 @@ std::string run(const char* cmd)
         return result;
 }
 
+// private
 std::string fetch_url(const std::string & url)
 {
 	std::string cmd = "curl -s -L " + url;
@@ -28,7 +30,7 @@ std::string fetch_url(const std::string & url)
 	return run(cmd.c_str());
 }
 
-
+// public
 std::vector<std::string> fetch_tickers(const std::vector<std::string>& tickers, std::string& usd)
 {
 	std::string pre = "'http://download.finance.yahoo.com/d/quotes.csv?s=";	

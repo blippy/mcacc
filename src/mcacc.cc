@@ -17,8 +17,6 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
-//#include <boost/algorithm/string/classification.hpp>
-//#include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string.hpp>
 
 #include "assets.hpp"
@@ -26,11 +24,7 @@
 #include "common.hpp"
 #include "parse.hpp"
 #include "reusable.hpp"
-//#include "etran.hpp"
-//#include "comm.hpp"
 #include "gaap.hpp"
-//#include "nacc.hpp"
-//#include "yahoo.hpp"
 #include "inputs.hpp"
 #include "posts.hpp"
 #include "stend.hpp"
@@ -77,9 +71,10 @@ vecvec_t commasep(string  &filename)
         return res;
 }
 
-// TODO add to reusable
 // remove directory contents
 // http://stackoverflow.com/questions/14610185/how-to-avoid-removing-directory-on-remove-all-with-boost-libraries
+// NB C++ has a filesystem::remove_all() function which will do this for us,
+// but is only experimental at 22-Sep-2016
 void rmfiles(std::string fname)
 {
 	fsys::path path_to_remove(fname.c_str());
@@ -372,15 +367,5 @@ int main(int argc, char *argv[])
 
 	main_processing(vm);
 
-/*
-	if(argc>1) {
-		string cmd;
-		cmd = argv[1];
-		dispatch(cmd);
-
-	} else {
-		cout << "No command specified" << endl;
-	}
-	*/
 	return EXIT_SUCCESS;
 }

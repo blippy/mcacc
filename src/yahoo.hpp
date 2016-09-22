@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-//#include "inputs.hpp"
-
 typedef struct yahoo_t {
 	std::string dstamp;
 	std::string tstamp;
