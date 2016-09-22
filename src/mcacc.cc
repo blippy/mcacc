@@ -22,6 +22,7 @@
 #include "assets.hpp"
 #include "cgt.hpp"
 #include "common.hpp"
+#include "etb.hpp"
 #include "parse.hpp"
 #include "reusable.hpp"
 #include "gaap.hpp"
@@ -82,6 +83,7 @@ void clean()
 }
 
 
+/*
 int dsv_extract()
 {
 	string input;
@@ -96,11 +98,10 @@ int dsv_extract()
 		for(int i = 1; i < output.size() -1; i++) { fs << output[i] << "\t"; }
 		fs << output.back() << endl ;
 		fs.close();
-		//cout << "In: " << trimmed << endl;
 	}
 	return EXIT_SUCCESS;
 }
-
+*/
 
 
 

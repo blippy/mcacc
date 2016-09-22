@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "yahoo.hpp"
+
 /* This is a self-contained unit. You can use fetch_tickers as the functions to call
 */
 // private
@@ -61,3 +63,8 @@ std::string fetch_url(const std::string & url)
 }
 
 
+// public
+bool operator<(yahoo_t a, yahoo_t b)
+{
+	return std::tie(a.ticker, a.dstamp, a.tstamp) < std::tie(b.ticker, b.dstamp, b.tstamp);
+}

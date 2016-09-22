@@ -18,6 +18,8 @@ typedef struct yahoo_t {
 	std::string desc = "no desc";
 } yahoo_t;
 
+bool operator<(yahoo_t a, yahoo_t b);
+
 typedef std::map<std::string, std::vector<yahoo_t> > yahoo_ts;
 
 //void process_yahoos(const inputs_t& inps, bool with_fetch);

@@ -16,11 +16,6 @@ bool operator<(post_t a, post_t b)
 {
 	return std::tie(a.dr, a.dstamp) < std::tie(b.dr, b.dstamp);
 }
-/*bool operator<(post_t a, post_t b)
-{
-	return std::tie(a.dr, a.dstamp) < std::tie(b.cr, b.dstamp);
-}
-*/
 
 void push(post_ts &ps, const string& dstamp, const string& ticker, string acc, string str, int amount)
 {

@@ -5,7 +5,7 @@ source mcacc-env.sh
 
 financials.sh
 returns.sh
-snap.sh
+#snap.sh
 
 paste $s3/gaap-0.rep $s1/gaap-1.rep >$s3/gaap.rep
 mkdir -p $w/gaap

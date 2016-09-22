@@ -1,3 +1,4 @@
+# As at 22-Sep-2016, this should be obsolete
 #!/usr/bin/env bash
 
 #IN: s3/etrans-aug.dsv s3/yproc.dsv
