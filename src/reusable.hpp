@@ -1,11 +1,6 @@
 #pragma once
-//#ifndef REUSABLE_H
-//#define REUSABLE_H
-
 #include <string>
 #include <vector>
-
-//using std::string ;
 
 bool file_exists(const std::string &filename);
 std::string slurp(const char *filename);
@@ -18,7 +13,5 @@ std::string pad_right(std::string s, int n);
 std::string pad_left(std::string s, int n);
 std::string format_num(double n, int dp);
 std::string intercalate(std::string inter, std::vector<std::string> strings);
-
-
-
-//#endif
+std::vector<std::string> commasepstr(const std::string& line);
+std::vector<std::vector<std::string> > commasep(std::string  &filename);

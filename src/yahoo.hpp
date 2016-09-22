@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+//#include "inputs.hpp"
+
 typedef struct yahoo_t {
 	std::string dstamp;
 	std::string tstamp;
@@ -18,4 +20,5 @@ typedef struct yahoo_t {
 
 typedef std::map<std::string, std::vector<yahoo_t> > yahoo_ts;
 
+//void process_yahoos(const inputs_t& inps, bool with_fetch);
 std::vector<std::string> fetch_tickers(const std::vector<std::string>& tickers, std::string& usd);

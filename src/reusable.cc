@@ -1,14 +1,16 @@
 #include <fstream>
 #include <sstream>
 #include <unistd.h>
+#include <vector>
 
 #include "reusable.hpp"
-
+#include "parse.hpp"
 
 using std::ifstream;
 using std::ofstream;
 using std::stringstream;
 using std::string;
+using std::vector;
 
 bool file_exists(const string& filename)
 {
@@ -73,4 +75,25 @@ std::string intercalate(std::string inter, std::vector<std::string> strings)
 		if(it< strings.end()-1) res += inter;
 	}
 	return res;
+}
+
+vector<string> commasepstr(const string& line)
+{
+	string line1 = line;
+	for(auto it = line1.begin(); it != line1.end(); ++it) {
+		if(*it == ',') *it = ' '; }
+	return tokenize_line(line1);
+}	
+
+vector<vector<string> > commasep(string  &filename)
+{
+        vector<vector<string> > res;
+        ifstream fin;
+        string line;
+        fin.open(filename.c_str(), ifstream::in);
+        while(getline(fin, line)) {
+		vector<string> fields = commasepstr(line);
+                if(fields.size() >0) res.push_back(fields);
+        }
+        return res;
 }

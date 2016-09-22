@@ -13,7 +13,7 @@ mcacc_SOURCES = assets.cc \
 		parse.cc posts.cc \
 		reusable.cc stend.cc types.cc \
 		wiegley.cc \
-		yahoo.cc
+		yahoo.cc yproc.cc
 
 mcacc_SOURCES += $(BUILT_SOURCES)
 
