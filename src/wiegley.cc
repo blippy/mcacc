@@ -1,5 +1,7 @@
 #include <assert.h>
 #include <iostream>
+#include <fstream>
+#include <set>
 #include <utility>
 #include <math.h>
 #include <string>
@@ -22,13 +24,12 @@ bool sorter(spair a, spair b)
 	return a.first < b.first;
 }
 
-void wiegley(const inputs_t& inputs)
+/* Create the ledger.dat file */
+void mkledger(const etran_ts& es, const ntran_ts& ns)
 {
 	vector<spair> trans;
 
-	// LEDGER.DAT
-	
-	for(auto& e: inputs.etrans) {
+	for(auto& e: es) {
 		//char sgn = e.buy ? ' ' : '-';
 		string t1 = (format("%1%\t*\tetran\n") % e.dstamp).str() ;
 		assert(e.typ != unknown);
@@ -41,7 +42,7 @@ void wiegley(const inputs_t& inputs)
 		trans.push_back(make_pair(e.dstamp, t));
 	}
 
-	for(auto& n:inputs.ntrans) {
+	for(auto& n: ns) {
 		string t1 = (format("%1%\t*\t%2%\n") % n.dstamp % n.desc).str();
 		string t2 = (format("\t%1%\tGBP\t%2%\n") % n.dr % to_gbp(n.amount)).str();
 		string t3 = (format("\t%1%\n\n") % n.cr).str();
@@ -58,18 +59,40 @@ void wiegley(const inputs_t& inputs)
 		dat += p.second;
 	}
 	spit(fname, dat);
+}
 
-	trans.clear();
-	for(auto& y:inputs.yahoos) {
+
+// TODO reusable
+//template<class T<string> >
+void spit_strings(const string& filename, const multiset<string>& lines)
+{
+	ofstream out;
+	out.open(filename, ofstream::trunc);
+	for(auto& line: lines) out << line << endl;
+	out.close();
+
+}
+
+void mkprices(const yahoo_ts&  ys)
+{
+	multiset<string> prices;
+	for(auto& y: ys) {
 		for(auto& y1: y.second) {
-			string t = (format("P\t%1%\t%2%\t\"%3%\"\tGBP\t%4$.7f\n") % y1.dstamp % y1.tstamp % y1.ticker % (y1.price/100)).str();
-			trans.push_back(make_pair(y1.dstamp, t));
+			string price_str = format_num(y1.price/100, 7);
+			string ticker = "\"" + y1.ticker + "\"";
+			strings fields = {"P", y1.dstamp, y1.tstamp, ticker, "GBP", price_str};
+			string line = intercalate("\t", fields);			
+			prices.insert(line);
 		}
 	}
-	sort(begin(trans), end(trans), sorter);
 
-	dat = "";
-	for(auto& p:trans) dat += p.second;
-	fname = rootdir() + "/prices.dat";
-	spit(fname, dat);
+	string fname = rootdir() + "/prices.dat";
+	spit_strings(fname, prices);
+}
+
+void wiegley(const inputs_t& inputs)
+{
+	// note that I split this out into two functions for profiling purposes
+	mkledger(inputs.etrans, inputs.ntrans);
+	mkprices(inputs.yahoos);
 }
