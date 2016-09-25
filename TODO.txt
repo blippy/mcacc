@@ -1,0 +1,1 @@
+yahoo operator< should use const& the same as post's operator<
