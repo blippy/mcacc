@@ -50,11 +50,11 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 		pad_gbp("QTY"), pad_gbp("UCOST"), pad_gbp("UVALUE") };
 	print_strings(eout, fields);
 
-	for(auto k:epic_names) {
+	for(const auto& k:epic_names) {
 		tqty =0; tcost = 0;
 		double uvalue;
 
-		for(auto e:es){
+		for(const auto& e:es){
 
 			// determine if we are interested in this epic
 			bool match = k == e.ticker;
