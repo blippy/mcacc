@@ -18,4 +18,4 @@ typedef std::vector<post_t> post_ts;
 
 post_ts posts_main(const inputs_t& inputs);
 
-bool operator<(post_t a, post_t b);
+bool operator<(const post_t& a, const post_t& b);

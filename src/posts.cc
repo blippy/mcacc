@@ -12,7 +12,7 @@
 
 using namespace std;
 
-bool operator<(post_t a, post_t b)
+bool operator<(const post_t& a, const post_t& b)
 {
 	return std::tie(a.dr, a.dstamp) < std::tie(b.dr, b.dstamp);
 }
