@@ -83,28 +83,6 @@ void clean()
 }
 
 
-/*
-int dsv_extract()
-{
-	string input;
-	while(getline(cin, input)) {
-		vector<string> output = tokenize_line(input);
-		if(output.size() == 0) continue;
-		string fname = output[0];
-		fname  += ".dsv";
-		fstream fs;
-		ios_base::openmode mode =  fstream::out | fstream::app;
-		fs.open(fname.c_str(), mode); // user has to pre-delete the file
-		for(int i = 1; i < output.size() -1; i++) { fs << output[i] << "\t"; }
-		fs << output.back() << endl ;
-		fs.close();
-	}
-	return EXIT_SUCCESS;
-}
-*/
-
-
-
 void main_processing(po::variables_map vm)
 {
 
@@ -129,7 +107,15 @@ void main_processing(po::variables_map vm)
 	gaap_main(inps.naccs, p);
 	epics_main(inps.etrans, stends);
 	cgt(inps.etrans, p);
-	wiegley(inps);
+	
+	string wiegley_str = vm["wiegley"].as<string>();
+	if(wiegley_str == "on") {
+		wiegley(inps);
+	} else if(wiegley_str != "off") {
+		cerr << "ERR: Option wiegley error. Must be on|off, but given`"
+			<< wiegley_str 
+			<< "'. Continuing anyway." << endl;
+	}
 
 	system("mcacc-reports.sh");
 }
@@ -157,6 +143,8 @@ po::variables_map process_options(int argc, char *argv[])
 		("root", "Print root directory")
 		("snap,s", "Snapshot")
 		("version,v", "Version")
+		("wiegley", po::value<string>()->default_value("on"), 
+		 "Produce (on) or surpress (off) wiegley output")
 	;
 	po::variables_map vm;
 
@@ -199,6 +187,7 @@ int main(int argc, char *argv[])
 		print_version();
 		return EXIT_SUCCESS;
 	}
+
 
 
 
