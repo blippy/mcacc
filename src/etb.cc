@@ -25,8 +25,6 @@ void etb_main(nacc_ts& the_naccs, const post_ts& posts)
 	for(auto& n:the_naccs) n.second.bal = 0;
 
 	std::string fname;
-	//s3("posts.dsv", fname);
-        //vecvec_t posts = vecvec(fname);
 	int total;
 
 	ofstream aout, eout;
@@ -36,19 +34,18 @@ void etb_main(nacc_ts& the_naccs, const post_ts& posts)
 	eout.open(fname);
 
 	set<string> keys;
-	for(auto p:posts) {keys.insert(p.dr); }
+	for(const auto& p:posts) {keys.insert(p.dr); }
 
-	for(auto k: keys) {
+	for(const auto& k: keys) {
 		total = 0;
 
-		for(auto p:posts){
+		for(const auto& p:posts){
 			if(p.dr != k) continue;
 			// normal case
 			aout << setw(7) << p.dr;
 			aout << setw(11) << p.dstamp;
 			aout << setw(7) << p.cr;
 			aout << setw(30) << p.desc;
-			//int pennies = stoi(p[3]);
 			pennies_t pennies = p.amount;
 			aout << fixed << setw(12) << setprecision(2) << (double(pennies) /100);
 			total += pennies;
