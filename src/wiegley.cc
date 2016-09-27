@@ -77,13 +77,13 @@ void mkprices(const yahoo_ts&  ys)
 {
 	multiset<string> prices;
 	for(auto& y: ys) {
-		for(auto& y1: y.second) {
-			string price_str = format_num(y1.price/100, 7);
-			string ticker = "\"" + y1.ticker + "\"";
-			strings fields = {"P", y1.dstamp, y1.tstamp, ticker, "GBP", price_str};
+		//for(auto& y1: y.second) {
+			string price_str = format_num(y.price/100, 7);
+			string ticker = "\"" + y.ticker + "\"";
+			strings fields = {"P", y.dstamp, y.tstamp, ticker, "GBP", price_str};
 			string line = intercalate("\t", fields);			
 			prices.insert(line);
-		}
+		//}
 	}
 
 	string fname = rootdir() + "/prices.dat";

@@ -99,13 +99,17 @@ yahoo_t make_yahoo(inputs_t& inputs, const strings& fields)
 
 }
 
+
 void insert_yahoo(const yahoo_t& y, inputs_t& inputs)
 {
-	auto& ys = inputs.yahoos;
-	if(ys.find(y.ticker) == ys.end())
-		ys[y.ticker] = vector<yahoo_t> {};
-	ys[y.ticker].push_back(y);
+	inputs.yahoos.insert(y);
+	//auto& ys = inputs.yahoos;
+	//if(ys.find(y.ticker) == ys.end())
+	//	ys[y.ticker] = vector<yahoo_t> {};
+	//ys[y.ticker].push_back(y);
 }
+
+
 void insert_LVL05(inputs_t& inputs, const strings& fields)
 {
 	string subtype = fields[1];
@@ -120,6 +124,7 @@ void insert_LVL05(inputs_t& inputs, const strings& fields)
 	}
 
 	insert_yahoo(y, inputs);
+	//inputs.yahoos.insert(std::pair<string, yahoo_t>(y.ticker, y));
 }
 
 void set_period(inputs_t& inputs, const strings& fields)
@@ -157,7 +162,6 @@ inputs_t read_inputs()
 				set_period(inputs, row);
 				break;
 			case 5: // LVL05
-				//insert_yahoo(inputs, row);
 				insert_LVL05(inputs, row);
 				break;
 			default:
