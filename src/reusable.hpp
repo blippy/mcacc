@@ -7,6 +7,9 @@ std::string slurp(const char *filename);
 std::string slurp(const std::string filename);
 void spit(const char *filename, const char *content);
 void spit(const std::string& filename, const std::string& content);
+void split(const std::string &s, char delim, std::vector<std::string> &elems);
+std::vector<std::string> split(const std::string &s, char delim);
+void erase_all(std::string& str, const char c);
 
 std::string nchars(char c, int num);
 std::string pad_right(std::string s, int n);

@@ -5,8 +5,6 @@
 #include <sstream>
 #include <string>
 
-//#include <boost/algorithm/string.hpp>
-
 #include "common.hpp"
 #include "reusable.hpp"
 #include "yproc.hpp"
@@ -21,57 +19,14 @@ typedef struct downloads_t {
 	set<yahoo_t> ys;
 } downloads_t;
 
-//bool yorder (vector<string> a, vector<string> b) { return a[0] < b[0];}
 
-/*
-bool yorder(yahoo_t a, yahoo_t b)
-{
-	return tie(a.ticker, a.dstamp, a.tstamp) < tie(b.ticker, b.dstamp, b.tstamp);
-}
-*/
-
-// TODO reusable
-// http://stackoverflow.com/questions/236129/split-a-string-in-c
-void split(const string &s, char delim, vector<string> &elems) {
-	stringstream ss;
-	ss.str(s);
-	string item;
-	while (getline(ss, item, delim)) {
-		elems.push_back(item);
-	}
-}
-
-
-// TODO reusable
-vector<string> split(const string &s, char delim) {
-	vector<string> elems;
-	split(s, delim, elems);
-	return elems;
-}
-
-
-// TODO reusable
-/* remove all charachters in-place */ 
-void erase_all(string& str, const char c)
-{
-	str.erase(std::remove(str.begin(), str.end(), c), str.end());
-}
-
-//void download(inputs_t& inputs, downloads_t& ds)
 void download(const comm_ts& the_comms, downloads_t& ds)
 {
-	//const comm_ts& the_comms = inputs.comms;
-	//load(the_comms);
-
 	std::time_t t = std::time(nullptr);
 	char dstamp[80], tstamp[80];
 	strftime(dstamp, 80, "%Y-%m-%d", std::localtime(&t));
 	ds.dstamp = dstamp;
-	//s2("dstamp", fname);
-	//spit(fname, dstamp);
 	strftime(tstamp, 80, "%H:%M:%S", std::localtime(&t));
-	//s2("tstamp", fname);
-	//spit(fname, tstamp);
 	ds.tstamp = tstamp;
 	
 	strings tickers;
@@ -80,32 +35,19 @@ void download(const comm_ts& the_comms, downloads_t& ds)
 		if(c.down == "W") tickers.push_back(c.ticker);
 	}
 
-	//string fname;
-	//string usd;
 	strings retrs = fetch_tickers(tickers, ds.usd);
-	//ds.usd = usd;
-	//s2("usd.csv", fname);
-	//spit(fname, usd);
-	//s3("yproc-down.csv", fname);
-	//spit(fname, intercalate("", retrs));
-
 	for(auto& line: retrs) {
-		//strings fields;
-		//boost::split(fields, line, boost::is_any_of(","), boost::token_compress_on);
 		strings fields = split(line, ',');
 		yahoo_t y;
 		y.dstamp = dstamp;
 		y.tstamp = tstamp;
 		y.ticker = fields[0]; 
-		//boost::erase_all(y.ticker, "\"");
 		erase_all(y.ticker, '"');
 		y.price = stod(fields[1]);
 		y.chg = stod(fields[2]);
 		y.chgpc = y.chg / (y.price - y.chg) * 100;
-		//insert_yahoo(y, ds.ys);
 		ds.ys.insert(y);
 	}
-	//sort(ds.ys.begin(), ds.ys.end());
 }
  
 /* Create a yahoo cache file */

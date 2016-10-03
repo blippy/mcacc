@@ -29,6 +29,7 @@
 #include "inputs.hpp"
 #include "posts.hpp"
 #include "stend.hpp"
+#include "tests.hpp"
 #include "etrans-aug.hpp"
 #include "epics.hpp"
 #include "yproc.hpp"
@@ -142,6 +143,7 @@ po::variables_map process_options(int argc, char *argv[])
 		("pre", po::value<string>(), "Preprocess command")
 		("root", "Print root directory")
 		("snap,s", "Snapshot")
+		("tests", "Run tests only")
 		("version,v", "Version")
 		("wiegley", po::value<string>()->default_value("on"), 
 		 "Produce (on) or surpress (off) wiegley output")
@@ -178,17 +180,11 @@ int main(int argc, char *argv[])
 
 	if(vm.count("help")) return EXIT_SUCCESS;
 
-	if(vm.count("root")) {
-		print_rootdir();
-		return EXIT_SUCCESS;
-	}
+	if(vm.count("tests")) { run_all_tests(); return EXIT_SUCCESS; }
+	
+	if(vm.count("root")) { print_rootdir(); return EXIT_SUCCESS; }
 
-	if(vm.count("version")) {
-		print_version();
-		return EXIT_SUCCESS;
-	}
-
-
+	if(vm.count("version")) { print_version(); return EXIT_SUCCESS; }
 
 
 	main_processing(vm);

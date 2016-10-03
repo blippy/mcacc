@@ -11,7 +11,8 @@ mcacc_SOURCES = assets.cc \
 		mcacc.cc \
 		nacc.cc \
 		parse.cc posts.cc \
-		reusable.cc stend.cc types.cc \
+		reusable.cc stend.cc \ 
+		tests.cc types.cc \
 		wiegley.cc \
 		yahoo.cc yproc.cc
 

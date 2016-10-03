@@ -44,6 +44,34 @@ void spit(const std::string& filename, const std::string& content)
 	spit(filename.c_str(), content.c_str());
 }
 
+// http://stackoverflow.com/questions/236129/split-a-string-in-c
+void split(const std::string &s, char delim, std::vector<std::string> &elems)
+{
+	stringstream ss;
+	ss.str(s);
+	string item;
+	while (getline(ss, item, delim)) {
+		elems.push_back(item);
+	}
+}
+
+
+std::vector<std::string> split(const std::string &s, char delim)
+{
+	vector<string> elems;
+	split(s, delim, elems);
+	return elems;
+}
+
+
+/* remove all characters in-place */ 
+void erase_all(std::string& str, const char c)
+{
+	//str.erase(std::remove(str.begin(), str.end(), c), str.end());
+	for(auto it=str.begin(); it != str.end(); ++it)
+		if(*it ==c) str.erase(it--);
+}
+
 string nchars(char c, int num) 
 {
 	string res = "";
