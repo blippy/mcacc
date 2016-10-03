@@ -2,6 +2,7 @@
 created 19-Feb-2016
 */
 
+// TODO eliminate this module
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
@@ -9,8 +10,6 @@ created 19-Feb-2016
 #include <iostream>
 #include <math.h>
 #include <memory>
-//#include <set>
-//#include <vector>
 
 #include "common.hpp"
 #include "parse.hpp"
@@ -29,7 +28,7 @@ string trim(string& str)
     return str.substr(first, (last-first+1));
 }
 
-vector<string> tokenize_line(string &input) //, const char sep= ' ')
+vector<string> tokenize_line_XXX(string &input) //, const char sep= ' ')
 {
 	vector<string> output;
 	string trimmed = input;
@@ -77,7 +76,7 @@ fin:
 	return output;
 }
 
-
+/*
 period get_period()
 {
 	period p;
@@ -98,88 +97,8 @@ period get_period()
 
 	return p;
 }
+*/
 
 
 
-vecvec_t vecvec(string  &filename)
-{
-	ifstream fin;
-	fin.open(filename.c_str(), ifstream::in);
-	auto res  = vecvec(fin);
-	fin.close();
-	return res;
-}
-
-vecvec_t vecvec(istream  &istr)
-{
-	vecvec_t res;
-	string line;
-	while(getline(istr, line)) {
-		vector<string> fields = tokenize_line(line);
-		if(fields.size() >0) res.push_back(fields);
-	}
-	return res;
-}
-
-
-void prin_vecvec(vecvec_t & vvs, const char *sep, const char *recsep, const char *filename )
-{
-	
-	std::ofstream ofs;
-	bool use_file = strlen(filename);
-	if(use_file) ofs.open(filename, std::ofstream::out);
-	ostream &os = use_file ? ofs : cout ;
-
-	string ssep = string(sep);
-	int i;
-	for(i=0; i< vvs.size(); i++) {
-		vector<string> v = vvs[i];
-		int j, len;
-		len = v.size();
-		if(len == 0) continue;
-		for(j=0; j<len; j++) {
-			os << v[j];
-			if(j+1<len) os << ssep;
-		}
-		if(len>0) os << recsep ;
-	}
-
-	if(use_file) ofs.close();
-}
-
-
-void prin_vecvec1(vecvec_t &vv)
-{
-	prin_vecvec(vv, "\n", "\n", "");
-}
-vecvec_t vecvec(const char *fname)
-{
-	string fn = (fname);
-	return vecvec(fn);
-}
-
-
-
-double bround(double x) 
-{
-  double c ,f, det;
-  c = ceil(x);
-  f = floor(x);
-
-  // eliminate strange artifacts of creating "negative 0"
-  if(c == 0) c = 0.0;
-  if(f == 0) f = 0.0;
-  // printf("c: %f ", c);
-
-
-  det = c + f - 2.0*x;
-  if (det < 0) {return c;}
-  if (det > 0) {return f;}
-
-  /* banker's tie */
- if(2*ceil(c/2) == c) {return c;} else {return f;};
-
-}
-
-double round2(double x) { return bround(x*100)/100; }
 

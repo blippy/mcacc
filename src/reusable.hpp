@@ -16,5 +16,9 @@ std::string pad_right(std::string s, int n);
 std::string pad_left(std::string s, int n);
 std::string format_num(double n, int dp);
 std::string intercalate(std::string inter, std::vector<std::string> strings);
-std::vector<std::string> commasepstr(const std::string& line);
-std::vector<std::vector<std::string> > commasep(std::string  &filename);
+//std::vector<std::string> commasepstr(const std::string& line);
+//std::vector<std::vector<std::string> > commasep(std::string  &filename);
+
+
+double bround(double x);
+double round2(double x);

@@ -1,7 +1,7 @@
 #include "nacc.hpp"
 
 #include "common.hpp"
-
+/*
 void load(nacc_ts & results)
 {
 	std::string filename;
@@ -19,3 +19,4 @@ void load(nacc_ts & results)
 }
 
 void save(const nacc_ts &xs) {}
+*/

@@ -39,3 +39,5 @@ class period {
 		bool during(const std::string &dstamp) const;		
 };
 
+typedef std::vector<std::string>  vs_t;
+typedef std::vector<std::vector<std::string> > vecvec_t;

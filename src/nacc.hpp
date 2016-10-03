@@ -25,7 +25,7 @@ typedef struct nacc_t {
 
 
 typedef std::map<std::string, nacc_t> nacc_ts;
-void load(nacc_ts & results);
-void save(const nacc_ts &xs);
+//void load(nacc_ts & results);
+//void save(const nacc_ts &xs);
 
 //#endif

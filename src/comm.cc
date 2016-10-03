@@ -1,7 +1,8 @@
 #include "comm.hpp"
+#include "common.hpp"
+#include "types.hpp"
 
-#include <common.hpp>
-
+/*
 void load(comm_ts & results)
 {
 	//comm_ts results;
@@ -23,3 +24,4 @@ void load(comm_ts & results)
 }
 
 void save(const comm_ts &xs) {}
+*/

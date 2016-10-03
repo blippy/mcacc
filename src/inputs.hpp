@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include "comm.hpp"
 #include "etran.hpp"
 #include "nacc.hpp"
@@ -19,3 +22,8 @@ typedef struct inputs_t {
 
 inputs_t read_inputs();
 void insert_yahoo(const yahoo_t& y, inputs_t& inputs);
+
+namespace parse {
+	std::vector<std::string> tokenise_line(std::string& s);
+}
+

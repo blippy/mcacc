@@ -1,3 +1,5 @@
+#include <cstring>
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <stdlib.h>
@@ -8,6 +10,141 @@
 #include "parse.hpp"
 
 using namespace std;
+
+namespace parse {
+
+// TODO NOW this should be a new version
+
+typedef struct lexer_t {
+	//basic_string<iterator> cursor;
+	//iterator<basic_string> cursor;
+	std::string::iterator cursor, end, tok_start, tok_end;
+	//string *cursor;
+	std::string token() { 
+		//return cursor == end? '\0' : *curso
+		std::string s ; // = "";
+		for(auto& it= tok_start; it != tok_end; it++) s+= *it;
+		return s;
+	}
+	bool is_white() {
+		char c = *cursor;
+		return c == ' ' || c == '\t' || c == '\r';
+	}
+	//bool not_white() { return is_white(); }
+
+	bool more() { 
+		if(cursor == end) return false;
+
+		// eat white
+		while(cursor != end) {
+			if(! is_white()) break;
+			cursor++;
+		}
+		if(*cursor == '#') return false;
+		if(cursor == end) return false;
+
+		tok_start = cursor;
+		bool is_string  = *cursor == '"';
+		if(is_string) {
+			tok_start++;
+			cursor++;
+			while(cursor !=end && *cursor != '"') cursor++;
+			tok_end = cursor;
+			if(cursor !=end) cursor++;
+		} else {
+			while(!is_white() && cursor !=end) cursor++;
+			tok_end = cursor;
+		}
+
+		//while(!is_white() && cursor !=end) cursor++;
+		/*
+		if(is_string) cursor++;
+		while(cursor !=end) {
+			if(!is_string && is_white()) break;
+			cursor++;
+			if(is_string && *cursor == '"') break;
+		}
+		if(is_string) cursor++;
+		*/
+
+		return true;
+	}
+	lexer_t(std::string& s) {cursor = s.begin(); end = s.end(); }
+} lexer_t;
+
+std::vector<std::string> tokenise_line(std::string& s)
+{
+	std::vector<std::string> result;
+	lexer_t lexer(s);
+
+	while(lexer.more()) {
+		std::string token = lexer.token();
+		//std::cout << '<' << token << '>' << std::endl;
+		result.push_back(token);
+	}
+	//std::cout << std::endl;
+	return result;
+}
+
+vecvec_t vecvec(istream  &istr)
+{
+	vecvec_t res;
+	string line;
+	while(getline(istr, line)) {
+		vector<string> fields = parse::tokenise_line(line);
+		if(fields.size() >0) res.push_back(fields);
+	}
+	return res;
+}
+
+vecvec_t vecvec(std::string  &filename)
+{
+	ifstream fin;
+	fin.open(filename.c_str(), ifstream::in);
+	auto res  = parse::vecvec(fin);
+	fin.close();
+	return res;
+}
+
+
+
+void prin_vecvec(vecvec_t & vvs, const char *sep, const char *recsep, const char *filename )
+{
+	
+	std::ofstream ofs;
+	bool use_file = strlen(filename);
+	if(use_file) ofs.open(filename, std::ofstream::out);
+	ostream &os = use_file ? ofs : cout ;
+
+	string ssep = string(sep);
+	int i;
+	for(i=0; i< vvs.size(); i++) {
+		vector<string> v = vvs[i];
+		int j, len;
+		len = v.size();
+		if(len == 0) continue;
+		for(j=0; j<len; j++) {
+			os << v[j];
+			if(j+1<len) os << ssep;
+		}
+		if(len>0) os << recsep ;
+	}
+
+	if(use_file) ofs.close();
+}
+
+
+void prin_vecvec1(vecvec_t &vv)
+{
+	prin_vecvec(vv, "\n", "\n", "");
+}
+vecvec_t vecvec(const char *fname)
+{
+	string fn = (fname);
+	return vecvec(fn);
+}
+
+} // namespace parse
 
 void insert_nacc(nacc_ts& ns, const strings& fields)
 {	
@@ -139,7 +276,7 @@ inputs_t read_inputs()
 
 	string fname;
 	s1("derive-2.txt", fname);
-	vecvec_t mat = vecvec(fname);
+	vecvec_t mat = parse::vecvec(fname);
 
 	for(auto& row:mat) {
 		string cmd = row[0]; // => LVL0?
