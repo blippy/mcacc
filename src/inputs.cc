@@ -13,15 +13,9 @@ using namespace std;
 
 namespace parse {
 
-// TODO NOW this should be a new version
-
 typedef struct lexer_t {
-	//basic_string<iterator> cursor;
-	//iterator<basic_string> cursor;
 	std::string::iterator cursor, end, tok_start, tok_end;
-	//string *cursor;
 	std::string token() { 
-		//return cursor == end? '\0' : *curso
 		std::string s ; // = "";
 		for(auto& it= tok_start; it != tok_end; it++) s+= *it;
 		return s;
@@ -30,7 +24,6 @@ typedef struct lexer_t {
 		char c = *cursor;
 		return c == ' ' || c == '\t' || c == '\r';
 	}
-	//bool not_white() { return is_white(); }
 
 	bool more() { 
 		if(cursor == end) return false;
@@ -56,17 +49,6 @@ typedef struct lexer_t {
 			tok_end = cursor;
 		}
 
-		//while(!is_white() && cursor !=end) cursor++;
-		/*
-		if(is_string) cursor++;
-		while(cursor !=end) {
-			if(!is_string && is_white()) break;
-			cursor++;
-			if(is_string && *cursor == '"') break;
-		}
-		if(is_string) cursor++;
-		*/
-
 		return true;
 	}
 	lexer_t(std::string& s) {cursor = s.begin(); end = s.end(); }
@@ -79,10 +61,8 @@ std::vector<std::string> tokenise_line(std::string& s)
 
 	while(lexer.more()) {
 		std::string token = lexer.token();
-		//std::cout << '<' << token << '>' << std::endl;
 		result.push_back(token);
 	}
-	//std::cout << std::endl;
 	return result;
 }
 
@@ -240,10 +220,6 @@ yahoo_t make_yahoo(inputs_t& inputs, const strings& fields)
 void insert_yahoo(const yahoo_t& y, inputs_t& inputs)
 {
 	inputs.yahoos.insert(y);
-	//auto& ys = inputs.yahoos;
-	//if(ys.find(y.ticker) == ys.end())
-	//	ys[y.ticker] = vector<yahoo_t> {};
-	//ys[y.ticker].push_back(y);
 }
 
 
@@ -261,7 +237,6 @@ void insert_LVL05(inputs_t& inputs, const strings& fields)
 	}
 
 	insert_yahoo(y, inputs);
-	//inputs.yahoos.insert(std::pair<string, yahoo_t>(y.ticker, y));
 }
 
 void set_period(inputs_t& inputs, const strings& fields)
