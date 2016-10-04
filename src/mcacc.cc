@@ -85,6 +85,15 @@ void clean()
 }
 
 
+/* Perform user preprocessing
+ *
+ * It doesn't do much, but it has been separated out to aid profiling
+ */
+void preprocess(const char* command)
+{
+	system(command); // TODO LOW check return status
+	
+}
 void main_processing(po::variables_map vm)
 {
 
@@ -93,8 +102,7 @@ void main_processing(po::variables_map vm)
 
 	if(vm.count("pre")>0) {
 		string pre = vm["pre"].as<string>();
-		system(pre.c_str()); // TODO LOW check return status
-		//cout << "Pre cmd is " << pre << "\n";
+		preprocess(pre.c_str());
 	}
 
 	inputs_t inps = read_inputs();
