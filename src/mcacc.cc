@@ -1,6 +1,7 @@
-#include <assert.h>
-#include <ctime>
 #include <algorithm>
+#include <assert.h>
+#include <cfenv>
+#include <ctime>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -168,6 +169,9 @@ po::variables_map process_options(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
+
+	//feenableexcept(FE_ALL_EXCEPT);
+	feenableexcept(FE_OVERFLOW);
 
 	po::variables_map vm;
 
