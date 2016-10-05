@@ -26,21 +26,22 @@ void augment(const inputs_t& inputs, etran_t& e, const stend_ts& stends)
 		s.ticker = e.ticker;
 	}
 
-	e.ucost = e.cost.get()/e.qty;
+	e.ucost = e.cost.get()/e.qty.get(); // TODO generalise this pattern
 	e.start_dstamp = s.start_dstamp;
 	e.start_price = s.start_price;
 	e.end_dstamp = s.end_dstamp;
 	e.end_price = s.end_price;
 
-	double qty = e.qty;
+	quantity qty;
+	qty.inc(e.qty);
 	e.vbefore.set(0);
 	e.flow.set(0);
 	e.prior_year_profit.set(0);
-	e.vto.set(qty * s.end_price);
+	e.vto.set(qty.get() * s.end_price);
 	const period& per = inputs.p;
 	switch(per.when(e.dstamp)) {
 		case perBefore:
-			e.vbefore.set(qty * s.start_price);
+			e.vbefore.set(qty.get() * s.start_price);
 			e.prior_year_profit.set(e.vbefore.get() - e.cost.get());
 			break;
 		case perDuring:
@@ -70,7 +71,7 @@ void write_etran(ofstream& ofs, const etran_t& e)
 	bout(e.buy? 'B' : 'S'); // 3
 	sout(e.folio); // 4
 	sout(e.ticker); // 5
-	dout(e.qty, 6); // 6
+	ofs << e.qty.str(); //dout(e.qty, 6); // 6
 	ceout(e.cost); // 7
 	dout(e.ucost, 6); // 8
 	sout(e.ticker); // 9

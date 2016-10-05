@@ -36,7 +36,7 @@ void mkledger(const etran_ts& es, const ntran_ts& ns)
 		string at = (e.typ == leak) ? "@" : "@@";
 		string lcost = format_num(labs(e.cost.get()), 2);
 		string t2 = (format("\tEquity:%1%\t\"%2%\"\t%3%\t%4%\tGBP\t%5%\n") % 
-				e.folio % e.ticker %  e.qty % at % lcost).str();
+				e.folio % e.ticker %  e.qty.str() % at % lcost).str();
 		string t3 = (format("\t%1%\n\n") % e.folio).str();
 		string t = t1 + t2 + t3;
 		//cout << t;

@@ -88,19 +88,22 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 
 	bool total_written = false;
 	for(auto& y:ds.ys) {
-		double qty = 0;
+		quantity qty;
 		bool is_index = y.ticker[0] == '^';
-		for(auto& e:inps.etrans) if(y.ticker == e.ticker) qty += e.qty;
-		string qty_str = pad_left(format_num(qty , 0), 6);
-		pennies_t profit = is_index? y.chg : y.chg *qty/100;
+		for(auto& e:inps.etrans) 
+			if(y.ticker == e.ticker) 
+				qty.inc(e.qty);
+		//string qty_str = pad_left(format_num(qty , 0), 6);
+		pennies_t profit = is_index? y.chg : y.chg *qty.get()/100;
 		total_profit += profit;
 		string chgpc_str = pad_left(format_num(y.chgpc, 2), 6);
 		string price_str = pad_left(format_num(y.price, 2), 8);
-		pennies_t value = y.price * qty/100;
+		pennies_t value = y.price * qty.get()/100;
 		total_value += value;
 		string value_str = to_gbx(value);
-		strings fields = strings {pad_right(y.ticker, 6), to_gbx(profit), chgpc_str, value_str, 
-			qty_str, price_str};
+		strings fields = strings {pad_right(y.ticker, 6), 
+			to_gbx(profit), chgpc_str, value_str, 
+			qty.str(), price_str};
 
 		if(is_index && ! total_written) {
 			double chgpc = total_profit/total_value * 100;

@@ -8,7 +8,6 @@
 #include <set>
 
 #include "common.hpp"
-//#include "autotypes.hpp"
 #include "reusable.hpp"
 #include "stend.hpp"
 #include "epics.hpp"
@@ -51,7 +50,7 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 	print_strings(eout, fields);
 
 	for(const auto& k:epic_names) {
-		tqty =0; 
+		quantity tqty; 
 		tcost.set(0);
 		double uvalue;
 		//centis uvalue;
@@ -68,12 +67,12 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 
 			uvalue = e.end_price;
 			if(e.buy) {
-				tqty += e.qty; 
+				tqty.inc(e.qty); 
 				tcost.inc(e.cost);
 			} else { 
-				double ucost = tcost.get()/tqty; 
-				tqty += e.qty; 
-				tcost.inc(ucost * e.qty);
+				double ucost = tcost.get()/tqty.get(); 
+				tqty.inc(e.qty); 
+				tcost.inc(ucost * e.qty.get());
 			}
 
 			vbefore.inc(e.vbefore);
@@ -82,16 +81,16 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 			vto.inc(e.vto);
 		}
 
-		if(tqty == 0) { zeros.insert(k) ; continue; }
-		double ucost = tcost.get()/tqty;
+		if(tqty.get() == 0) { zeros.insert(k) ; continue; }
+		double ucost = tcost.get()/tqty.get();
 		//double value = uvalue * tqty;
 		centis value;
-		value.set(uvalue*tqty);
+		value.set(uvalue*tqty.get());
 
 		fields = {pad_right(k, 7),
 		       	tcost.str(), value.str() , 
 			ret_str(value, tcost), 
-			to_gbx(tqty), to_gbx(ucost), to_gbx(uvalue)};
+			tqty.str(), to_gbx(ucost), to_gbx(uvalue)};
 		print_strings(eout, fields);
 		grand_cost.inc(tcost);
 		grand_value.inc(value);

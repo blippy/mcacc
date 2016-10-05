@@ -164,7 +164,8 @@ etran_t mketran(const strings& fields)
 	e.buy = e.sgn == 1;
 	e.folio = fields[2];
 	e.ticker = fields[3];
-	e.qty= e.sgn * stod(fields[5]);
+	//e.qty= e.sgn * stod(fields[5]);
+	e.qty.from_str(e.sgn, fields[5]);
 	e.cost.set(e.sgn * enpennies(fields[6]));
 	e.typ = regular;
 	return e;

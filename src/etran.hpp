@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "types.hpp"
+#include "quantity.hpp"
 #include "centis.hpp"
 
 enum Etype { unknown, leak, regular };
@@ -13,7 +14,7 @@ typedef struct etran_t {
 	double 		sgn;
 	bool		buy;
 	std::string	folio;
-	double		qty;
+	quantity	qty;
 	centis  	cost;
 	std::string	ticker;
 	Etype typ = unknown;
