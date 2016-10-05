@@ -44,7 +44,10 @@ void mkledger(const etran_ts& es, const ntran_ts& ns)
 
 	for(auto& n: ns) {
 		string t1 = (format("%1%\t*\t%2%\n") % n.dstamp % n.desc).str();
-		string t2 = (format("\t%1%\tGBP\t%2%\n") % n.dr % to_gbp(n.amount)).str();
+		//string t2 = (format("\t%1%\tGBP\t%2%\n") % n.dr % to_gbp(n.amount)).str();
+		string amt = n.amount.str();
+		string t2 = (format("\t%1%\tGBP\t%2%\n") % n.dr % amt).str();
+
 		string t3 = (format("\t%1%\n\n") % n.cr).str();
 		string t = t1 + t2 + t3;
 		trans.push_back(make_pair(n.dstamp, t));

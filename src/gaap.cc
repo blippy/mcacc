@@ -2,6 +2,7 @@
  * 18-Jun-2016 Can't use autosprintf on cygwin
  * */
 
+#include <cmath>
 #include <map>
 #include <iostream>
 #include <fstream>
@@ -20,16 +21,17 @@ using namespace std;
 
 void ul1(ostream* ofs) { (*ofs) << nchars(' ', 11) << nchars('-', 10) << endl;};
 
-void emit(ostream* ofs, const string& title, pennies_t value)
+void emit(ostream* ofs, const string& title, const centis& value)
 {
-	char sgn = ' ';
-	if (value<0) { sgn = '-' ; value = -value;}
-	double bal = round2(double(value)/double(100));
+	//char sgn = ' ';
+	//if (value<0) { sgn = '-' ; value = -value;}
+	//double bal = round2(double(value)/double(100));
+	double bal = round2(value.get()/100);
+	char sgn = bal<0 ? '-' : ' ';
+	bal = fabs(bal);
 	setlocale(LC_NUMERIC, "");
 	char buf[80];
 	snprintf(buf, sizeof(buf), "%10.10s %'10.2f%c", title.c_str() , bal, sgn);
-	//ofs << gnu::autosprintf("%10.10s %'10.2f%c", title.c_str() , bal, sgn);
-	//ofs << endl;
 	(*ofs) << buf << endl;
 
 
@@ -39,20 +41,26 @@ void emit(ostream* ofs, const string& title, pennies_t value)
 ostream* m_ofs = nullptr;
 nacc_ts m_naccs;
 
-pennies_t get_bal(string key)
+centis get_bal(string key)
 { 
-	pennies_t bal = 0;
+	//pennies_t bal = 0;
+	centis bal;
 	try {
 		bal = m_naccs.at(key).bal;
 	} catch (const std::out_of_range& ex) {
-		bal = 0;
+		//bal = 0;
 		//cerr << "gaap_main() couldn't look up key " << key << " in naccs" << endl;
 		//throw ex;
 	}	
 	return bal;
 }	
 
-struct Lie { string desc; pennies_t amount = 0; bool oline = false ; bool uline = false;}; // line entry
+struct Lie { 
+	string desc; 
+	centis amount; 
+	bool oline = false ; 
+	bool uline = false;
+}; // line entry
 void print_lie(const Lie& lie) 
 { 
 	if(lie.oline) ul1(m_ofs);
@@ -75,7 +83,7 @@ class section {
 		//static int foo;
 		
 		section add(string desc) {
-			pennies_t amount = get_bal(desc);
+			centis amount = get_bal(desc);
 			struct Lie lie = {desc, amount};
 			//lies.push_back(lie);
 			//total_lie.amount += amount;
@@ -91,7 +99,8 @@ class section {
 
 		section add(Lie lie) {
 			lies.push_back(lie);
-			total_lie.amount += lie.amount;
+			//total_lie.amount += lie.amount;
+			total_lie.amount.inc(lie.amount);
 			return *this;
 		}
 
@@ -119,9 +128,10 @@ class section {
 		vector<Lie> lies;
 };
 
-void subtotal(ostream* ofs, const string& title, pennies_t value)
+void subtotal(ostream* ofs, const string& title, centis& value)
 { 
-	ul1(ofs); emit(ofs, title, value); ul1(ofs);
+	ul1(ofs); emit(ofs, title, value); 
+	ul1(ofs);
 	(*ofs) << endl;
 
 }

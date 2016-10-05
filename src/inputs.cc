@@ -126,6 +126,12 @@ vecvec_t vecvec(const char *fname)
 
 } // namespace parse
 
+double enpennies(std::string s)
+{
+	double p= 100.0* stod(s);
+	p = bround(p);
+	return p;
+}
 void insert_nacc(nacc_ts& ns, const strings& fields)
 {	
 	nacc_t n;
@@ -178,7 +184,8 @@ ntran_t mkntran(const strings& fields)
 	n.dstamp=fields[1];
 	n.dr=fields[2];
 	n.cr=fields[3];
-	n.amount=enpennies(fields[6]);
+	//n.amount=enpennies(fields[6]);
+	n.amount.set(enpennies(fields[6]));
 	n.desc=fields[9];
 	return n;
 }

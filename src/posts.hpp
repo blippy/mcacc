@@ -5,12 +5,13 @@
 #include <vector>
 
 #include "types.hpp"
+#include "centis.hpp"
 
 typedef struct post_t {
 	std::string dstamp;
 	std::string dr;
 	std::string cr;
-	pennies_t amount;
+	centis amount;
 	std::string desc;
 } post_t;
 

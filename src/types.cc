@@ -14,12 +14,7 @@
 
 using namespace std;
 
-double enpennies(std::string s)
-{
-	double p= 100.0* stod(s);
-	p = bround(p);
-	return p;
-}
+
 string to_gbx(pennies_t p)
 {
 	string s1 =format_num(p, 2);

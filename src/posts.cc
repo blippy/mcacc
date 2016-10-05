@@ -24,7 +24,7 @@ void push(post_ts &ps, const string& dstamp, const string& ticker, string acc, s
 	p.dstamp = dstamp;
 	p.dr = acc;
 	p.cr = str;
-	p.amount = amount;
+	p.amount.set(amount);
 	p.desc = str + ":" + ticker;
 	ps.push_back(p);
 }
@@ -35,7 +35,7 @@ post_ts posts_main(const inputs_t& inputs)
 	post_ts ps;
 	for(auto& n:inputs.ntrans) {
 		if(n.dstamp > inputs.p.end_date) continue;
-		if(n.amount ==0) continue;
+		if(n.amount.get() ==0) continue;
 
 		post_t p;
 		p.dstamp = n.dstamp;
@@ -45,12 +45,14 @@ post_ts posts_main(const inputs_t& inputs)
 			p.dr = inputs.naccs.at(p.dr).alt;
 			p.cr = inputs.naccs.at(p.cr).alt;
 		}
-		p.amount = n.amount;
+		//p.amount = n.amount;
+		p.amount.set(n.amount.get());
 		p.desc = n.desc;
 		ps.push_back(p);
 
 		std::swap(p.dr, p.cr);
-		p.amount = -p.amount;
+		//p.amount = -p.amount;
+		p.amount.negate();
 		ps.push_back(p);
 	}
 	for(auto& e: inputs.etrans) {

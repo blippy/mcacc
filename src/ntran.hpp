@@ -9,7 +9,7 @@ typedef struct ntran_t {
 	std::string dstamp;
 	std::string dr;
 	std::string cr;
-	pennies_t amount;
+	centis amount;
 	std::string desc;
 } ntran_t;
 

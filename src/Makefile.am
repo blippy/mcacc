@@ -4,7 +4,7 @@ man1_MANS = mcacc.1
 mcacc_LDADD = -lpthread -lboost_system -lboost_filesystem -lboost_program_options
 #-lasprintf
 mcacc_SOURCES = assets.cc \ 
-		cgt.cc comm.cc common.cc \
+		centis.cc cgt.cc comm.cc common.cc \
 		epics.cc etb.cc etran.cc etrans-aug.cc \
 		gaap.cc \
 		inputs.cc \
