@@ -17,14 +17,14 @@ bool operator<(const post_t& a, const post_t& b)
 	return std::tie(a.dr, a.dstamp) < std::tie(b.dr, b.dstamp);
 }
 
-void push(post_ts &ps, const string& dstamp, const string& ticker, string acc, string str, int amount)
+void push(post_ts &ps, const string& dstamp, const string& ticker, string acc, string str, double sgn, const centis& amount)
 {
 	post_t p;
-	if(amount == 0) return;
+	if(amount.get() == 0) return;
 	p.dstamp = dstamp;
 	p.dr = acc;
 	p.cr = str;
-	p.amount.set(amount);
+	p.amount.set(sgn * amount.get());
 	p.desc = str + ":" + ticker;
 	ps.push_back(p);
 }
@@ -58,10 +58,14 @@ post_ts posts_main(const inputs_t& inputs)
 	for(auto& e: inputs.etrans) {
 		if(e.dstamp > inputs.p.end_date) continue;
 
-		push(ps, e.dstamp, e.ticker, e.folio,        "pCost", -e.cost);
-		push(ps, e.dstamp, e.ticker, e.folio + "_c", "pVcd", e.vto);
-		push(ps, e.dstamp, e.ticker, e.folio + "_g", "pPdp", -e.profit);
-		push(ps, e.dstamp, e.ticker, "opn",          "pbd", -e.prior_year_profit);
+		push(ps, e.dstamp, e.ticker, e.folio,        "pCost", 
+				-1, e.cost);
+		push(ps, e.dstamp, e.ticker, e.folio + "_c", "pVcd", 
+				1, e.vto);
+		push(ps, e.dstamp, e.ticker, e.folio + "_g", "pPdp",
+			       -1, e.profit);
+		push(ps, e.dstamp, e.ticker, "opn",          "pbd", 
+				-1, e.prior_year_profit);
 	}
 
 	sort(begin(ps), end(ps));

@@ -165,7 +165,7 @@ etran_t mketran(const strings& fields)
 	e.folio = fields[2];
 	e.ticker = fields[3];
 	e.qty= e.sgn * stod(fields[5]);
-	e.cost= e.sgn * enpennies(fields[6]);
+	e.cost.set(e.sgn * enpennies(fields[6]));
 	e.typ = regular;
 	return e;
 }
@@ -184,7 +184,6 @@ ntran_t mkntran(const strings& fields)
 	n.dstamp=fields[1];
 	n.dr=fields[2];
 	n.cr=fields[3];
-	//n.amount=enpennies(fields[6]);
 	n.amount.set(enpennies(fields[6]));
 	n.desc=fields[9];
 	return n;

@@ -42,17 +42,19 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 	set<string> zeros;
 	strings fields;
 	string line;
-	double tqty, tcost;
-	double grand_cost =0, grand_value = 0;
-	pennies_t vbefore =0, vflow = 0, vprofit = 0, vto = 0;
+	double tqty;
+	centis tcost, grand_cost, grand_value;
+	centis vbefore, vflow, vprofit, vto;
 
 	fields = { pad_ticker("TICK"), pad_gbp("COST"), pad_gbp("VALUE"), ret_str("RET%"), 
 		pad_gbp("QTY"), pad_gbp("UCOST"), pad_gbp("UVALUE") };
 	print_strings(eout, fields);
 
 	for(const auto& k:epic_names) {
-		tqty =0; tcost = 0;
+		tqty =0; 
+		tcost.set(0);
 		double uvalue;
+		//centis uvalue;
 
 		for(const auto& e:es){
 
@@ -65,27 +67,39 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 			if(!match) continue;
 
 			uvalue = e.end_price;
-			if(e.buy) {tqty += e.qty; tcost += e.cost;}
-			else { double ucost = tcost/tqty; tqty += e.qty; tcost += ucost * e.qty;}
+			if(e.buy) {
+				tqty += e.qty; 
+				tcost.inc(e.cost);
+			} else { 
+				double ucost = tcost.get()/tqty; 
+				tqty += e.qty; 
+				tcost.inc(ucost * e.qty);
+			}
 
-			vbefore += e.vbefore;
-			vflow += e.flow;
-			vprofit += e.profit;
-			vto += e.vto;
+			vbefore.inc(e.vbefore);
+			vflow.inc(e.flow);
+			vprofit.inc(e.profit);
+			vto.inc(e.vto);
 		}
 
 		if(tqty == 0) { zeros.insert(k) ; continue; }
-		double ucost = tcost/tqty;
-		double value = uvalue * tqty;
+		double ucost = tcost.get()/tqty;
+		//double value = uvalue * tqty;
+		centis value;
+		value.set(uvalue*tqty);
 
-		fields = {pad_right(k, 7), to_gbp(tcost), to_gbp(value) , ret_str(value, tcost), 
+		fields = {pad_right(k, 7),
+		       	tcost.str(), value.str() , 
+			ret_str(value, tcost), 
 			to_gbx(tqty), to_gbx(ucost), to_gbx(uvalue)};
 		print_strings(eout, fields);
-		grand_cost += tcost;
-		grand_value += value;
+		grand_cost.inc(tcost);
+		grand_value.inc(value);
 
 	}
-	fields = {pad_right("Grand:", 7), to_gbp(grand_cost), to_gbp(grand_value), ret_str(grand_value, grand_cost), 
+	fields = {pad_right("Grand:", 7), grand_cost.str(), 
+		grand_value.str(),
+	       	ret_str(grand_value, grand_cost), 
 		pad_gbp(' '), pad_gbp(' '), pad_gbp(' ') };
 	print_strings(eout, fields);
 	eout << endl;
@@ -105,8 +119,9 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 	
 	// portfolios output
 	if(f.ftype ==1 || f.ftype==2) underline(pout, '-');
-	fields = {pad_ticker(f.name), to_gbp(vbefore), to_gbp(vflow), to_gbp(vprofit), 
-		to_gbp(vto), ret_str(vprofit+vbefore, vbefore) };
+	fields = {pad_ticker(f.name), vbefore.str(), vflow.str(), 
+		vprofit.str(), vto.str(),
+	       	ret_str(vprofit.get() + vbefore.get(), vbefore.get()) };
 	print_strings(pout, fields);
 	if(f.ftype==2) underline(pout, '=');
 

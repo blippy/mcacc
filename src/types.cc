@@ -43,6 +43,10 @@ string ret_str(double num, double denom) {  return ret_str(num/denom*100-100); }
 string ret_str(char c) { return nchars(c, 6); }
 string ret_str(string s) { return pad_left(s, 6); }
 
+std::string ret_str(const centis& num, const centis& denom)
+{
+	return ret_str(num.get(), denom.get());
+}
 
 void print_strings(ostream &ost, const strings &strs)
 {
@@ -65,28 +69,3 @@ bool period::during(const std::string &dstamp) const
 }
 
 
-/*
-void stend_c::from_vec(strings &row)
-{
-	ticker = row[0];
-	start_dstamp = row[1];
-	start_price = stod(row[2]);
-	end_dstamp = row[3];
-	end_price = stod(row[4]);
-
-}
-
-stends_t load_stends()
-{
-	string fname;
-	s3("stend.dsv", fname);
-	vecvec_t rows = vecvec(fname);
-	stends_t smap;
-	for(strings r : rows) {
-		stend_c s;
-		s.from_vec(r);
-		smap[r[0]] = s;
-	}
-	return smap;
-}
-*/

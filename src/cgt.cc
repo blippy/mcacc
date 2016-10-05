@@ -27,7 +27,7 @@ string mkrow(etran_t& e)
 
 	string share_str = format_num(fabs(e.qty), 4);
 	
-	string price_str = format_num(fabs(e.cost/e.qty/100), 5);
+	string price_str = format_num(fabs(e.cost.get()/e.qty/100), 5);
 
 	return  intercalate("\t", {bs, dstamp, e.ticker, share_str, price_str, "0.00", "0.00"});
 	//return result;

@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 
+class centis; // forward declaration
 
 typedef double pennies_t;
 typedef std::vector<std::string> strings;
@@ -11,7 +12,6 @@ typedef std::vector<std::string> strings;
 std::string to_gbp(pennies_t p);
 std::string to_gbx(pennies_t p);
 
-//double enpennies(std::string s);
 typedef std::string dstamp_t;
 
 std::string pad_ticker(std::string ticker);
@@ -21,6 +21,7 @@ std::string pad_gbp(char c);
 std::string pad_gbp(std::string s);
 std::string ret_str(double r);
 std::string ret_str(double num, double denom); 
+std::string ret_str(const centis& num, const centis& denom); 
 std::string ret_str(char c);
 std::string ret_str(std::string s);
 

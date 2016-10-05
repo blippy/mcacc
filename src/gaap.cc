@@ -43,16 +43,14 @@ nacc_ts m_naccs;
 
 centis get_bal(string key)
 { 
-	//pennies_t bal = 0;
-	centis bal;
+	//centis bal;
 	try {
-		bal = m_naccs.at(key).bal;
+		return m_naccs.at(key).bal;
 	} catch (const std::out_of_range& ex) {
-		//bal = 0;
-		//cerr << "gaap_main() couldn't look up key " << key << " in naccs" << endl;
-		//throw ex;
+		return centis();
 	}	
-	return bal;
+
+	//return bal;
 }	
 
 struct Lie { 

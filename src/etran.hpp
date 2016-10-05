@@ -3,18 +3,18 @@
 #include <string>
 #include <vector>
 #include "types.hpp"
+#include "centis.hpp"
 
 enum Etype { unknown, leak, regular };
 
 typedef struct etran_t {
-	bool	taxable;
+	bool		taxable;
 	dstamp_t	dstamp;
-	double sgn;
-	bool	buy;
+	double 		sgn;
+	bool		buy;
 	std::string	folio;
-	//std::string	sym;
-	double	qty;
-	pennies_t	cost = 0;
+	double		qty;
+	centis  	cost;
 	std::string	ticker;
 	Etype typ = unknown;
 
@@ -24,11 +24,11 @@ typedef struct etran_t {
 	pennies_t	start_price;
 	dstamp_t	end_dstamp;
 	pennies_t	end_price;
-	pennies_t	prior_year_profit;
-	pennies_t	vbefore;
-	pennies_t	flow;
-	pennies_t	profit;
-	pennies_t	vto;
+	centis		prior_year_profit;
+	centis		vbefore;
+	centis		flow;
+	centis		profit;
+	centis		vto;
 } etran_t ;
 
 bool operator<(const etran_t& lhs, const etran_t& rhs);
