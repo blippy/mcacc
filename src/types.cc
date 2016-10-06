@@ -15,16 +15,6 @@
 using namespace std;
 
 
-string to_gbx(pennies_t p)
-{
-	string s1 =format_num(p, 2);
-	string s2 = pad_left(s1, 12);
-	return s2 ;
-}
-
-string to_gbp(pennies_t p) { return to_gbx(p/100.0); }
-
-
 string pad_ticker(string ticker) { return pad_right(ticker, 7); }
 string pad_ticker(char c) { return nchars(c, 7);}
 
@@ -48,6 +38,22 @@ std::string ret_str(const centis& num, const centis& denom)
 	return ret_str(num.get(), denom.get());
 }
 
+
+std::string retchg_str(double num, double denom)
+{
+	return ret_str(num/denom *100);
+}
+
+std::string retchg_str(const centis& num, const centis& denom)
+{
+	return retchg_str(num.get(), denom.get());
+}
+
+
+std::string ret_str(const price& num, const price& denom)
+{
+	return ret_str(num.get(), denom.get());
+}
 void print_strings(ostream &ost, const strings &strs)
 {
 	auto line = intercalate(" ", strs);

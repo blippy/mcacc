@@ -18,6 +18,7 @@ using namespace std;
 
 void augment(const inputs_t& inputs, etran_t& e, const stend_ts& stends)
 {
+	/*
 	stend_t s;
 	try {s = stends.at(e.ticker);}
 	catch (const std::out_of_range& oor) {		 
@@ -25,23 +26,27 @@ void augment(const inputs_t& inputs, etran_t& e, const stend_ts& stends)
 			<< e.ticker << endl;
 		s.ticker = e.ticker;
 	}
+	*/
+	const stend& s = stends.at(e.ticker);
 
-	e.ucost = e.cost.get()/e.qty.get(); // TODO generalise this pattern
+	e.ucost.reprice(e.cost, e.qty); 
 	e.start_dstamp = s.start_dstamp;
-	e.start_price = s.start_price;
+	e.start_price.set(s.start_price);
 	e.end_dstamp = s.end_dstamp;
-	e.end_price = s.end_price;
+	e.end_price.set(s.end_price);
 
 	quantity qty;
 	qty.inc(e.qty);
 	e.vbefore.set(0);
 	e.flow.set(0);
 	e.prior_year_profit.set(0);
-	e.vto.set(qty.get() * s.end_price);
+	//e.vto.set(qty.get() * s.end_price);
+	recentis(e.vto, s.end_price, qty);
 	const period& per = inputs.p;
 	switch(per.when(e.dstamp)) {
 		case perBefore:
-			e.vbefore.set(qty.get() * s.start_price);
+			//e.vbefore.set(qty.get() * s.start_price);
+			recentis(e.vbefore, s.start_price, qty);
 			e.prior_year_profit.set(e.vbefore.get() - e.cost.get());
 			break;
 		case perDuring:
@@ -66,6 +71,7 @@ void write_etran(ofstream& ofs, const etran_t& e)
 	auto sout = [&ofs](string s) { ofs << s << '\t' ; };
 	auto dout = [&ofs](double d, int dp) { ofs << format_num(d, dp) 
 		<< '\t' ; };
+	auto pout = [&ofs](const price& p){ ofs << p.str6() << '\t' ; };
 	bout(e.taxable? 'T' : 'F'); // 1
 	sout(e.dstamp); // 2
 	bout(e.buy? 'B' : 'S'); // 3
@@ -73,12 +79,12 @@ void write_etran(ofstream& ofs, const etran_t& e)
 	sout(e.ticker); // 5
 	ofs << e.qty.str(); //dout(e.qty, 6); // 6
 	ceout(e.cost); // 7
-	dout(e.ucost, 6); // 8
+	pout(e.ucost); //dout(e.ucost, 6); // 8
 	sout(e.ticker); // 9
 	sout(e.start_dstamp); // 10
-	dout(e.start_price, 6); // 11
+	pout(e.start_price); //dout(e.start_price, 6); // 11
 	sout(e.end_dstamp); // 12
-	dout(e.end_price, 6); //13
+	pout(e.end_price); //dout(e.end_price, 6); //13
 	ceout(e.prior_year_profit); // 14
 	ceout(e.vbefore); // 15
 	ceout(e.flow); // 16

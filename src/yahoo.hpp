@@ -6,14 +6,15 @@
 #include <vector>
 
 //#include "inputs.hpp"
+#include "price.hpp"
 
 typedef struct yahoo_t {
 	std::string dstamp;
 	std::string tstamp;
 	std::string ticker;
-	double rox = 1;
-	double price = 0;
-	double chg = 0;
+	//double rox = 1;
+	price yprice;
+	price chg;
 	double chgpc = 0;
 	std::string currency = "P";
 	std::string desc = "no desc";

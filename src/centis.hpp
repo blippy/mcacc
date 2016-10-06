@@ -8,7 +8,10 @@ class centis {
 	public:
 		centis() {};
 		double get() const;
+		//void get(double& num, );
 		void set(double newval);
+		void set(double sgn, std::string str);
+		void set(std::string str);
 		void inc(double by);
 		void inc(const centis& by);
 		void write(std::ofstream& ofs);

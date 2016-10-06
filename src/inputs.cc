@@ -126,12 +126,7 @@ vecvec_t vecvec(const char *fname)
 
 } // namespace parse
 
-double enpennies(std::string s)
-{
-	double p= 100.0* stod(s);
-	p = bround(p);
-	return p;
-}
+
 void insert_nacc(nacc_ts& ns, const strings& fields)
 {	
 	nacc_t n;
@@ -164,9 +159,8 @@ etran_t mketran(const strings& fields)
 	e.buy = e.sgn == 1;
 	e.folio = fields[2];
 	e.ticker = fields[3];
-	//e.qty= e.sgn * stod(fields[5]);
 	e.qty.from_str(e.sgn, fields[5]);
-	e.cost.set(e.sgn * enpennies(fields[6]));
+	e.cost.set(e.sgn, fields[6]);
 	e.typ = regular;
 	return e;
 }
@@ -185,7 +179,7 @@ ntran_t mkntran(const strings& fields)
 	n.dstamp=fields[1];
 	n.dr=fields[2];
 	n.cr=fields[3];
-	n.amount.set(enpennies(fields[6]));
+	n.amount.set(fields[6]);
 	n.desc=fields[9];
 	return n;
 }
@@ -213,9 +207,9 @@ yahoo_t make_yahoo(inputs_t& inputs, const strings& fields)
 	y.dstamp = fields[2];
 	y.tstamp = fields[3];
 	y.ticker = fields[4];
-	y.rox = stod(fields[5]);
-	y.price = stod(fields[6]);
-	y.chg = stod(fields[7]);
+	//y.rox = stod(fields[5]);
+	y.yprice.set(fields[6]);
+	y.chg.set(fields[7]);
 	y.chgpc = stod(fields[8]);
 	y.currency = fields[9];
 	y.desc = fields[10];
@@ -235,8 +229,8 @@ void insert_LVL05(inputs_t& inputs, const strings& fields)
 	string subtype = fields[1];
 	yahoo_t y = make_yahoo(inputs, fields);	
 	if(subtype == "PRICE-1") {
-		y.price = y.price /y.rox * 100;
-		y.rox =1;
+		//y.yprice = y.yprice /y.rox * 100;
+		//y.rox =1;
 	} else if (subtype != "YAHOO-1") {
 		cerr << "inputs.cc:insert_LVL05() couldn't understand type ";
 		cerr << subtype << ". Fatal exit." << endl;

@@ -1,9 +1,13 @@
+#include <cmath>
 #include <iostream>
 #include <string>
 
 //using namespace std;
 #include "inputs.hpp"
 #include "reusable.hpp"
+
+using std::cout;
+using std::string;
 
 void check(bool ok, std::string msg)
 {
@@ -12,6 +16,10 @@ void check(bool ok, std::string msg)
 }
 
 
+void check_near(double src, double targ, string msg)
+{
+	check(fabs(src-targ) <0.0001, msg);
+}
 void check_erase_all(std::string src, char c, std::string targ)
 {
 	std::string s = src;
@@ -39,6 +47,27 @@ void check_tokeniser(std::string str, std::vector<std::string> strs)
 	check(ok, msg);
 }
 
+void check_fundamentals()
+{	
+	price p;
+	p.set("123.45");
+	check_near(p.get(), 123.45, "price 123.45");
+
+
+	centis c;
+	c.set("456.78");
+	check_near(c.get(), 45678, "centis 456.78");
+
+	quantity q;
+	q.set("37.46");
+	check_near(q.get(), 37.46, "quantity 37.46");
+
+	p.reprice(c, q);
+	check_near(p.get(), 1219.3806, "reprice");
+	
+	recentis(c, p, q);
+	check_near(c.get(), 45678, "recentis");
+}
 void run_all_tests()
 {
 	check_erase_all("", 'a', "");
@@ -50,6 +79,6 @@ void run_all_tests()
 	check_tokeniser("foo  \"baz shazam\"  bar", {"foo", "baz shazam", "bar"});
        	check_tokeniser("    hello  \"joe blogg\"  world   # just a comment   ", {"hello", "joe blogg", "world"});
 	check_tokeniser("this is \"tricky disco", {"this", "is", "tricky disco"});
-	//std::string s;
-	//tokenise_line_1(s);
+
+	check_fundamentals();
 }

@@ -23,12 +23,18 @@ std::string quantity::str() const
 
 void quantity::from_str(double sgn, const std::string & s)
 {
-	value = sgn * scale * bround(stod(s));
+	value = bround(sgn * scale * stod(s));
 }
 
 double quantity::get() const
 {
 	return value/scale;
+}
+
+void quantity::get(double& num, double& den) const
+{
+	num = value;
+	den = scale;
 }
 
 double quantity::num() const
@@ -42,3 +48,4 @@ void quantity::inc(const quantity& q)
 }
 
 
+void quantity::set(const std::string & s) { from_str(1, s); }

@@ -1,7 +1,3 @@
-// TODO this should replace pennies_t
-
-
-//using std::ofstream;
 using namespace std;
 
 #include "centis.hpp"
@@ -11,6 +7,13 @@ using namespace std;
 
 double centis::get() const { return value;};
 void centis::set(double newval) { value = bround(newval); }
+
+void centis::set(double sgn, std::string str)
+{
+	value = bround(sgn * 100 * stod(str));
+}
+
+void centis::set(std::string str) { set(1, str); }
 
 void centis::inc(double by) { value += bround(by); }
 

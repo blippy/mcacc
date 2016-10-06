@@ -82,7 +82,8 @@ void mkprices(const yahoo_ts&  ys)
 	multiset<string> prices;
 	for(auto& y: ys) {
 		//for(auto& y1: y.second) {
-			string price_str = format_num(y.price/100, 7);
+			//string price_str = format_num(y.yprice/100, 7);
+			string price_str = format_num(y.yprice.get()/100, 7);
 			string ticker = "\"" + y.ticker + "\"";
 			strings fields = {"P", y.dstamp, y.tstamp, ticker, "GBP", price_str};
 			string line = intercalate("\t", fields);			

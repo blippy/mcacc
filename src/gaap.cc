@@ -74,17 +74,9 @@ class section {
 			total_lie.uline = true;
 		}
 		
-		//string desc;
-		//int amount;
-		//pennies_t total = 0;
-		//static ofstream& ofs;
-		//static int foo;
-		
 		section add(string desc) {
 			centis amount = get_bal(desc);
 			struct Lie lie = {desc, amount};
-			//lies.push_back(lie);
-			//total_lie.amount += amount;
 			add(lie);
 			return *this;
 		}
@@ -144,11 +136,11 @@ void gaap_main(const nacc_ts& the_naccs, const period& per)
 	m_naccs = the_naccs;
 
 	auto get_bal = [the_naccs](auto key){ 
-		pennies_t bal = 0;
+		centis bal;
 		try {
-			bal = the_naccs.at(key).bal;
+			bal.set( the_naccs.at(key).bal);
 		} catch (const std::out_of_range& ex) {
-			bal = 0;
+			//bal = 0;
 		}	
 		return bal;
 	};	

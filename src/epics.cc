@@ -52,7 +52,7 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 	for(const auto& k:epic_names) {
 		quantity tqty; 
 		tcost.set(0);
-		double uvalue;
+		price uvalue;
 		//centis uvalue;
 
 		for(const auto& e:es){
@@ -65,7 +65,7 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 			}
 			if(!match) continue;
 
-			uvalue = e.end_price;
+			uvalue.set(e.end_price);
 			if(e.buy) {
 				tqty.inc(e.qty); 
 				tcost.inc(e.cost);
@@ -82,15 +82,15 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 		}
 
 		if(tqty.get() == 0) { zeros.insert(k) ; continue; }
-		double ucost = tcost.get()/tqty.get();
-		//double value = uvalue * tqty;
+		price ucost;
+	       	ucost.reprice(tcost, tqty);
 		centis value;
-		value.set(uvalue*tqty.get());
+		recentis(value, uvalue, tqty);
 
 		fields = {pad_right(k, 7),
 		       	tcost.str(), value.str() , 
 			ret_str(value, tcost), 
-			tqty.str(), to_gbx(ucost), to_gbx(uvalue)};
+			tqty.str(), ucost.str2(), uvalue.str2()};
 		print_strings(eout, fields);
 		grand_cost.inc(tcost);
 		grand_value.inc(value);
@@ -136,11 +136,14 @@ void print_indices(stend_ts& stends, ostream &pout)
 
 	auto indices = strings {"^FTSE", "^FTMC", "^FTAS"};
 	for(string& i:indices){
-		stend_t s = stends[i];
-		double sp = s.start_price;
-		double ep = s.end_price;
-		double chg = ep - sp;
-		auto fields = strings { pad_ticker(i), to_gbx(sp), pad_gbp(' '), to_gbx(chg), to_gbx(ep), ret_str(ep, sp)};
+		stend s = stends[i];
+		price sp, ep, chg;
+	       	sp.set(s.start_price);
+		ep.set(s.end_price);
+		chg.diff(ep, sp);
+		auto fields = strings { pad_ticker(i), 
+			sp.str2(), pad_gbp(' '), chg.str2(), ep.str2(), 
+			ret_str(ep, sp)};
 		print_strings(pout, fields);
 	}
 }

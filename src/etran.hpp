@@ -5,6 +5,7 @@
 #include "types.hpp"
 #include "quantity.hpp"
 #include "centis.hpp"
+#include "price.hpp"
 
 enum Etype { unknown, leak, regular };
 
@@ -20,11 +21,11 @@ typedef struct etran_t {
 	Etype typ = unknown;
 
 	// derived fields:
-	pennies_t	ucost; 
+	price		ucost; 
 	dstamp_t	start_dstamp;
-	pennies_t	start_price;
+	price		start_price;
 	dstamp_t	end_dstamp;
-	pennies_t	end_price;
+	price		end_price;
 	centis		prior_year_profit;
 	centis		vbefore;
 	centis		flow;

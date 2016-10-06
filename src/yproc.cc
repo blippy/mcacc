@@ -43,9 +43,9 @@ void download(const comm_ts& the_comms, downloads_t& ds)
 		y.tstamp = tstamp;
 		y.ticker = fields[0]; 
 		erase_all(y.ticker, '"');
-		y.price = stod(fields[1]);
-		y.chg = stod(fields[2]);
-		y.chgpc = y.chg / (y.price - y.chg) * 100;
+		y.yprice.set(fields[1]);
+		y.chg.set(fields[2]);
+		y.chgpc = y.chg.get() / (y.yprice.get() - y.chg.get()) * 100;
 		ds.ys.insert(y);
 	}
 }
@@ -58,10 +58,12 @@ void mkyahoos(downloads_t& ds)
 	yout.open(yout_name);
 	for(auto& y: ds.ys){
 		//yahoo_t y2 = y.second;
-		string price = format_num(y.price, 6);
-		string chg = format_num(y.chg, 6);
+		//string price = format_num(y.price, 6);
+		//string chg = format_num(y.chg, 6);
 		string chgpc = format_num(y.chgpc, 2);
-		strings fields = {"yahoo", ds.dstamp, ds.tstamp, y.ticker, "1.0000", price, chg, chgpc, "P"};
+		strings fields = {"yahoo", ds.dstamp, ds.tstamp, 
+			y.ticker, "1.0000", y.yprice.str6(), 
+			y.chg.str2(), chgpc, "P"};
 		yout << intercalate("\t", fields);
 		yout << endl;
 	}
@@ -84,7 +86,7 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 		pad_left("VALUE", 12), pad_left("QTY", 6), pad_left("PRICE", 8)};
 	sout << intercalate(" ", fields) << endl;
 	
-	pennies_t total_profit = 0, total_value = 0;
+	centis total_profit, total_value;
 
 	bool total_written = false;
 	for(auto& y:ds.ys) {
@@ -94,22 +96,35 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 			if(y.ticker == e.ticker) 
 				qty.inc(e.qty);
 		//string qty_str = pad_left(format_num(qty , 0), 6);
-		pennies_t profit = is_index? y.chg : y.chg *qty.get()/100;
-		total_profit += profit;
+
+		centis profit;
+		if(is_index) {
+			profit.set(y.chg.get() * 100);
+		} else {
+			recentis(profit, y.chg, qty);
+		}
+		total_profit.inc(profit);
+		
 		string chgpc_str = pad_left(format_num(y.chgpc, 2), 6);
-		string price_str = pad_left(format_num(y.price, 2), 8);
-		pennies_t value = y.price * qty.get()/100;
-		total_value += value;
-		string value_str = to_gbx(value);
+		//string price_str = pad_left(format_num(y.yprice, 2), 8);
+		string price_str = y.yprice.str6();
+		centis value;
+	       	recentis(value, y.yprice, qty);
+		total_value.inc(value);
+		string value_str = value.str();
 		strings fields = strings {pad_right(y.ticker, 6), 
-			to_gbx(profit), chgpc_str, value_str, 
+			profit.str(), chgpc_str, value_str, 
 			qty.str(), price_str};
 
 		if(is_index && ! total_written) {
-			double chgpc = total_profit/total_value * 100;
-			string chgpc_str = pad_left(format_num(chgpc, 2), 6);
-			strings fields = {pad_right("TOTAL", 6), to_gbx(total_profit), 
-				chgpc_str, to_gbx(total_value)};
+			//double chgpc = total_profit/total_value * 100;
+			//string chgpc_str = pad_left(format_num(chgpc, 2), 6);
+			//centis newval;
+			//nerval
+			string chgpc_str = retchg_str(total_profit, total_value);
+			strings fields = {pad_right("TOTAL", 6), 
+				total_profit.str(), 
+				chgpc_str, total_value.str()};
 			sout << intercalate(" ", fields) << endl << endl;
 			total_written = true;
 		}
