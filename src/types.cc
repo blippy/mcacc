@@ -6,7 +6,6 @@
 #include <iostream>
 #include <assert.h>
 #include <algorithm>
-#include <sstream>
 
 #include "common.hpp"
 #include "types.hpp"
@@ -23,9 +22,6 @@ string pad_gbp(string s) { return pad_left(s, 12); }
 
 string ret_str(double r)
 {
-	//char ret[7];
-	//snprintf(ret, 7, "%7.2f", r);
-	//return string(ret);
 	return format_num(r, 7, 2);
 }
 
