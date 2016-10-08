@@ -7,7 +7,6 @@
 #include "inputs.hpp"
 #include "reusable.hpp"
 #include "common.hpp"
-#include "parse.hpp"
 #include "types.hpp"
 #include "etrans-aug.hpp"
 
@@ -18,15 +17,6 @@ using namespace std;
 
 void augment(const inputs_t& inputs, etran_t& e, const stend_ts& stends)
 {
-	/*
-	stend_t s;
-	try {s = stends.at(e.ticker);}
-	catch (const std::out_of_range& oor) {		 
-		cerr << "WARN: Creating a fake stend for " 
-			<< e.ticker << endl;
-		s.ticker = e.ticker;
-	}
-	*/
 	const stend& s = stends.at(e.ticker);
 
 	e.ucost.reprice(e.cost, e.qty); 

@@ -17,7 +17,6 @@ OUT: s3/stend.dsv
 #include <stdexcept>
 
 #include "common.hpp"
-#include "parse.hpp"
 #include "types.hpp"
 #include "reusable.hpp"
 #include "stend.hpp"

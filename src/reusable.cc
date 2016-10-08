@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "reusable.hpp"
-#include "parse.hpp"
 
 using std::ifstream;
 using std::ofstream;
