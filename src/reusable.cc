@@ -96,6 +96,16 @@ string format_num(double n, int dp)
 	return s.str();
 }
 
+string format_num(double n, int width, int dp)
+{
+	std::ostringstream s;
+	s.width(width);
+	s.precision(dp);
+	s << std::fixed;
+	s <<  n;
+	return s.str();
+}
+
 std::string intercalate(std::string inter, std::vector<std::string> strings)
 {
 	string res = "";

@@ -82,8 +82,9 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 	ofstream sout;
 	sout.open(fname, ofstream::out);
 
-	strings fields = {pad_right("EPIC", 6), pad_left("PROFIT", 12), pad_left("CHG%", 6), 
-		pad_left("VALUE", 12), pad_left("QTY", 6), pad_left("PRICE", 8)};
+	strings fields = {pad_right("EPIC", 6), pad_left("PROFIT", 12), 
+		ret_str("CHG%"), pad_left("VALUE", 12), pad_left("QTY", 12), 
+		pad_left("PRICE", 12)};
 	sout << intercalate(" ", fields) << endl;
 	
 	centis total_profit, total_value;
@@ -95,7 +96,6 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 		for(auto& e:inps.etrans) 
 			if(y.ticker == e.ticker) 
 				qty.inc(e.qty);
-		//string qty_str = pad_left(format_num(qty , 0), 6);
 
 		centis profit;
 		if(is_index) {
@@ -105,8 +105,8 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 		}
 		total_profit.inc(profit);
 		
-		string chgpc_str = pad_left(format_num(y.chgpc, 2), 6);
-		//string price_str = pad_left(format_num(y.yprice, 2), 8);
+		//string chgpc_str = pad_left(format_num(y.chgpc, 2), 6);
+		string chgpc_str =ret_str(y.chgpc);
 		string price_str = y.yprice.str6();
 		centis value;
 	       	recentis(value, y.yprice, qty);
@@ -117,10 +117,6 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 			qty.str(), price_str};
 
 		if(is_index && ! total_written) {
-			//double chgpc = total_profit/total_value * 100;
-			//string chgpc_str = pad_left(format_num(chgpc, 2), 6);
-			//centis newval;
-			//nerval
 			string chgpc_str = retchg_str(total_profit, total_value);
 			strings fields = {pad_right("TOTAL", 6), 
 				total_profit.str(), 
