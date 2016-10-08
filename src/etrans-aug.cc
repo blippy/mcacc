@@ -30,12 +30,10 @@ void augment(const inputs_t& inputs, etran_t& e, const stend_ts& stends)
 	e.vbefore.set(0);
 	e.flow.set(0);
 	e.prior_year_profit.set(0);
-	//e.vto.set(qty.get() * s.end_price);
 	recentis(e.vto, s.end_price, qty);
 	const period& per = inputs.p;
 	switch(per.when(e.dstamp)) {
 		case perBefore:
-			//e.vbefore.set(qty.get() * s.start_price);
 			recentis(e.vbefore, s.start_price, qty);
 			e.prior_year_profit.set(e.vbefore.get() - e.cost.get());
 			break;
@@ -51,13 +49,8 @@ void augment(const inputs_t& inputs, etran_t& e, const stend_ts& stends)
 
 void write_etran(ofstream& ofs, const etran_t& e)
 {
-	//auto out = [&ofs](double d) { ofs << d << '\t' ;};
-	//auto out = [&ofs](const centis& c) { out(c.get()) ;};
-	//auto dout = [&out](double d, int dp) { out(format_num(d, dp)); };
-	//auto iout = [&out](int i) { out(i); } ;
 	auto bout = [&ofs](bool b) { ofs << b << '\t';};
 	auto ceout = [&ofs](const centis& c) { ofs << c.str() << '\t' ; };
-	//auto dout = [&ofs](double d) { ofs << d << '\t' ; };
 	auto sout = [&ofs](string s) { ofs << s << '\t' ; };
 	auto dout = [&ofs](double d, int dp) { ofs << format_num(d, dp) 
 		<< '\t' ; };
@@ -87,52 +80,6 @@ void eaug_main(inputs_t& inputs, const stend_ts& stends)
 {
 	string fname;
 	for(auto& e:inputs.etrans) augment(inputs, e, stends);
-
-	//etran_ts& aes =  inputs.etrans;
-
-	/* TODO not sure if we need this
-	s1("etran.dsv", fname);
-	vecvec_t etrans = vecvec(fname);
-	for(vs_t &e: etrans) {
-		etran_t cooked;
-		cooked.taxable = e[0] == "T";
-		cooked.dstamp = e[1];
-		cooked.buy = e[2] == "B";
-		cooked.folio = e[3];
-		cooked.sym = e[4];
-		double sgn = cooked.buy ? 1 : -1;
-		cooked.qty = sgn * stod(e[5]);
-		cooked.cost = bround(100.0* sgn * stod(e[6]));
-		aes.push_back(cooked);
-	}
-	*/
-
-
-	/* TODO not sure if we need this
-	s1("leak-1.dsv", fname);
-	vecvec_t leak_1s = vecvec(fname);
-	for(auto& x: leak_1s) {
-		etrana cooked;
-		cooked.taxable = x[0] == "T";
-		cooked.dstamp = x[1];
-		cooked.buy = false; // we're always assuming a sell at theis stage
-		cooked.folio = x[2];
-		cooked.sym = x[3];
-		cooked.qty = -stod(x[4]);
-		cooked.cost = 0;
-		// skip description, as there's nowhere to put it
-		aes.push_back(cooked);
-	}
-	*/
-
-
-	// sort, just to be sure
-	// 2016-06-29 shouldn't be necessary as the inputs should have already been sorted
-	//sort(begin(aes), end(aes));
-	
-	// do the actual processing
-	//stends_t stends = load_stends();
-	//for(auto& e:inputs.etrans) augment(inputs, e);
 
 	// save
 	s3("etrans-aug.dsv", fname);

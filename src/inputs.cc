@@ -182,7 +182,6 @@ ntran_t mkntran(const strings& fields)
 	n.desc=fields[9];
 	return n;
 }
-void TODO() { cout << "TODO in inputs.cc\n" ; }
 
 void insert_LVL03(inputs_t& inputs, const strings& fields)
 {

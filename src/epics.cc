@@ -131,8 +131,6 @@ void print_indices(stend_ts& stends, ostream &pout)
 {
 	pout << endl;
 	string fname;
-	//s3("stend.dsv", fname);
-	//stends_t stends = load_stends();
 
 	auto indices = strings {"^FTSE", "^FTMC", "^FTAS"};
 	for(string& i:indices){
@@ -150,12 +148,6 @@ void print_indices(stend_ts& stends, ostream &pout)
 
 void epics_main(const etran_ts& es, stend_ts& stends)
 {
-	//etranas_t es = load_etranas();
-	// TODO determine sorting requirements
-	//assert(std::is_sorted(es.begin(), es.end()));
-	//if(!std::is_sorted(es.begin(), es.end()))
-	//	std::sort(es.begin(), es.end());
-
 	set<string> keys;
 	for(auto e:es) { keys.insert(e.ticker);}
 

@@ -5,29 +5,10 @@
 namespace fsys = boost::filesystem;
 
 #include "common.hpp"
+#include "reusable.hpp"
 
 using namespace std;
 
-// TODO reusuable
-// http://stackoverflow.com/questions/4891006/how-to-create-a-folder-in-the-home-directory
-std::string expand_user(std::string path) 
-{
-	if (not path.empty() and path[0] == '~') {
-		assert(path.size() == 1 or path[1] == '/');  // or other error handling
-		char const* home = getenv("HOME");
-		if (home or ((home = getenv("USERPROFILE")))) {
-			path.replace(0, 1, home);
-		}
-		else {
-			char const *hdrive = getenv("HOMEDRIVE"),
-			     *hpath = getenv("HOMEPATH");
-			assert(hdrive);  // or other error handling
-			assert(hpath);
-			path.replace(0, 1, std::string(hdrive) + hpath);
-		}
-	}
-	return path;
-}
 
 string rootdir()
 {

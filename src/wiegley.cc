@@ -30,7 +30,6 @@ void mkledger(const etran_ts& es, const ntran_ts& ns)
 	vector<spair> trans;
 
 	for(auto& e: es) {
-		//char sgn = e.buy ? ' ' : '-';
 		string t1 = (format("%1%\t*\tetran\n") % e.dstamp).str() ;
 		assert(e.typ != unknown);
 		string at = (e.typ == leak) ? "@" : "@@";
@@ -66,8 +65,6 @@ void mkledger(const etran_ts& es, const ntran_ts& ns)
 }
 
 
-// TODO reusable
-//template<class T<string> >
 void spit_strings(const string& filename, const multiset<string>& lines)
 {
 	ofstream out;

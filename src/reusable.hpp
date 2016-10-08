@@ -18,6 +18,7 @@ std::string format_num(double n, int dp);
 std::string format_num(double n, int width, int dp);
 std::string intercalate(std::string inter, std::vector<std::string> strings);
 
+std::string expand_user(std::string path);
 
 double bround(double x);
 double round2(double x);

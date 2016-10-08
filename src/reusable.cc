@@ -1,3 +1,4 @@
+#include <cassert>
 #include <fstream>
 #include <cmath>
 #include <sstream>
@@ -115,28 +116,26 @@ std::string intercalate(std::string inter, std::vector<std::string> strings)
 	return res;
 }
 
-/*
-vector<string> commasepstr(const string& line)
+// TODO reusuable
+// http://stackoverflow.com/questions/4891006/how-to-create-a-folder-in-the-home-directory
+std::string expand_user(std::string path) 
 {
-	string line1 = line;
-	for(auto it = line1.begin(); it != line1.end(); ++it) {
-		if(*it == ',') *it = ' '; }
-	return tokenize_line(line1);
-}	
-
-vector<vector<string> > commasep(string  &filename)
-{
-        vector<vector<string> > res;
-        ifstream fin;
-        string line;
-        fin.open(filename.c_str(), ifstream::in);
-        while(getline(fin, line)) {
-		vector<string> fields = commasepstr(line);
-                if(fields.size() >0) res.push_back(fields);
-        }
-        return res;
+	if (not path.empty() and path[0] == '~') {
+		assert(path.size() == 1 or path[1] == '/');  // or other error handling
+		char const* home = getenv("HOME");
+		if (home or ((home = getenv("USERPROFILE")))) {
+			path.replace(0, 1, home);
+		}
+		else {
+			char const *hdrive = getenv("HOMEDRIVE"),
+			     *hpath = getenv("HOMEPATH");
+			assert(hdrive);  // or other error handling
+			assert(hpath);
+			path.replace(0, 1, std::string(hdrive) + hpath);
+		}
+	}
+	return path;
 }
-*/
 
 
 double bround(double x) 
