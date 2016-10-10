@@ -19,5 +19,6 @@ class stend {
 typedef std::map<std::string, stend> stend_ts;
 
 
-stend_ts stend_main(const inputs_t& inputs, period& per);
+//stend_ts stend_main(const inputs_t& inputs, period& per);
+stend_ts stend_main(const yahoo_ts& yahoos, const period& per);
 

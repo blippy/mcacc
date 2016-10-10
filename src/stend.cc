@@ -25,19 +25,19 @@ using namespace std;
 
 
 
-stend_ts stend_main(const inputs_t& inputs, period& per)
+//stend_ts stend_main(const inputs_t& inputs, period& per)
+stend_ts stend_main(const yahoo_ts& yahoos, const period& per)
 {
 	stend_ts stends;
 
-	auto& ys = inputs.yahoos; // NB it is sorted!
-	for(auto& y:ys) { 
+	//auto& ys = inputs.yahoos; // NB it is sorted!
+	for(auto& y:yahoos) { 
 		stend s;
 		s.ticker = y.ticker;
 	       	stends[y.ticker] = s;
 	}
-	//for(auto& y:ys) stends[y.ticker] = make_unique<stend_t>();
 
-	for(auto& y:ys) {
+	for(auto& y:yahoos) {
 		stend& s = stends[y.ticker];
 		if(y.dstamp<per.start_date){
 			s.start_dstamp = y.dstamp;

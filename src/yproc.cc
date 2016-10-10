@@ -130,12 +130,15 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 	sout << endl << intercalate(" ", strings {"DSTAMP:", ds.dstamp, ds.tstamp}) << endl;
 	sout.close();
 }
-void process_yahoos(inputs_t& inps, bool with_fetch)
+
+yahoo_ts process_yahoos(const inputs_t& inps)
 {
-	if(!with_fetch) return;
+	//if(!with_fetch) return;
+	cout << "process_yahoos() performing download\n";
 	downloads_t ds;
 	download(inps.comms, ds);
 	mkyahoos(ds);
-	for(auto& y:ds.ys) insert_yahoo(y, inps);
+	//for(auto& y:ds.ys) insert_yahoo(y, inps);
 	mksnap(inps, ds);
+	return ds.ys;
 }

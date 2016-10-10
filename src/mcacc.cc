@@ -27,6 +27,7 @@
 #include "etrans-aug.hpp"
 #include "gaap.hpp"
 #include "inputs.hpp"
+#include "oven.hpp"
 #include "posts.hpp"
 #include "stend.hpp"
 #include "tests.hpp"
@@ -103,11 +104,23 @@ void main_processing(po::variables_map vm)
 		preprocess(pre.c_str());
 	}
 
+
 	inputs_t inps = read_inputs();
-	process_yahoos(inps, vm.count("snap")>0);
+	oven ove;
+	ove.load_inputs();
+
+	//process_yahoos(inps, vm.count("snap")>0);
+	if(vm.count("snap")) {
+		//inps.yahoos += process_yahoos(inps);
+		for(const auto& y:process_yahoos(inps)) inps.yahoos.insert(y);
+		ove.fetch();
+	}
+
 	period p = inps.p;
 
-	stend_ts stends = stend_main(inps, p);
+	//stend_ts stends = stend_main(inps, p);
+	stend_ts stends = stend_main(inps.yahoos, p);
+	ove.process(); // TODO NOW
 	eaug_main(inps, stends);
 
 	post_ts posts = posts_main(inps);

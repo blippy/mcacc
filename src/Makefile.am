@@ -10,6 +10,7 @@ mcacc_SOURCES = assets.cc \
 		inputs.cc \
 		mcacc.cc \
 		nacc.cc \
+		oven.cc \
 		posts.cc price.cc \
 		quantity.cc \
 		reusable.cc stend.cc \ 
