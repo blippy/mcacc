@@ -55,17 +55,18 @@ post_ts posts_main(const inputs_t& inputs, const augetran_ts& augetrans)
 		p.amount.negate();
 		ps.push_back(p);
 	}
-	for(auto& e: augetrans) {
+	for(const auto& ae: augetrans) {
+		const etran_t& e = ae.etran;
 		if(e.dstamp > inputs.p.end_date) continue;
 
 		push(ps, e.dstamp, e.ticker, e.folio,        "pCost", 
 				-1, e.cost);
 		push(ps, e.dstamp, e.ticker, e.folio + "_c", "pVcd", 
-				1, e.vto);
+				1, ae.vto);
 		push(ps, e.dstamp, e.ticker, e.folio + "_g", "pPdp",
-			       -1, e.profit);
+			       -1, ae.profit);
 		push(ps, e.dstamp, e.ticker, "opn",          "pbd", 
-				-1, e.prior_year_profit);
+				-1, ae.prior_year_profit);
 	}
 
 	sort(begin(ps), end(ps));

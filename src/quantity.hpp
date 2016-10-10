@@ -13,7 +13,8 @@ class quantity {
 		void inc(const quantity& q);
 		void from_str(double sgn, const std::string & s);
 		void set(const std::string & s);
-		const double scale = 1'000;
+		//static const double scale = 1'000;
+		static constexpr double scale = 1'000;
 	private:
 		double value = 0;
 };

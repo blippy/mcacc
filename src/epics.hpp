@@ -4,4 +4,4 @@
 #include "stend.hpp"
 
 //void epics_main(const etran_ts& es);
-void epics_main(const etran_ts& es, const stend_ts& stends);
+void epics_main(const augetran_ts& es, const stend_ts& stends);

@@ -36,7 +36,8 @@ vector<folio> folios = {
 	{"total", 2}
 };
 
-void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostream &eout, ostream &pout)
+void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es, 
+		ostream &eout, ostream &pout)
 {
 	eout << f.name << endl;
 	set<string> zeros;
@@ -59,21 +60,21 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 		for(const auto& e:es){
 
 			// determine if we are interested in this epic
-			bool match = k == e.ticker;
+			bool match = k == e.etran.ticker;
 			switch(f.ftype) {
-				case 0: match = match && (e.folio == f.name); break;
-				case 1: match = match && (e.folio != "ut"); break;
+				case 0: match = match && (e.etran.folio == f.name); break;
+				case 1: match = match && (e.etran.folio != "ut"); break;
 			}
 			if(!match) continue;
 
 			uvalue.set(e.end_price);
-			if(e.buy) {
-				tqty.inc(e.qty); 
-				tcost.inc(e.cost);
+			if(e.etran.buy) {
+				tqty.inc(e.etran.qty); 
+				tcost.inc(e.etran.cost);
 			} else { 
 				double ucost = tcost.get()/tqty.get(); 
-				tqty.inc(e.qty); 
-				tcost.inc(ucost * e.qty.get());
+				tqty.inc(e.etran.qty); 
+				tcost.inc(ucost * e.etran.qty.get()); // TODO looks suspicious
 			}
 
 			vbefore.inc(e.vbefore);
@@ -147,10 +148,10 @@ void print_indices(const stend_ts& stends, ostream &pout)
 	}
 }
 
-void epics_main(const etran_ts& es, const stend_ts& stends)
+void epics_main(const augetran_ts& es, const stend_ts& stends)
 {
 	set<string> keys;
-	for(auto e:es) { keys.insert(e.ticker);}
+	for(auto e:es) { keys.insert(e.etran.ticker);}
 
 	string filename;
 	s3("epics.rep", filename);

@@ -110,7 +110,7 @@ void old_method(bool do_snap, bool do_wiegley) // TODO deprecate
 	etb_main(inps.naccs, posts);
 	gaap_main(inps.naccs, p);
 	epics_main(augetrans, stends);
-	cgt(augetrans, p);
+	cgt(inps.etrans, p);
 	if(do_wiegley) { wiegley(inps); }
 }
 void main_processing(po::variables_map vm)

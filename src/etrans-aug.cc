@@ -18,7 +18,8 @@ using namespace std;
 
 augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
 {
-	augetran_t aug = e;
+	augetran_t aug;
+	aug.etran = e;
 	const stend& s = stends.at(e.ticker);
 
 	aug.ucost.reprice(e.cost, e.qty); 
@@ -34,13 +35,13 @@ augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
 	aug.prior_year_profit.set(0);
 	recentis(aug.vto, s.end_price, qty);
 	//const period& per = inputs.p;
-	switch(per.when(aug.dstamp)) {
+	switch(per.when(aug.etran.dstamp)) {
 		case perBefore:
 			recentis(aug.vbefore, s.start_price, qty);
-			aug.prior_year_profit.set(aug.vbefore.get() - aug.cost.get());
+			aug.prior_year_profit.set(aug.vbefore.get() - aug.etran.cost.get());
 			break;
 		case perDuring:
-			aug.flow = aug.cost;
+			aug.flow = aug.etran.cost;
 			break;
 		case perAfter:
 			aug.vto.set(0);
@@ -90,16 +91,16 @@ void write_augetran(ofstream& ofs, const augetran_t& e)
 	auto gout = [&ofs](const string& s, const auto& v) {
 		recline(ofs, s, v);};
 
-	gout("Tax", e.taxable? "T" : "F"); // 1
-	gout("Dstamp", e.dstamp); // 2
-	gout("Buy", e.buy? "B" : "S"); // 3
-	gout("Folio", e.folio); // 4
-	gout("Eticker", e.ticker); // 5
+	gout("Tax", e.etran.taxable? "T" : "F"); // 1
+	gout("Dstamp", e.etran.dstamp); // 2
+	gout("Buy", e.etran.buy? "B" : "S"); // 3
+	gout("Folio", e.etran.folio); // 4
+	gout("Eticker", e.etran.ticker); // 5
 	//ofs << e.qty.str(); //dout(e.qty, 6); // 6
-	gout("Qty", e.qty.str());
-	gout("Cost", e.cost); // 7
+	gout("Qty", e.etran.qty.str());
+	gout("Cost", e.etran.cost); // 7
 	gout("Ucost", e.ucost); //dout(e.ucost, 6); // 8
-	gout("Eticker", e.ticker); // 9
+	gout("Eticker", e.etran.ticker); // 9
 	gout("Start_dstamp", e.start_dstamp); // 10
 	gout("Start_price", e.start_price); //dout(e.start_price, 6); // 11
 	gout("End_dstamp", e.end_dstamp); // 12

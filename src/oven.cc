@@ -45,9 +45,7 @@ void oven::process(bool do_wiegley)
 	etb_main(user_inputs.naccs, posts);
 	gaap_main(user_inputs.naccs, per);
 	epics_main(augetrans, stends);
-	cgt(augetrans, per);
-	epics_main(augetrans, stends);
-	cgt(augetrans, per);
+	cgt(user_inputs.etrans, per);
 
 	if(do_wiegley) wiegley(user_inputs); // TODO not sure if this requires augmented etrans
 
