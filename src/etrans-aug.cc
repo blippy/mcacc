@@ -16,41 +16,44 @@ using namespace std;
 
 
 
-void augment(const inputs_t& inputs, etran_t& e, const stend_ts& stends)
+augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
 {
+	augetran_t aug = e;
 	const stend& s = stends.at(e.ticker);
 
-	e.ucost.reprice(e.cost, e.qty); 
-	e.start_dstamp = s.start_dstamp;
-	e.start_price.set(s.start_price);
-	e.end_dstamp = s.end_dstamp;
-	e.end_price.set(s.end_price);
+	aug.ucost.reprice(e.cost, e.qty); 
+	aug.start_dstamp = s.start_dstamp;
+	aug.start_price.set(s.start_price);
+	aug.end_dstamp = s.end_dstamp;
+	aug.end_price.set(s.end_price);
 
 	quantity qty;
 	qty.inc(e.qty);
-	e.vbefore.set(0);
-	e.flow.set(0);
-	e.prior_year_profit.set(0);
-	recentis(e.vto, s.end_price, qty);
-	const period& per = inputs.p;
-	switch(per.when(e.dstamp)) {
+	aug.vbefore.set(0);
+	aug.flow.set(0);
+	aug.prior_year_profit.set(0);
+	recentis(aug.vto, s.end_price, qty);
+	//const period& per = inputs.p;
+	switch(per.when(aug.dstamp)) {
 		case perBefore:
-			recentis(e.vbefore, s.start_price, qty);
-			e.prior_year_profit.set(e.vbefore.get() - e.cost.get());
+			recentis(aug.vbefore, s.start_price, qty);
+			aug.prior_year_profit.set(aug.vbefore.get() - aug.cost.get());
 			break;
 		case perDuring:
-			e.flow = e.cost;
+			aug.flow = aug.cost;
 			break;
 		case perAfter:
-			e.vto.set(0);
+			aug.vto.set(0);
 	}
 
-	e.profit.set(e.vto.get() - e.vbefore.get() - e.flow.get());
+	aug.profit.set(aug.vto.get() - aug.vbefore.get() - aug.flow.get());
+
+	return aug;
 }
 
+string asstr(const char& c) { return to_string(c); }
 string asstr(const centis& c) { return c.str();}
 string asstr(const string& s) { return s;}
-string asstr(const char& c) { return to_string(c); }
 string asstr(const price& p) { return p.str6(); }
 template <typename T>
 void recline(ofstream& ofs, const string& fname, T const& fvalue)
@@ -68,7 +71,7 @@ void recline(ofstream& ofs, const string& fname, T const& fvalue)
 	ofs << fstr << fvs << endl;
 }
 
-void write_etran(ofstream& ofs, const etran_t& e)
+void write_augetran(ofstream& ofs, const augetran_t& e)
 {
 	
 	//auto bout = [&ofs](const string& s, char b) { ofs << fstr(s) << b << '\n';};
@@ -87,9 +90,9 @@ void write_etran(ofstream& ofs, const etran_t& e)
 	auto gout = [&ofs](const string& s, const auto& v) {
 		recline(ofs, s, v);};
 
-	gout("Tax", e.taxable? 'T' : 'F'); // 1
+	gout("Tax", e.taxable? "T" : "F"); // 1
 	gout("Dstamp", e.dstamp); // 2
-	gout("Buy", e.buy? 'B' : 'S'); // 3
+	gout("Buy", e.buy? "B" : "S"); // 3
 	gout("Folio", e.folio); // 4
 	gout("Eticker", e.ticker); // 5
 	//ofs << e.qty.str(); //dout(e.qty, 6); // 6
@@ -109,16 +112,23 @@ void write_etran(ofstream& ofs, const etran_t& e)
 	ofs << endl;
 }
 
-void eaug_main(inputs_t& inputs, const stend_ts& stends)
+augetran_ts eaug_main(const etran_ts& etrans, const stend_ts& stends, 
+		const period &per)
 {
+	augetran_ts augs;
+
 	string fname;
-	for(auto& e:inputs.etrans) augment(inputs, e, stends);
+	for(auto& e:etrans) 
+		if(e.dstamp <= per.end_date)
+			augs.push_back(augment(e, stends, per));
 
 	// save
 	s3("etrans-aug.rec", fname);
 	ofstream ofs;
 	ofs.open(fname);
-	for(auto& e:inputs.etrans) write_etran(ofs, e);
+	for(auto& e:augs) write_augetran(ofs, e);
 	ofs.close();
+
+	return augs;
 }
 

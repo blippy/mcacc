@@ -16,7 +16,8 @@ using namespace std;
 
 void underline(ostream &ost, char c)
 { 
-	auto fields = strings {pad_ticker(c), pad_gbp(c), pad_gbp(c), pad_gbp(c), pad_gbp(c), ret_str(c) };
+	auto fields = strings {pad_ticker(c), pad_gbp(c), 
+		pad_gbp(c), pad_gbp(c), pad_gbp(c), ret_str(c) };
 	print_strings(ost, fields);
 }
 struct folio {
@@ -127,14 +128,14 @@ void process_folio(folio &f, set<string> &epic_names, const etran_ts& es, ostrea
 
 }
 
-void print_indices(stend_ts& stends, ostream &pout)
+void print_indices(const stend_ts& stends, ostream &pout)
 {
 	pout << endl;
 	string fname;
 
 	auto indices = strings {"^FTSE", "^FTMC", "^FTAS"};
 	for(string& i:indices){
-		stend s = stends[i];
+		const stend s = stends.at(i);
 		price sp, ep, chg;
 	       	sp.set(s.start_price);
 		ep.set(s.end_price);
@@ -146,7 +147,7 @@ void print_indices(stend_ts& stends, ostream &pout)
 	}
 }
 
-void epics_main(const etran_ts& es, stend_ts& stends)
+void epics_main(const etran_ts& es, const stend_ts& stends)
 {
 	set<string> keys;
 	for(auto e:es) { keys.insert(e.ticker);}

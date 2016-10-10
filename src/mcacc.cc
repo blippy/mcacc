@@ -93,6 +93,26 @@ void preprocess(const char* command)
 	system(command); // TODO LOW check return status
 	
 }
+
+void old_method(bool do_snap, bool do_wiegley) // TODO deprecate
+{
+	inputs_t inps = read_inputs();
+	if(do_snap)
+		for(const auto& y:process_yahoos(inps))
+		       inps.yahoos.insert(y);
+
+	period p = inps.p;
+
+	//stend_ts stends = stend_main(inps, p);
+	stend_ts stends = stend_main(inps.yahoos, p);
+	augetran_ts augetrans = eaug_main(inps.etrans, stends, p);
+	post_ts posts = posts_main(inps, augetrans);
+	etb_main(inps.naccs, posts);
+	gaap_main(inps.naccs, p);
+	epics_main(augetrans, stends);
+	cgt(augetrans, p);
+	if(do_wiegley) { wiegley(inps); }
+}
 void main_processing(po::variables_map vm)
 {
 
@@ -104,38 +124,25 @@ void main_processing(po::variables_map vm)
 		preprocess(pre.c_str());
 	}
 
-
-	inputs_t inps = read_inputs();
-	oven ove;
-	ove.load_inputs();
-
-	//process_yahoos(inps, vm.count("snap")>0);
-	if(vm.count("snap")) {
-		//inps.yahoos += process_yahoos(inps);
-		for(const auto& y:process_yahoos(inps)) inps.yahoos.insert(y);
-		ove.fetch();
-	}
-
-	period p = inps.p;
-
-	//stend_ts stends = stend_main(inps, p);
-	stend_ts stends = stend_main(inps.yahoos, p);
-	ove.process(); // TODO NOW
-	eaug_main(inps, stends);
-
-	post_ts posts = posts_main(inps);
-	etb_main(inps.naccs, posts);
-	gaap_main(inps.naccs, p);
-	epics_main(inps.etrans, stends);
-	cgt(inps.etrans, p);
-	
 	string wiegley_str = vm["wiegley"].as<string>();
-	if(wiegley_str == "on") {
-		wiegley(inps);
-	} else if(wiegley_str != "off") {
+	bool do_wiegley = wiegley_str == "on";
+	//if(wiegley_str == "on") {
+		//wiegley(inps);
+	//} else if(wiegley_str != "off") {
+	if(! do_wiegley && wiegley_str != "off") {
 		cerr << "ERR: Option wiegley error. Must be on|off, but given`"
 			<< wiegley_str 
 			<< "'. Continuing anyway." << endl;
+	}
+
+	bool do_snap = vm.count("snap") > 0;
+	if(true) {
+		oven ove;
+		ove.load_inputs();
+		if(do_snap) ove.fetch();
+		ove.process(do_wiegley); // TODO NOW
+	} else {
+		old_method(do_snap, do_wiegley);
 	}
 
 	system("mcacc-reports.sh");
@@ -185,6 +192,7 @@ po::variables_map process_options(int argc, char *argv[])
 
 	return vm;
 }
+
 
 int main(int argc, char *argv[])
 {

@@ -17,6 +17,7 @@ typedef struct post_t {
 
 typedef std::vector<post_t> post_ts;
 
-post_ts posts_main(const inputs_t& inputs);
+//post_ts posts_main(const inputs_t& inputs);
+post_ts posts_main(const inputs_t& inputs, const augetran_ts& augetrans);
 
 bool operator<(const post_t& a, const post_t& b);

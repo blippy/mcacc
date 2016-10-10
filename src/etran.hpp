@@ -33,7 +33,11 @@ typedef struct etran_t {
 	centis		vto;
 } etran_t ;
 
+typedef etran_t augetran_t;
+
 bool operator<(const etran_t& lhs, const etran_t& rhs);
 
 bool same_ticker(etran_t a, etran_t b);
 typedef std::vector<etran_t> etran_ts;
+
+typedef etran_ts augetran_ts; // TODO

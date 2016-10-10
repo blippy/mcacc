@@ -4,4 +4,6 @@
 #include "stend.hpp"
 
 
-void eaug_main(inputs_t& inputs, const stend_ts& stends);
+//void eaug_main(inputs_t& inputs, const stend_ts& stends);
+augetran_ts eaug_main(const etran_ts& etrans, const stend_ts& stends, 
+		const period &per);
