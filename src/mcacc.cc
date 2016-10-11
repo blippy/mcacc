@@ -20,20 +20,20 @@
 #include <boost/algorithm/string.hpp>
 
 #include "assets.hpp"
-#include "cgt.hpp"
+//#include "cgt.hpp"
 #include "common.hpp"
-#include "epics.hpp"
-#include "etb.hpp"
-#include "etrans-aug.hpp"
-#include "gaap.hpp"
-#include "inputs.hpp"
+//#include "epics.hpp"
+//#include "etb.hpp"
+//#include "etrans-aug.hpp"
+//#include "gaap.hpp"
+//#include "inputs.hpp"
 #include "oven.hpp"
-#include "posts.hpp"
-#include "stend.hpp"
+//#include "posts.hpp"
+//#include "stend.hpp"
 #include "tests.hpp"
 #include "reusable.hpp"
-#include "yproc.hpp"
-#include "wiegley.hpp"
+//#include "yproc.hpp"
+//#include "wiegley.hpp"
 
 
 namespace fsys = boost::filesystem;
@@ -94,25 +94,6 @@ void preprocess(const char* command)
 	
 }
 
-void old_method(bool do_snap, bool do_wiegley) // TODO deprecate
-{
-	inputs_t inps = read_inputs();
-	if(do_snap)
-		for(const auto& y:process_yahoos(inps))
-		       inps.yahoos.insert(y);
-
-	period p = inps.p;
-
-	//stend_ts stends = stend_main(inps, p);
-	stend_ts stends = stend_main(inps.yahoos, p);
-	augetran_ts augetrans = eaug_main(inps.etrans, stends, p);
-	post_ts posts = posts_main(inps, augetrans);
-	etb_main(inps.naccs, posts);
-	gaap_main(inps.naccs, p);
-	epics_main(augetrans, stends);
-	cgt(inps.etrans, p);
-	if(do_wiegley) { wiegley(inps); }
-}
 void main_processing(po::variables_map vm)
 {
 
@@ -126,9 +107,6 @@ void main_processing(po::variables_map vm)
 
 	string wiegley_str = vm["wiegley"].as<string>();
 	bool do_wiegley = wiegley_str == "on";
-	//if(wiegley_str == "on") {
-		//wiegley(inps);
-	//} else if(wiegley_str != "off") {
 	if(! do_wiegley && wiegley_str != "off") {
 		cerr << "ERR: Option wiegley error. Must be on|off, but given`"
 			<< wiegley_str 
@@ -136,14 +114,10 @@ void main_processing(po::variables_map vm)
 	}
 
 	bool do_snap = vm.count("snap") > 0;
-	if(true) {
-		oven ove;
-		ove.load_inputs();
-		if(do_snap) ove.fetch();
-		ove.process(do_wiegley); // TODO NOW
-	} else {
-		old_method(do_snap, do_wiegley);
-	}
+	oven ove;
+	ove.load_inputs();
+	if(do_snap) ove.fetch();
+	ove.process(do_wiegley);
 
 	system("mcacc-reports.sh");
 }

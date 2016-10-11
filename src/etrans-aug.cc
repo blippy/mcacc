@@ -60,6 +60,13 @@ template <typename T>
 void recline(ofstream& ofs, const string& fname, T const& fvalue)
 {
 	string fvs= asstr(fvalue);
+
+	/*
+	if(constexpr(typeid(T) == typeid(centis))) {
+		string foo = "it works";
+	}
+	*/
+
 	/*
 	if(typeid(T) == typeid(centis)) { 
 		fvs = fvalue.str();

@@ -56,9 +56,6 @@ void mkyahoos(downloads_t& ds)
 	ofstream yout;
 	yout.open(yout_name);
 	for(auto& y: ds.ys){
-		//yahoo_t y2 = y.second;
-		//string price = format_num(y.price, 6);
-		//string chg = format_num(y.chg, 6);
 		string chgpc = format_num(y.chgpc, 2);
 		strings fields = {"yahoo", ds.dstamp, ds.tstamp, 
 			y.ticker, "1.0000", y.yprice.str6(), 
@@ -104,7 +101,6 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 		}
 		total_profit.inc(profit);
 		
-		//string chgpc_str = pad_left(format_num(y.chgpc, 2), 6);
 		string chgpc_str =ret_str(y.chgpc);
 		string price_str = y.yprice.str6();
 		centis value;
@@ -133,12 +129,10 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 
 yahoo_ts process_yahoos(const inputs_t& inps)
 {
-	//if(!with_fetch) return;
-	cout << "process_yahoos() performing download\n";
+	//cout << "process_yahoos() performing download\n";
 	downloads_t ds;
 	download(inps.comms, ds);
 	mkyahoos(ds);
-	//for(auto& y:ds.ys) insert_yahoo(y, inps);
 	mksnap(inps, ds);
 	return ds.ys;
 }
