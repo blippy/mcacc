@@ -5,6 +5,7 @@
 class quantity {
 	public:
 		quantity() {};
+		quantity(const std::string& s);
 		std::string pos_str() const;
 		std::string str() const;
 		double get() const;

@@ -37,10 +37,14 @@ void oven::process(bool do_wiegley)
 	set_union(user_inputs.yahoos.begin(), user_inputs.yahoos.end(),
 			fetched_yahoos.begin(), fetched_yahoos.end(),
 			inserter(all_yahoos, all_yahoos.begin()));
+	//assert(has_ticker(user_inputs.yahoos, "KCOM.L"));
+	//assert(has_ticker(fetched_yahoos, "KCOM.L"));
 	const period& per = curr_period();
 	const stend_ts stends = stend_main(all_yahoos, per);
+	//assert(has_key(stends, "KCOM.L"));
 	const augetran_ts augetrans = eaug_main(user_inputs.etrans, stends,
 			per);
+	//assert(has_key(stends, "KCOM.L"));
 	const post_ts posts = posts_main(user_inputs, augetrans);
 	etb_main(user_inputs.naccs, posts);
 	gaap_main(user_inputs.naccs, per);

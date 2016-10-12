@@ -23,6 +23,10 @@ OUT: s3/stend.dsv
 
 using namespace std;
 
+bool has_key(const stend_ts& stends, const std::string& ticker)
+{
+	return stends.find(ticker) != stends.end();
+}
 
 
 //stend_ts stend_main(const inputs_t& inputs, period& per)

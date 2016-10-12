@@ -13,6 +13,10 @@ void centis::set(double sgn, std::string str)
 	value = bround(sgn * 100 * stod(str));
 }
 
+centis::centis(const std::string& s)
+{
+	set(s);
+}
 void centis::set(std::string str) { set(1, str); }
 
 void centis::inc(double by) { value += bround(by); }

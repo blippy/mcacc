@@ -26,4 +26,6 @@ bool operator<(yahoo_t a, yahoo_t b);
 //typedef std::multimap<std::string, yahoo_t> yahoo_ts;
 typedef std::set<yahoo_t> yahoo_ts;
 
-std::vector<std::string> fetch_tickers(const std::vector<std::string>& tickers, std::string& usd);
+std::vector<std::string> fetch_tickers(const std::vector<std::string>& tickers,
+	       	std::string& usd);
+bool has_ticker(const yahoo_ts& yahoos, const std::string& ticker);

@@ -7,6 +7,7 @@
 class centis {
 	public:
 		centis() {};
+		centis(const std::string& s);
 		double get() const;
 		//void get(double& num, );
 		void set(double newval);

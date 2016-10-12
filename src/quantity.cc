@@ -5,6 +5,11 @@
 
 using namespace std;
 
+quantity::quantity(const std::string& s)
+{
+	from_str(1, s);
+}
+
 string format(double d)
 {
 	string s = format_num(d, 4);

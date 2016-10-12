@@ -68,3 +68,9 @@ bool operator<(yahoo_t a, yahoo_t b)
 {
 	return std::tie(a.ticker, a.dstamp, a.tstamp) < std::tie(b.ticker, b.dstamp, b.tstamp);
 }
+bool has_ticker(const yahoo_ts& yahoos, const std::string& ticker)
+{
+	for(const auto& y:yahoos)
+		if(y.ticker == ticker) return true;
+	return false;
+}

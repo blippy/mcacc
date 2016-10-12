@@ -227,7 +227,8 @@ void insert_LVL05(inputs_t& inputs, const strings& fields)
 	string subtype = fields[1];
 	yahoo_t y = make_yahoo(inputs, fields);	
 	if(subtype == "PRICE-1") {
-		//y.yprice = y.yprice /y.rox * 100;
+		y.yprice.reprice(centis(fields[6]),
+			       	quantity(fields[5]));
 		//y.rox =1;
 	} else if (subtype != "YAHOO-1") {
 		cerr << "inputs.cc:insert_LVL05() couldn't understand type ";
@@ -280,6 +281,8 @@ inputs_t read_inputs()
 				exit(EXIT_FAILURE);
 		}
 	}
+
+	//assert(has_ticker(inputs.yahoos, "KCOM.L"));
 	return inputs;
 
 }
