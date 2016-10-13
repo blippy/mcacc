@@ -5,6 +5,10 @@
 
 using namespace std;
 
+price::price(const centis& c, const quantity& q)
+{
+	reprice(c, q);
+}
 void price::get(double& num, double& den) const
 {
 	num = rat.numerator();
@@ -33,22 +37,18 @@ void price::set(const std::string& s)
 
 void recentis(centis& out_centis, const price& p, const quantity& q)
 {
-	/*
-	double pnum, pden, qnum, qden;
-	p.get(pnum, pden);
-	q.get(qnum, qden);
-	double newval = (pnum * qnum) * (pden * qden)/100;
-	out_centis.set(newval);
-	*/
-
 	price_t v1 = p.rat * price_t(q.num(), q.scale);
-	//double n = v1.numerator();
-	//double d = v1.denominator();
-	//double v2 = n/d;
-	//cout << n << '\t' << d <<  '\t' << v2 << endl;
 	double v2 = boost::rational_cast<double>(v1);
-	//cout << v2 << endl;
 	out_centis.set(v2);
+}
+
+centis price::recentis(const quantity& q) const
+{
+	price_t v1 = this->rat * price_t(q.num(), q.scale);
+	double v2 = boost::rational_cast<double>(v1);
+	centis c;
+	c.set(v2);
+	return c;
 }
 
 void price::reprice(const centis& c, const quantity& q)

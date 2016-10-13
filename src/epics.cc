@@ -43,11 +43,11 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 	set<string> zeros;
 	strings fields;
 	string line;
-	double tqty;
 	centis tcost, grand_cost, grand_value;
 	centis vbefore, vflow, vprofit, vto;
 
-	fields = { pad_ticker("TICK"), pad_gbp("COST"), pad_gbp("VALUE"), ret_str("RET%"), 
+	fields = { pad_ticker("TICK"), pad_gbp("COST"), pad_gbp("VALUE"), 
+		ret_str("RET%"), 
 		pad_gbp("QTY"), pad_gbp("UCOST"), pad_gbp("UVALUE") };
 	print_strings(eout, fields);
 
@@ -55,7 +55,6 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 		quantity tqty; 
 		tcost.set(0);
 		price uvalue;
-		//centis uvalue;
 
 		for(const auto& e:es){
 
@@ -72,9 +71,9 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 				tqty.inc(e.etran.qty); 
 				tcost.inc(e.etran.cost);
 			} else { 
-				double ucost = tcost.get()/tqty.get(); 
+				const price ucost(tcost, tqty);
 				tqty.inc(e.etran.qty); 
-				tcost.inc(ucost * e.etran.qty.get()); // TODO looks suspicious
+				tcost.inc(ucost.recentis(e.etran.qty));
 			}
 
 			vbefore.inc(e.vbefore);
@@ -161,7 +160,8 @@ void epics_main(const augetran_ts& es, const stend_ts& stends)
 	s3("portfolios.rep", filename);
 	ofstream pout;
 	pout.open(filename);
-	strings fields = strings { pad_ticker("FOLIO"), pad_gbp("VBEFORE"), pad_gbp("VFLOW"), pad_gbp("VPROFIT"), 
+	strings fields = strings { pad_ticker("FOLIO"), pad_gbp("VBEFORE"), 
+		pad_gbp("VFLOW"), pad_gbp("VPROFIT"), 
 		pad_gbp("VTO"), ret_str("VRET")};
 	print_strings(pout, fields);
 

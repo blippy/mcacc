@@ -52,3 +52,10 @@ void centis::negate()
 	value = -value;
 }
 
+/*centis operator*(const price& p, const quantity& q)
+{
+	centis c;
+	recentis(c, p, q);
+	return c;
+}
+*/

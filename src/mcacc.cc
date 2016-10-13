@@ -20,20 +20,10 @@
 #include <boost/algorithm/string.hpp>
 
 #include "assets.hpp"
-//#include "cgt.hpp"
 #include "common.hpp"
-//#include "epics.hpp"
-//#include "etb.hpp"
-//#include "etrans-aug.hpp"
-//#include "gaap.hpp"
-//#include "inputs.hpp"
 #include "oven.hpp"
-//#include "posts.hpp"
-//#include "stend.hpp"
 #include "tests.hpp"
 #include "reusable.hpp"
-//#include "yproc.hpp"
-//#include "wiegley.hpp"
 
 
 namespace fsys = boost::filesystem;
@@ -153,7 +143,7 @@ po::variables_map process_options(int argc, char *argv[])
 
 	po::store(po::parse_command_line(argc, argv, desc), vm);
 
-	string cfg_name = "/home/mcarter/.mcacc/mcacc.ini"; // TODO generalise
+	string cfg_name = rootdir() + "/mcacc.ini";
 	ifstream ifs;
 	ifs.open(cfg_name.c_str());
 	po::store(po::parse_config_file(ifs, desc), vm); 
@@ -171,7 +161,6 @@ po::variables_map process_options(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
 
-	//feenableexcept(FE_ALL_EXCEPT);
 	feenableexcept(FE_OVERFLOW);
 
 	po::variables_map vm;

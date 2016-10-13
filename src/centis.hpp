@@ -4,6 +4,9 @@
 #include <iostream>
 #include <iomanip>
 
+//class price;
+//class quantity;
+
 class centis {
 	public:
 		centis() {};
@@ -23,3 +26,4 @@ class centis {
 };
 
 void write_centis(std::ofstream& ofs, const centis& c);
+//centis operator*(const price& p, const quantity& q);

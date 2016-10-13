@@ -38,13 +38,11 @@ void mkledger(const etran_ts& es, const ntran_ts& ns)
 				e.folio % e.ticker %  e.qty.str() % at % lcost).str();
 		string t3 = (format("\t%1%\n\n") % e.folio).str();
 		string t = t1 + t2 + t3;
-		//cout << t;
 		trans.push_back(make_pair(e.dstamp, t));
 	}
 
 	for(auto& n: ns) {
 		string t1 = (format("%1%\t*\t%2%\n") % n.dstamp % n.desc).str();
-		//string t2 = (format("\t%1%\tGBP\t%2%\n") % n.dr % to_gbp(n.amount)).str();
 		string amt = n.amount.str();
 		string t2 = (format("\t%1%\tGBP\t%2%\n") % n.dr % amt).str();
 
@@ -78,14 +76,12 @@ void mkprices(const yahoo_ts&  ys)
 {
 	multiset<string> prices;
 	for(auto& y: ys) {
-		//for(auto& y1: y.second) {
-			//string price_str = format_num(y.yprice/100, 7);
-			string price_str = format_num(y.yprice.get()/100, 7);
-			string ticker = "\"" + y.ticker + "\"";
-			strings fields = {"P", y.dstamp, y.tstamp, ticker, "GBP", price_str};
-			string line = intercalate("\t", fields);			
-			prices.insert(line);
-		//}
+		string price_str = format_num(y.yprice.get()/100, 7);
+		string ticker = "\"" + y.ticker + "\"";
+		strings fields = {"P", y.dstamp, y.tstamp, ticker, 
+			"GBP", price_str};
+		string line = intercalate("\t", fields);			
+		prices.insert(line);
 	}
 
 	string fname = rootdir() + "/prices.dat";

@@ -12,6 +12,7 @@ typedef boost::rational<long int> price_t;
 class price {
 	public:		
 		price() {};
+		price(const centis& c, const quantity& q);
 		price_t rat;
 		void set(const price& p);
 		void set(const std::string& s);
@@ -20,6 +21,7 @@ class price {
 		//price_t get() const;
 		std::string str2() const;
 		std::string str6() const;
+		centis recentis(const quantity& q) const;
 		void reprice(const centis& c, const quantity& q);
 		void diff(const price& p1, const price& p2);
 	private:
@@ -27,3 +29,4 @@ class price {
 };
 
 void recentis(centis& out_centis, const price& p, const quantity& q);
+
