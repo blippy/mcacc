@@ -59,3 +59,9 @@ void centis::negate()
 	return c;
 }
 */
+centis operator-(const centis& c1, const centis& c2)
+{
+	centis c;
+	c.set(c1.get() - c2.get());
+	return c;
+}

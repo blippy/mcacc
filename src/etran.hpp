@@ -19,7 +19,7 @@ typedef struct etran_t {
 	centis  	cost;
 	std::string	ticker;
 	Etype typ = unknown;
-	std::string	buystr() { return buy? "B" : "S"; };
+	std::string	buystr() const { return buy? "B" : "S"; };
 } etran_t ;
 
 typedef struct augetran_t {

@@ -27,3 +27,4 @@ class centis {
 
 void write_centis(std::ofstream& ofs, const centis& c);
 //centis operator*(const price& p, const quantity& q);
+centis operator-(const centis& c1, const centis& c2);

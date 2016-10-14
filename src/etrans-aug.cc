@@ -14,8 +14,6 @@
 using namespace std;
 
 
-
-
 augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
 {
 	augetran_t aug;
@@ -34,11 +32,12 @@ augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
 	aug.flow.set(0);
 	aug.prior_year_profit.set(0);
 	recentis(aug.vto, s.end_price, qty);
-	//const period& per = inputs.p;
 	switch(per.when(aug.etran.dstamp)) {
 		case perBefore:
 			recentis(aug.vbefore, s.start_price, qty);
-			aug.prior_year_profit.set(aug.vbefore.get() - aug.etran.cost.get());
+			//aug.prior_year_profit.set(aug.vbefore.get() - aug.etran.cost.get());
+			aug.prior_year_profit = aug.vbefore 
+				- aug.etran.cost;
 			break;
 		case perDuring:
 			aug.flow = aug.etran.cost;
@@ -47,7 +46,8 @@ augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
 			aug.vto.set(0);
 	}
 
-	aug.profit.set(aug.vto.get() - aug.vbefore.get() - aug.flow.get());
+	//aug.profit.set(aug.vto.get() - aug.vbefore.get() - aug.flow.get());
+	aug.profit = aug.vto - aug.vbefore - aug.flow;
 
 	return aug;
 }
@@ -60,21 +60,6 @@ template <typename T>
 void recline(ofstream& ofs, const string& fname, T const& fvalue)
 {
 	string fvs= asstr(fvalue);
-
-	/*
-	if(constexpr(typeid(T) == typeid(centis))) {
-		string foo = "it works";
-	}
-	*/
-
-	/*
-	if(typeid(T) == typeid(centis)) { 
-		fvs = fvalue.str();
-	} else {
-		fvs = fvalue;
-	}
-	*/
-
 	string fstr = pad_right(fname + ": ", 8);
 	ofs << fstr << fvs << endl;
 }
@@ -82,28 +67,14 @@ void recline(ofstream& ofs, const string& fname, T const& fvalue)
 void write_augetran(ofstream& ofs, const augetran_t& e)
 {
 	
-	//auto bout = [&ofs](const string& s, char b) { ofs << fstr(s) << b << '\n';};
-	//auto bout = [&ofs](const string& s, char b) { recline(ofs, s, b);};
-	//auto ceout = [&ofs](const centis& c) { ofs << c.str() << '\t' ; };
-	//auto ceout = [&ofs](const string& s, const centis& c) 
-	//	{ recline(ofs, s,  c.str()); };
-	//auto sout = [&ofs](string s) { ofs << s << '\t' ; };
-	//auto sout = [&ofs](const string& s1, const string& s2) 
-	//	{ recline(ofs, s1, s2); };
-	//auto dout = [&ofs](double d, int dp) { ofs << format_num(d, dp) 
-	//	<< '\t' ; };
-	//auto pout = [&ofs](const price& p){ ofs << p.str6() << '\t' ; };
-	//auto pout = [&ofs](const string& s, const price& p)
-	//	{ recline(ofs, s, p.str6()); };
 	auto gout = [&ofs](const string& s, const auto& v) {
 		recline(ofs, s, v);};
 
 	gout("Tax", e.etran.taxable? "T" : "F"); // 1
 	gout("Dstamp", e.etran.dstamp); // 2
-	gout("Buy", e.etran.buy? "B" : "S"); // 3
+	gout("Buy", e.etran.buystr()); // 3
 	gout("Folio", e.etran.folio); // 4
 	gout("Eticker", e.etran.ticker); // 5
-	//ofs << e.qty.str(); //dout(e.qty, 6); // 6
 	gout("Qty", e.etran.qty.str());
 	gout("Cost", e.etran.cost); // 7
 	gout("Ucost", e.ucost); //dout(e.ucost, 6); // 8
