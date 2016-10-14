@@ -9,6 +9,7 @@
 #include <string>
 
 #include "common.hpp"
+#include "cpq.hpp"
 #include "reusable.hpp"
 
 //using std::cout;
@@ -18,26 +19,22 @@ using std::string;
 
 string mkrow(etran_t& e)
 {
-	string bs = e.buy? "B" : "S"; // TODO LOW could be abstracted into etran..cc
 
 	string y = e.dstamp.substr(0, 4);
 	string m = e.dstamp.substr(5, 2);
 	string d = e.dstamp.substr(8, 2);
 	string dstamp = d + "-" + m + "-" + y;
 
-	//string share_str = format_num(fabs(e.qty), 4);
 	string share_str = e.qty.pos_str();
 	
-	string price_str = format_num(fabs(e.cost.get()/e.qty.get()/100), 5);
+	price p = e.cost/e.qty;
+	//string price_str = format_num(fabs(e.cost.get()/e.qty.get()/100), 5);
+	string price_str = format_num(p.get(), 5);
 
-	return  intercalate("\t", {bs, dstamp, e.ticker, share_str, price_str, "0.00", "0.00"});
-	//return result;
+	return  intercalate("\t", {e.buystr(), dstamp, e.ticker, share_str, 
+			price_str, "0.00", "0.00"});
 }
 
-//bool match(etran_t &e)
-//{
-//	return true;
-//}
 
 void cgt(const etran_ts& es, const period &per)
 {

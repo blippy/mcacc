@@ -19,34 +19,11 @@ typedef struct etran_t {
 	centis  	cost;
 	std::string	ticker;
 	Etype typ = unknown;
-/*
-	// derived fields:
-	price		ucost; 
-	dstamp_t	start_dstamp;
-	price		start_price;
-	dstamp_t	end_dstamp;
-	price		end_price;
-	centis		prior_year_profit;
-	centis		vbefore;
-	centis		flow;
-	centis		profit;
-	centis		vto;
-	*/
+	std::string	buystr() { return buy? "B" : "S"; };
 } etran_t ;
+
 typedef struct augetran_t {
 	etran_t etran;
-/*	
-	bool		taxable;
-	dstamp_t	dstamp;
-	double 		sgn;
-	bool		buy;
-	std::string	folio;
-	quantity	qty;
-	centis  	cost;
-	std::string	ticker;
-	Etype typ = unknown;
-*/
-
 	// derived fields:
 	price		ucost; 
 	dstamp_t	start_dstamp;
@@ -60,7 +37,6 @@ typedef struct augetran_t {
 	centis		vto;
 } augetran_t ;
 
-//typedef etran_t augetran_t;
 
 bool operator<(const etran_t& lhs, const etran_t& rhs);
 
