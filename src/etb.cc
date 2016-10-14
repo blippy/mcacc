@@ -45,7 +45,7 @@ void etb_main(nacc_ts& the_naccs, const post_ts& posts)
 			aout << setw(7) << p.cr;
 			aout << setw(30) << p.desc;
 			write_centis(aout, p.amount);
-			total.inc(p.amount);
+			total += p.amount;
 			total.write(aout);
 			aout << endl;
 		}

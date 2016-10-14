@@ -21,8 +21,6 @@ void centis::set(std::string str) { set(1, str); }
 
 void centis::inc(double by) { value += bround(by); }
 
-void centis::inc(const centis& by) { value += by.value; }
-
 centis& centis::operator+=(const centis& c)
 {
 	this->value += c.value;

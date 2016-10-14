@@ -99,13 +99,13 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 		} else {
 			recentis(profit, y.chg, qty);
 		}
-		total_profit.inc(profit);
+		total_profit += profit;
 		
 		string chgpc_str =ret_str(y.chgpc);
 		string price_str = y.yprice.str6();
 		centis value;
 	       	recentis(value, y.yprice, qty);
-		total_value.inc(value);
+		total_value += value;
 		string value_str = value.str();
 		strings fields = strings {pad_right(y.ticker, 6), 
 			profit.str(), chgpc_str, value_str, 

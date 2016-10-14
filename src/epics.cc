@@ -73,10 +73,10 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 			tcost += cost;
 			tqty += e.etran.qty; 
 
-			vbefore.inc(e.vbefore);
-			vflow.inc(e.flow);
-			vprofit.inc(e.profit);
-			vto.inc(e.vto);
+			vbefore += e.vbefore;
+			vflow += e.flow;
+			vprofit += e.profit;
+			vto += e.vto;
 		}
 
 		if(tqty.get() == 0) { zeros.insert(k) ; continue; }
@@ -90,8 +90,8 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 			ret_str(value, tcost), 
 			tqty.str(), ucost.str2(), uvalue.str2()};
 		print_strings(eout, fields);
-		grand_cost.inc(tcost);
-		grand_value.inc(value);
+		grand_cost += tcost;
+		grand_value +=value;
 
 	}
 	fields = {pad_right("Grand:", 7), grand_cost.str(), 

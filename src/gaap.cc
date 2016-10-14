@@ -87,8 +87,7 @@ class section {
 
 		section add(Lie lie) {
 			lies.push_back(lie);
-			//total_lie.amount += lie.amount;
-			total_lie.amount.inc(lie.amount);
+			total_lie.amount += lie.amount;
 			return *this;
 		}
 
