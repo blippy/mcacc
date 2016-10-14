@@ -64,9 +64,10 @@ std::string fetch_url(const std::string & url)
 
 
 // public
-bool operator<(yahoo_t a, yahoo_t b)
+bool operator<(const yahoo_t& a, const yahoo_t& b)
 {
-	return std::tie(a.ticker, a.dstamp, a.tstamp) < std::tie(b.ticker, b.dstamp, b.tstamp);
+	return std::tie(a.ticker, a.dstamp, a.tstamp) < 
+		std::tie(b.ticker, b.dstamp, b.tstamp);
 }
 bool has_ticker(const yahoo_ts& yahoos, const std::string& ticker)
 {
