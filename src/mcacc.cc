@@ -19,7 +19,6 @@
 #include <boost/program_options.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "assets.hpp"
 #include "common.hpp"
 #include "oven.hpp"
 #include "tests.hpp"
@@ -58,16 +57,9 @@ void rmfiles(std::string fname)
 
 }
 
-void init()
-{
-	string htm = get_html();
-	string fname = rootdir() + "/mcacc.htm";
-	spit(fname, htm.c_str());
-}
 
 void clean()
 {
-	init();
 	rmfiles(sndir(1));
 	rmfiles(sndir(2));
 	rmfiles(sndir(3));
@@ -87,7 +79,7 @@ void preprocess(const char* command)
 void main_processing(po::variables_map vm)
 {
 
-	if(vm.count("init")) init();
+	//if(vm.count("init")) init();
 	if(vm.count("clean")) clean();
 
 	if(vm.count("pre")>0) {
@@ -130,7 +122,7 @@ po::variables_map process_options(int argc, char *argv[])
 	desc.add_options()
 		("clean", "Clean up the working folders")
 		("help,h", "Help")
-		("init", "Initialise working folders if necessary, and without cleaning")
+		//("init", "Initialise working folders if necessary, and without cleaning")
 		("pre", po::value<string>(), "Preprocess command")
 		("root", "Print root directory")
 		("snap,s", "Snapshot")
