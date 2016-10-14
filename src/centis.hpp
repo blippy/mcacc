@@ -17,7 +17,8 @@ class centis {
 		void set(double sgn, std::string str);
 		void set(std::string str);
 		void inc(double by);
-		void inc(const centis& by);
+		void inc(const centis& by); // TODO deprecate
+		centis& operator+=(const centis& c);
 		void write(std::ofstream& ofs);
 		void negate();
 		std::string str() const;

@@ -9,4 +9,5 @@
 #include <quantity.hpp>
 
 price operator/(const centis& c, const quantity& q);
+centis operator*(const price& p, const quantity& q);
 

@@ -27,7 +27,7 @@ augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
 	aug.end_price.set(s.end_price);
 
 	quantity qty;
-	qty.inc(e.qty);
+	qty += e.qty;
 	aug.vbefore.set(0);
 	aug.flow.set(0);
 	aug.prior_year_profit.set(0);

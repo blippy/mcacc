@@ -23,6 +23,11 @@ void centis::inc(double by) { value += bround(by); }
 
 void centis::inc(const centis& by) { value += by.value; }
 
+centis& centis::operator+=(const centis& c)
+{
+	this->value += c.value;
+}
+
 std::string centis::str () const 
 {
 	std::ostringstream s;

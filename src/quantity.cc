@@ -47,10 +47,16 @@ double quantity::num() const
 	return value;
 }
 
+/*
 void quantity::inc(const quantity& q)
 {
 	value += q.num();
 }
+*/
 
 
+quantity& quantity::operator+=(const quantity& q)
+{
+	this->value += q.num();
+}
 void quantity::set(const std::string & s) { from_str(1, s); }

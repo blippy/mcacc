@@ -8,6 +8,7 @@
 #include <set>
 
 #include "common.hpp"
+#include "cpq.hpp"
 #include "reusable.hpp"
 #include "stend.hpp"
 #include "epics.hpp"
@@ -43,7 +44,7 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 	set<string> zeros;
 	strings fields;
 	string line;
-	centis tcost, grand_cost, grand_value;
+	centis grand_cost, grand_value;
 	centis vbefore, vflow, vprofit, vto;
 
 	fields = { pad_ticker("TICK"), pad_gbp("COST"), pad_gbp("VALUE"), 
@@ -53,7 +54,7 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 
 	for(const auto& k:epic_names) {
 		quantity tqty; 
-		tcost.set(0);
+		centis tcost;
 		price uvalue;
 
 		for(const auto& e:es){
@@ -67,14 +68,10 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 			if(!match) continue;
 
 			uvalue.set(e.end_price);
-			if(e.etran.buy) {
-				tqty.inc(e.etran.qty); 
-				tcost.inc(e.etran.cost);
-			} else { 
-				const price ucost(tcost, tqty);
-				tqty.inc(e.etran.qty); 
-				tcost.inc(ucost.recentis(e.etran.qty));
-			}
+			const centis cost = e.etran.buy? e.etran.cost :
+				price(tcost, tqty) * e.etran.qty;
+			tcost += cost;
+			tqty += e.etran.qty; 
 
 			vbefore.inc(e.vbefore);
 			vflow.inc(e.flow);

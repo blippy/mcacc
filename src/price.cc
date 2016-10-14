@@ -35,6 +35,7 @@ void price::set(const std::string& s)
 
 }
 
+// TODO deprecate
 void recentis(centis& out_centis, const price& p, const quantity& q)
 {
 	price_t v1 = p.rat * price_t(q.num(), q.scale);

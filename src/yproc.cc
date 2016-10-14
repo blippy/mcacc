@@ -91,7 +91,7 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 		bool is_index = y.ticker[0] == '^';
 		for(auto& e:inps.etrans) 
 			if(y.ticker == e.ticker) 
-				qty.inc(e.qty);
+				qty += e.qty;
 
 		centis profit;
 		if(is_index) {
