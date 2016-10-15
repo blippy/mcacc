@@ -12,12 +12,11 @@
 #include "cpq.hpp"
 #include "reusable.hpp"
 
-//using std::cout;
 using std::endl;
 using std::ofstream;
 using std::string;
 
-string mkrow(etran_t& e)
+string mkrow(const etran_t& e)
 {
 
 	string y = e.dstamp.substr(0, 4);
@@ -28,7 +27,6 @@ string mkrow(etran_t& e)
 	string share_str = e.qty.pos_str();
 	
 	price p = e.cost/e.qty;
-	//string price_str = format_num(fabs(e.cost.get()/e.qty.get()/100), 5);
 	string price_str = format_num(p.get(), 5);
 
 	return  intercalate("\t", {e.buystr(), dstamp, e.ticker, share_str, 
@@ -45,14 +43,12 @@ void cgt(const etran_ts& es, const period &per)
 
 	std::set<string> tickers;
 	for(auto& e: es)
-		if(e.taxable && per.during(e.dstamp)  && ! e.buy) tickers.insert(e.ticker);
+		if(e.taxable && per.during(e.dstamp)  && ! e.buy)
+			tickers.insert(e.ticker);
 
-	etran_ts es1;
-	for(auto& e:es)
+	for(const auto& e:es)
 		if(tickers.find(e.ticker) != end(tickers))
-			es1.push_back(e);
-
-	for(auto& e:es1) sout << mkrow(e) << endl;
+			sout << mkrow(e) << endl;
 
 	sout.close();
 
