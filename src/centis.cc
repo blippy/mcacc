@@ -19,7 +19,7 @@ centis::centis(const std::string& s)
 }
 void centis::set(std::string str) { set(1, str); }
 
-void centis::inc(double by) { value += bround(by); }
+//void centis::inc(double by) { value += bround(by); }
 
 centis& centis::operator+=(const centis& c)
 {

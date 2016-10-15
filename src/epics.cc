@@ -82,8 +82,8 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 		if(tqty.get() == 0) { zeros.insert(k) ; continue; }
 		price ucost;
 	       	ucost.reprice(tcost, tqty);
-		centis value;
-		recentis(value, uvalue, tqty);
+		centis value = uvalue * tqty;
+		//recentis(value, uvalue, tqty);
 
 		fields = {pad_right(k, 7),
 		       	tcost.str(), value.str() , 

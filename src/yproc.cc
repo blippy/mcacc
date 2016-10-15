@@ -5,6 +5,7 @@
 #include <string>
 
 #include "common.hpp"
+#include "cpq.hpp"
 #include "reusable.hpp"
 #include "yproc.hpp"
 
@@ -97,14 +98,15 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 		if(is_index) {
 			profit.set(y.chg.get() * 100);
 		} else {
-			recentis(profit, y.chg, qty);
+			//recentis(profit, y.chg, qty);
+			profit = y.chg * qty;
 		}
 		total_profit += profit;
 		
 		string chgpc_str =ret_str(y.chgpc);
 		string price_str = y.yprice.str6();
-		centis value;
-	       	recentis(value, y.yprice, qty);
+		centis value = y.yprice*qty;
+	       	//recentis(value, y.yprice, qty);
 		total_value += value;
 		string value_str = value.str();
 		strings fields = strings {pad_right(y.ticker, 6), 

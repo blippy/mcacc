@@ -35,22 +35,6 @@ void price::set(const std::string& s)
 
 }
 
-// TODO deprecate
-void recentis(centis& out_centis, const price& p, const quantity& q)
-{
-	price_t v1 = p.rat * price_t(q.num(), q.scale);
-	double v2 = boost::rational_cast<double>(v1);
-	out_centis.set(v2);
-}
-
-centis price::recentis(const quantity& q) const
-{
-	price_t v1 = this->rat * price_t(q.num(), q.scale);
-	double v2 = boost::rational_cast<double>(v1);
-	centis c;
-	c.set(v2);
-	return c;
-}
 
 void price::reprice(const centis& c, const quantity& q)
 {

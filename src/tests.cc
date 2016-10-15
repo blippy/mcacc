@@ -3,6 +3,7 @@
 #include <string>
 
 //using namespace std;
+#include "cpq.hpp"
 #include "inputs.hpp"
 #include "reusable.hpp"
 
@@ -65,7 +66,8 @@ void check_fundamentals()
 	p.reprice(c, q);
 	check_near(p.get(), 1219.3806, "reprice");
 	
-	recentis(c, p, q);
+	//recentis(c, p, q);
+	c = p*q;
 	check_near(c.get(), 45678, "recentis");
 }
 void run_all_tests()

@@ -10,6 +10,7 @@
 #include "common.hpp"
 #include "types.hpp"
 #include "etrans-aug.hpp"
+#include "cpq.hpp"
 
 using namespace std;
 
@@ -31,11 +32,12 @@ augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
 	aug.vbefore.set(0);
 	aug.flow.set(0);
 	aug.prior_year_profit.set(0);
-	recentis(aug.vto, s.end_price, qty);
+	//recentis(aug.vto, s.end_price, qty);
+	aug.vto = s.end_price * qty;
 	switch(per.when(aug.etran.dstamp)) {
 		case perBefore:
-			recentis(aug.vbefore, s.start_price, qty);
-			//aug.prior_year_profit.set(aug.vbefore.get() - aug.etran.cost.get());
+			//recentis(aug.vbefore, s.start_price, qty);
+			aug.vbefore = s.start_price * qty;
 			aug.prior_year_profit = aug.vbefore 
 				- aug.etran.cost;
 			break;
