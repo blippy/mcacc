@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <cmath>
@@ -68,7 +69,6 @@ std::vector<std::string> split(const std::string &s, char delim)
 /* remove all characters in-place */ 
 void erase_all(std::string& str, const char c)
 {
-	//str.erase(std::remove(str.begin(), str.end(), c), str.end());
 	for(auto it=str.begin(); it != str.end(); ++it)
 		if(*it ==c) str.erase(it--);
 }
