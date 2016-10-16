@@ -23,6 +23,19 @@ OUT: s3/stend.dsv
 
 using namespace std;
 
+
+
+stend stend_ts::at(std::string key, std::string oops) const
+{
+	//const iterator it = super::find(key); 
+	if(super::find(key) == super::end()) {
+		throw std::out_of_range(oops);
+	} else {
+		return super::at(key);
+	}
+}
+
+
 bool has_key(const stend_ts& stends, const std::string& ticker)
 {
 	return stends.find(ticker) != stends.end();

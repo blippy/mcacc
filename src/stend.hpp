@@ -16,7 +16,14 @@ class stend {
 		price end_price;
 };
 
-typedef std::map<std::string, stend> stend_ts;
+//typedef std::map<std::string, stend> stend_ts;
+class stend_ts  : public std::map<std::string, stend> 
+{
+	public:
+		typedef std::map<std::string, stend> super;
+		stend at(std::string key, std::string oops) const;
+		stend at(std::string key) const { return super::at(key); };
+};
 
 
 //stend_ts stend_main(const inputs_t& inputs, period& per);

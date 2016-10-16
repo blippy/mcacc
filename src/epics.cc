@@ -132,7 +132,8 @@ void print_indices(const stend_ts& stends, ostream &pout)
 
 	auto indices = strings {"^FTSE", "^FTMC", "^FTAS"};
 	for(string& i:indices){
-		const stend s = stends.at(i);
+		const stend s = stends.at(i, 
+			"epic.cc:print_indices() couldn't find stend with key " + i);
 		price sp, ep, chg;
 	       	sp.set(s.start_price);
 		ep.set(s.end_price);
