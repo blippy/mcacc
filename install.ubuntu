@@ -5,4 +5,4 @@
 #[ ! -f ~/tmp ] && mkdir ~/tmp
 mkdir -p ~/tmp
 
-sudo apt-get install make build-essential autoconf libboost-all-dev gdb
+sudo apt-get install curl make build-essential autoconf libboost-all-dev gdb
