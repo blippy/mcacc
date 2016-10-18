@@ -23,6 +23,7 @@
 #include "oven.hpp"
 #include "tests.hpp"
 #include "reusable.hpp"
+#include "show.hpp"
 
 
 namespace fsys = boost::filesystem;
@@ -125,6 +126,7 @@ po::variables_map process_options(int argc, char *argv[])
 		//("init", "Initialise working folders if necessary, and without cleaning")
 		("pre", po::value<string>(), "Preprocess command")
 		("root", "Print root directory")
+		("show", po::value<string>(), "Show a report")
 		("snap,s", "Snapshot")
 		("tests", "Run tests only")
 		("version,v", "Version")
@@ -172,8 +174,12 @@ int main(int argc, char *argv[])
 
 	if(vm.count("version")) { print_version(); return EXIT_SUCCESS; }
 
-
 	main_processing(vm);
+
+	if(vm.count("show")) { 
+		const string str = vm["show"].as<string>();
+		show(str);
+	}
 
 	return EXIT_SUCCESS;
 }

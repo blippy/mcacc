@@ -12,7 +12,8 @@ mcacc_SOURCES = centis.cc cgt.cc common.cc cpq.cc \
 		oven.cc \
 		posts.cc price.cc \
 		quantity.cc \
-		reusable.cc stend.cc \ 
+		reusable.cc \
+		show.cc stend.cc \ 
 		tests.cc types.cc \
 		wiegley.cc \
 		yahoo.cc yproc.cc
