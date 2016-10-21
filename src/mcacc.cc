@@ -17,7 +17,6 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
-#include <boost/algorithm/string.hpp>
 
 #include "common.hpp"
 #include "oven.hpp"
