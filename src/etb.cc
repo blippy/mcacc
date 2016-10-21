@@ -8,9 +8,6 @@
 #include <functional>
 #include <stdexcept>
 
-//#include <boost/format.hpp>
-
-
 #include "common.hpp"
 #include "types.hpp"
 #include "posts.hpp"
@@ -61,10 +58,8 @@ void etb_main(nacc_ts& the_naccs, const post_ts& posts)
 		nacc_t& a_nacc = the_naccs.at(k);
 
 		double scale = a_nacc.scale;
-		//eout << boost::format("%-6.6s ") % k;
 		eout << pad_right(k, 6) << " "; 
 		write_centis(eout, total);
-		//eout << boost::format(" %2.0f %+010d\n") % scale % total.get();
 		eout << " " << format_num(scale, 2, 0) << " " << format_num(total.get(), 10, 0);
 		eout << endl;
 		a_nacc.bal = total;
