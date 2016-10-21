@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <assert.h>
 #include <iostream>
 #include <fstream>
@@ -7,15 +8,12 @@
 #include <string>
 #include <vector>
 
-#include <boost/format.hpp>
-
 #include "common.hpp"
 #include "reusable.hpp"
 #include "yahoo.hpp"
 #include "wiegley.hpp"
 
 using namespace std;
-using namespace boost;
 
 typedef pair<string, string> spair;
 
@@ -30,23 +28,28 @@ void mkledger(const etran_ts& es, const ntran_ts& ns)
 	vector<spair> trans;
 
 	for(auto& e: es) {
-		string t1 = (format("%1%\t*\tetran\n") % e.dstamp).str() ;
+		//string t1 = (format("%1%\t*\tetran\n") % e.dstamp).str() ;
+		string t1 = e.dstamp + "\t*\tetran\n";
 		assert(e.typ != unknown);
 		string at = (e.typ == leak) ? "@" : "@@";
 		string lcost = format_num(labs(e.cost.get()), 2);
-		string t2 = (format("\tEquity:%1%\t\"%2%\"\t%3%\t%4%\tGBP\t%5%\n") % 
-				e.folio % e.ticker %  e.qty.str() % at % lcost).str();
-		string t3 = (format("\t%1%\n\n") % e.folio).str();
+		//string t2 = (format("\tEquity:%1%\t\"%2%\"\t%3%\t%4%\tGBP\t%5%\n") % 
+		//		e.folio % e.ticker %  e.qty.str() % at % lcost).str();
+		string t2 = "\tEquity:" + e.folio 
+			+ "\t\"" + e.ticker + "\""
+			+ "\t" + e.qty.str()
+			+ "\t" + at 
+			+ "\tGBP\t" + lcost + "\n"; 
+		string t3 = "\t" + e.folio + "\n\n";
 		string t = t1 + t2 + t3;
 		trans.push_back(make_pair(e.dstamp, t));
 	}
 
 	for(auto& n: ns) {
-		string t1 = (format("%1%\t*\t%2%\n") % n.dstamp % n.desc).str();
+		string t1 = n.dstamp + "\t*\t" + n.desc + "\n";
 		string amt = n.amount.str();
-		string t2 = (format("\t%1%\tGBP\t%2%\n") % n.dr % amt).str();
-
-		string t3 = (format("\t%1%\n\n") % n.cr).str();
+		string t2 = "\t" + n.dr + "\tGBP\t" + amt + "\n";
+		string t3 = "\t" + n.cr + "\n\n";
 		string t = t1 + t2 + t3;
 		trans.push_back(make_pair(n.dstamp, t));
 	}
