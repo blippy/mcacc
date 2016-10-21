@@ -16,7 +16,6 @@ void price::get(double& num, double& den) const
 }
 double price::get() const
 {
-	//return boost::rational_cast<double>(rat);
 	double num, den;
 	num = rat.numerator();
 	den = rat.denominator();
@@ -39,9 +38,7 @@ void price::set(const std::string& s)
 void price::reprice(const centis& c, const quantity& q)
 {
 	double qnum, qden;
-	//c.get(cnum, cden);
 	q.get(qnum, qden);
-	//rat = boost::rational<long int>(c.get() * qden, qnum);
 	rat = boost::rational<long int>(c.get()) /
 		boost::rational<long int>(qnum, qden);
 }
