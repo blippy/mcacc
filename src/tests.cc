@@ -4,7 +4,8 @@
 #include <string>
 #include <type_traits>
 
-#include "cpq.hpp"
+//#include "cpq.hpp"
+#include "dec.hpp"
 #include "inputs.hpp"
 #include "reusable.hpp"
 
@@ -54,6 +55,7 @@ void check_tokeniser(std::string str, std::vector<std::string> strs)
 
 void check_fundamentals()
 {	
+	/*
 	price p;
 	p.set("123.45");
 	check_near(p.get(), 123.45, "price 123.45");
@@ -73,42 +75,36 @@ void check_fundamentals()
 	//recentis(c, p, q);
 	c = p*q;
 	check_near(c.get(), 45678, "recentis");
+	*/
 }
-
-////////////////////////////////////////////////////////////
-// experiments with decimals
-
-template<int DP>
-class decn 
-{ 
-	public:
-		decn() {};
-		decn(long before, long after) { dec = std::decimal::make_decimal128((long long)(before* pow(10, DP) + after), -DP); };
-		std::decimal::decimal128 dec ;
-	       	int dp = DP; 
-		bool operator==(const decn<DP>& other) { return this->dec == other.dec; };
-		bool operator!=(const decn<DP>& other) { return this->dec != other.dec; };
-		friend decn<DP> operator+(decn<DP> lhs, const decn<DP>& rhs) { lhs.dec += rhs.dec; return lhs; };
-};
-
-//bool operator==(const decn& lhs, const decn& rhs) { return lhs.dp == rhs.dp && lhs.dec == rhs.dec; }
-
-typedef decn<2> dec2;
-//class dec2 : public decn<2> {};
 
 void check_decimals()
 {
-	dec2 d1 = dec2(12, 34);
+	currency d1 = currency(12, 34);
 	static_assert(true, "always works");
 	//assert(d.dp ==2);
 	check(d1==d1, "decimal trivial equality");
-	dec2 d2 = dec2(12, 35);
+	currency d2 = currency(12, 35);
 	check(d1!=d2, "decimal trivial inequality");
-	check(dec2(10, 12) + dec2(13, 14) == dec2(23, 26), "decimal simple addition");
+	check(currency(10, 12) + currency(13, 14) == currency(23, 26), "decimal simple addition");
+	check_near(currency(10, 12).dbl(), 10.12, "currency 10.12");
+
+	currency c1;
+	c1.from_str("34.56");
+	check_near(c1.dbl(), 34.56, "currency from str");
+	check(c1.stra() == "34.56", "and back to string again");
+
+	quantity q1(10,0);
+	price p1 = c1/q1;
+	check_near(p1.dbl(), 345.6, "p 345.6 = c 34.56 / q 10.0");
+	currency c2 = p1 * q1;
+	check(c2.stra() == "34.56", "and back to string again");
+
+	price p2("145.6");
+	check(p2.stra() == "145.60000", "price from string");
+	//cout << p2.str() << endl;
 	
 }
-
-////////////////////////////////////////////////////////////
 
 void run_all_tests()
 {

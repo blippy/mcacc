@@ -9,7 +9,7 @@
 
 typedef boost::rational<long int> price_t;
 
-class price {
+class priceXXX {
 	public:		
 		price() {};
 		price(const centis& c, const quantity& q);

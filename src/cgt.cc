@@ -9,7 +9,8 @@
 #include <string>
 
 #include "common.hpp"
-#include "cpq.hpp"
+#include "dec.hpp"
+//#include "cpq.hpp"
 #include "reusable.hpp"
 
 using std::endl;
@@ -27,7 +28,7 @@ string mkrow(const etran_t& e)
 	string share_str = e.qty.pos_str();
 	
 	price p = e.cost/e.qty;
-	string price_str = format_num(p.get(), 5);
+	string price_str = p.str();
 
 	return  intercalate("\t", {e.buystr(), dstamp, e.ticker, share_str, 
 			price_str, "0.00", "0.00"});

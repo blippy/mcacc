@@ -32,14 +32,12 @@ void mkledger(const etran_ts& es, const ntran_ts& ns)
 		string t1 = e.dstamp + "\t*\tetran\n";
 		assert(e.typ != unknown);
 		string at = (e.typ == leak) ? "@" : "@@";
-		string lcost = format_num(labs(e.cost.get()), 2);
-		//string t2 = (format("\tEquity:%1%\t\"%2%\"\t%3%\t%4%\tGBP\t%5%\n") % 
-		//		e.folio % e.ticker %  e.qty.str() % at % lcost).str();
+		//string lcost = format_num(labs(e.cost), 2);
 		string t2 = "\tEquity:" + e.folio 
 			+ "\t\"" + e.ticker + "\""
 			+ "\t" + e.qty.str()
-			+ "\t" + at 
-			+ "\tGBP\t" + lcost + "\n"; 
+			+ "\t" + at ;
+		//	+ "\tGBP\t" + lcost + "\n"; 
 		string t3 = "\t" + e.folio + "\n\n";
 		string t = t1 + t2 + t3;
 		trans.push_back(make_pair(e.dstamp, t));
@@ -79,7 +77,7 @@ void mkprices(const yahoo_ts&  ys)
 {
 	multiset<string> prices;
 	for(auto& y: ys) {
-		string price_str = format_num(y.yprice.get()/100, 7);
+		string price_str = format_num(y.yprice.dbl()/100, 7);
 		string ticker = "\"" + y.ticker + "\"";
 		strings fields = {"P", y.dstamp, y.tstamp, ticker, 
 			"GBP", price_str};

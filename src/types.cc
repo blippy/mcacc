@@ -30,10 +30,10 @@ string ret_str(double num, double denom) {  return ret_str(num/denom*100-100); }
 string ret_str(char c) { return nchars(c, 7); }
 string ret_str(string s) { return pad_left(s, 7); }
 
-std::string ret_str(const centis& num, const centis& denom)
-{
-	return ret_str(num.get(), denom.get());
-}
+//std::string ret_str(const centis& num, const centis& denom)
+//{
+//	return ret_str(num.get(), denom.get());
+//}
 
 
 std::string retchg_str(double num, double denom)
@@ -41,16 +41,16 @@ std::string retchg_str(double num, double denom)
 	return ret_str(num/denom *100);
 }
 
-std::string retchg_str(const centis& num, const centis& denom)
-{
-	return retchg_str(num.get(), denom.get());
-}
+//std::string retchg_str(const centis& num, const centis& denom)
+//{
+//	return retchg_str(num.get(), denom.get());
+//}
 
 
-std::string ret_str(const price& num, const price& denom)
-{
-	return ret_str(num.get(), denom.get());
-}
+//std::string ret_str(const price& num, const price& denom)
+//{
+//	return ret_str(num.get(), denom.get());
+//}
 void print_strings(ostream &ost, const strings &strs)
 {
 	auto line = intercalate(" ", strs);

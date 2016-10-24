@@ -1,3 +1,4 @@
+#include <decimal/decimal>
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>
@@ -8,12 +9,14 @@
 #include <set>
 
 #include "common.hpp"
-#include "cpq.hpp"
+//#include "cpq.hpp"
+#include "dec.hpp"
 #include "reusable.hpp"
 #include "stend.hpp"
 #include "epics.hpp"
 
 using namespace std;
+using namespace std::decimal;
 
 void underline(ostream &ost, char c)
 { 
@@ -44,8 +47,8 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 	set<string> zeros;
 	strings fields;
 	string line;
-	centis grand_cost, grand_value;
-	centis vbefore, vflow, vprofit, vto;
+	currency grand_cost, grand_value;
+	currency vbefore, vflow, vprofit, vto;
 
 	fields = { pad_ticker("TICK"), pad_gbp("COST"), pad_gbp("VALUE"), 
 		ret_str("RET%"), 
@@ -54,7 +57,7 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 
 	for(const auto& k:epic_names) {
 		quantity tqty; 
-		centis tcost;
+		currency tcost;
 		price uvalue;
 
 		for(const auto& e:es){
@@ -67,9 +70,9 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 			}
 			if(!match) continue;
 
-			uvalue.set(e.end_price);
-			const centis cost = e.etran.buy? e.etran.cost :
-				price(tcost, tqty) * e.etran.qty;
+			uvalue = e.end_price;
+			const currency cost = e.etran.buy? e.etran.cost :
+				(tcost/tqty) * e.etran.qty; // TODO can we just write (tcost/tqty)*e.etran.qty somehow?
 			tcost += cost;
 			tqty += e.etran.qty; 
 
@@ -79,16 +82,17 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 			vto += e.vto;
 		}
 
-		if(tqty.get() == 0) { zeros.insert(k) ; continue; }
-		price ucost;
-	       	ucost.reprice(tcost, tqty);
-		centis value = uvalue * tqty;
+		if(tqty.zerop()) { zeros.insert(k) ; continue; }
+		//price ucost;
+	       	//ucost.reprice(tcost, tqty);
+		const price ucost = tcost/tqty;
+		currency value = uvalue * tqty;
 		//recentis(value, uvalue, tqty);
 
 		fields = {pad_right(k, 7),
 		       	tcost.str(), value.str() , 
-			ret_str(value, tcost), 
-			tqty.str(), ucost.str2(), uvalue.str2()};
+			ret_str(value.dbl()/ tcost.dbl()), 
+			tqty.str(), ucost.str(), uvalue.str()};
 		print_strings(eout, fields);
 		grand_cost += tcost;
 		grand_value +=value;
@@ -96,7 +100,7 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 	}
 	fields = {pad_right("Grand:", 7), grand_cost.str(), 
 		grand_value.str(),
-	       	ret_str(grand_value, grand_cost), 
+	       	ret_str(grand_value.dbl()/grand_cost.dbl()), 
 		pad_gbp(' '), pad_gbp(' '), pad_gbp(' ') };
 	print_strings(eout, fields);
 	eout << endl;
@@ -118,7 +122,7 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 	if(f.ftype ==1 || f.ftype==2) underline(pout, '-');
 	fields = {pad_ticker(f.name), vbefore.str(), vflow.str(), 
 		vprofit.str(), vto.str(),
-	       	ret_str(vprofit.get() + vbefore.get(), vbefore.get()) };
+	       	ret_str((vprofit + vbefore).dbl()/vbefore.dbl()) };
 	print_strings(pout, fields);
 	if(f.ftype==2) underline(pout, '=');
 
@@ -134,13 +138,16 @@ void print_indices(const stend_ts& stends, ostream &pout)
 	for(string& i:indices){
 		const stend s = stends.at(i, 
 			"epic.cc:print_indices() couldn't find stend with key " + i);
-		price sp, ep, chg;
-	       	sp.set(s.start_price);
-		ep.set(s.end_price);
-		chg.diff(ep, sp);
+		const price& sp = s.start_price;
+		const price&  ep = s.end_price;
+	       	//sp.set(s.start_price);
+		//ep.set(s.end_price);
+		const price chg = ep-sp;
+		const double rat = ep.dbl()/sp.dbl();
+		//const price
 		auto fields = strings { pad_ticker(i), 
-			sp.str2(), pad_gbp(' '), chg.str2(), ep.str2(), 
-			ret_str(ep, sp)};
+			sp.str(), pad_gbp(' '), chg.str(), ep.str(), 
+			ret_str(rat)};
 		print_strings(pout, fields);
 	}
 }

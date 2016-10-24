@@ -63,7 +63,7 @@ stend_ts stend_main(const yahoo_ts& yahoos, const period& per)
 
 		if(y.dstamp<=per.end_date) {
 			s.end_dstamp = y.dstamp;
-			s.end_price.set(y.yprice);
+			s.end_price = y.yprice;
 		}
 		stends[s.ticker] = s;
 	}
@@ -75,8 +75,8 @@ stend_ts stend_main(const yahoo_ts& yahoos, const period& per)
 	for(auto& s1:stends) {
 		stend s = s1.second;
 		strings fields = { s.ticker , s.start_dstamp, 
-			s.start_price.str6(), s.end_dstamp, 
-			s.end_price.str6() }; 
+			s.start_price.str(), s.end_dstamp, 
+			s.end_price.str() }; 
 		ofs << intercalate("\t", fields) << endl;
 	}
 	ofs.close();

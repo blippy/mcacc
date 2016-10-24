@@ -10,7 +10,7 @@
 #include "common.hpp"
 #include "types.hpp"
 #include "etrans-aug.hpp"
-#include "cpq.hpp"
+//#include "cpq.hpp"
 
 using namespace std;
 
@@ -21,22 +21,21 @@ augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
 	aug.etran = e;
 	const stend& s = stends.at(e.ticker);
 
-	aug.ucost.reprice(e.cost, e.qty); 
+	//aug.ucost.reprice(e.cost, e.qty); 
+	aug.ucost = e.cost/e.qty;
 	aug.start_dstamp = s.start_dstamp;
-	aug.start_price.set(s.start_price);
+	aug.start_price = s.start_price;
 	aug.end_dstamp = s.end_dstamp;
-	aug.end_price.set(s.end_price);
+	aug.end_price = s.end_price;
 
 	quantity qty;
 	qty += e.qty;
-	aug.vbefore.set(0);
-	aug.flow.set(0);
-	aug.prior_year_profit.set(0);
-	//recentis(aug.vto, s.end_price, qty);
+	aug.vbefore = 0;
+	aug.flow = 0;
+	aug.prior_year_profit = 0;
 	aug.vto = s.end_price * qty;
 	switch(per.when(aug.etran.dstamp)) {
 		case perBefore:
-			//recentis(aug.vbefore, s.start_price, qty);
 			aug.vbefore = s.start_price * qty;
 			aug.prior_year_profit = aug.vbefore 
 				- aug.etran.cost;
@@ -45,7 +44,7 @@ augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
 			aug.flow = aug.etran.cost;
 			break;
 		case perAfter:
-			aug.vto.set(0);
+			aug.vto = 0;
 	}
 
 	//aug.profit.set(aug.vto.get() - aug.vbefore.get() - aug.flow.get());
@@ -55,9 +54,9 @@ augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
 }
 
 string asstr(const char& c) { return to_string(c); }
-string asstr(const centis& c) { return c.str();}
+string asstr(const currency& c) { return c.str();}
 string asstr(const string& s) { return s;}
-string asstr(const price& p) { return p.str6(); }
+string asstr(const price& p) { return p.str(); }
 template <typename T>
 void recline(ofstream& ofs, const string& fname, T const& fvalue)
 {

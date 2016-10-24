@@ -19,7 +19,7 @@ void etb_main(nacc_ts& the_naccs, const post_ts& posts)
 {
 
 	//reset the account balances
-	for(auto& n:the_naccs) n.second.bal.set(0);
+	for(auto& n:the_naccs) n.second.bal = 0;
 
 	std::string fname;
 	int total;
@@ -34,7 +34,7 @@ void etb_main(nacc_ts& the_naccs, const post_ts& posts)
 	for(const auto& p:posts) {keys.insert(p.dr); }
 
 	for(const auto& k: keys) {
-		centis total;
+		currency total;
 		for(const auto& p:posts){
 			if(p.dr != k) continue;
 			// normal case
@@ -42,9 +42,11 @@ void etb_main(nacc_ts& the_naccs, const post_ts& posts)
 			aout << setw(11) << p.dstamp;
 			aout << setw(7) << p.cr;
 			aout << setw(30) << p.desc;
-			write_centis(aout, p.amount);
+			//write_centis(aout, p.amount);
+			aout << p.amount.str();
 			total += p.amount;
-			total.write(aout);
+			//total.write(aout);
+			aout << total.str();
 			aout << endl;
 		}
 
@@ -59,8 +61,9 @@ void etb_main(nacc_ts& the_naccs, const post_ts& posts)
 
 		double scale = a_nacc.scale;
 		eout << pad_right(k, 6) << " "; 
-		write_centis(eout, total);
-		eout << " " << format_num(scale, 2, 0) << " " << format_num(total.get(), 10, 0);
+		//write_centis(eout, total);
+		eout << total.str() ;
+		eout << " " << format_num(scale, 2, 0) << " " << format_num(total.dbl(), 10, 0);
 		eout << endl;
 		a_nacc.bal = total;
 

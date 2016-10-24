@@ -6,7 +6,8 @@
 #include <string>
 #include <vector>
 
-#include "centis.hpp"
+//#include "centis.hpp"
+#include "dec.hpp"
 
 
 
@@ -16,7 +17,7 @@ typedef struct nacc_t {
 	std::string typ;
 	double scale;
 	std::string desc;
-	centis bal;
+	currency bal;
 } nacc_t;
 
 

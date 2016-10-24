@@ -5,7 +5,7 @@
 #include <string>
 
 #include "common.hpp"
-#include "cpq.hpp"
+//#include "cpq.hpp"
 #include "reusable.hpp"
 #include "yproc.hpp"
 
@@ -43,9 +43,9 @@ void download(const comm_ts& the_comms, downloads_t& ds)
 		y.tstamp = tstamp;
 		y.ticker = fields[0]; 
 		erase_all(y.ticker, '"');
-		y.yprice.set(fields[1]);
-		y.chg.set(fields[2]);
-		y.chgpc = y.chg.get() / (y.yprice.get() - y.chg.get()) * 100;
+		y.yprice.from_str(fields[1]);
+		y.chg.from_str(fields[2]);
+		y.chgpc = y.chg.dbl() / (y.yprice.dbl() - y.chg.dbl()) * 100;
 		ds.ys.insert(y);
 	}
 }
@@ -59,8 +59,8 @@ void mkyahoos(downloads_t& ds)
 	for(auto& y: ds.ys){
 		string chgpc = format_num(y.chgpc, 2);
 		strings fields = {"yahoo", ds.dstamp, ds.tstamp, 
-			y.ticker, "1.0000", y.yprice.str6(), 
-			y.chg.str2(), chgpc, "P"};
+			y.ticker, "1.0000", y.yprice.str(), 
+			y.chg.str(), chgpc, "P"};
 		yout << intercalate("\t", fields);
 		yout << endl;
 	}
@@ -84,7 +84,7 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 		pad_left("PRICE", 12)};
 	sout << intercalate(" ", fields) << endl;
 	
-	centis total_profit, total_value;
+	currency total_profit, total_value;
 
 	bool total_written = false;
 	for(auto& y:ds.ys) {
@@ -94,19 +94,17 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 			if(y.ticker == e.ticker) 
 				qty += e.qty;
 
-		centis profit;
+		currency profit;
 		if(is_index) {
-			profit.set(y.chg.get() * 100);
+			profit = y.chg.dbl() * 100;
 		} else {
-			//recentis(profit, y.chg, qty);
 			profit = y.chg * qty;
 		}
 		total_profit += profit;
 		
 		string chgpc_str =ret_str(y.chgpc);
-		string price_str = y.yprice.str6();
-		centis value = y.yprice*qty;
-	       	//recentis(value, y.yprice, qty);
+		string price_str = y.yprice.str();
+		currency value = y.yprice*qty;
 		total_value += value;
 		string value_str = value.str();
 		strings fields = strings {pad_right(y.ticker, 6), 
@@ -114,7 +112,7 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 			qty.str(), price_str};
 
 		if(is_index && ! total_written) {
-			string chgpc_str = retchg_str(total_profit, total_value);
+			string chgpc_str = retchg_str(total_profit.dbl(),total_value.dbl());
 			strings fields = {pad_right("TOTAL", 6), 
 				total_profit.str(), 
 				chgpc_str, total_value.str()};
@@ -131,7 +129,6 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 
 yahoo_ts process_yahoos(const inputs_t& inps)
 {
-	//cout << "process_yahoos() performing download\n";
 	downloads_t ds;
 	download(inps.comms, ds);
 	mkyahoos(ds);

@@ -17,14 +17,15 @@ bool operator<(const post_t& a, const post_t& b)
 	return std::tie(a.dr, a.dstamp) < std::tie(b.dr, b.dstamp);
 }
 
-void push(post_ts &ps, const string& dstamp, const string& ticker, string acc, string str, double sgn, const centis& amount)
+void push(post_ts &ps, const string& dstamp, const string& ticker, string acc, string str, double sgn, const currency& amount)
 {
 	post_t p;
-	if(amount.get() == 0) return;
+	if(amount.zerop()) return;
 	p.dstamp = dstamp;
 	p.dr = acc;
 	p.cr = str;
-	p.amount.set(sgn * amount.get());
+	p.amount = amount;
+	if(sgn == -1) p.amount.negate();
 	p.desc = str + ":" + ticker;
 	ps.push_back(p);
 }
@@ -35,7 +36,7 @@ post_ts posts_main(const inputs_t& inputs, const augetran_ts& augetrans)
 	post_ts ps;
 	for(auto& n:inputs.ntrans) {
 		if(n.dstamp > inputs.p.end_date) continue;
-		if(n.amount.get() ==0) continue;
+		if(n.amount.zerop()) continue;
 
 		post_t p;
 		p.dstamp = n.dstamp;
@@ -46,7 +47,7 @@ post_ts posts_main(const inputs_t& inputs, const augetran_ts& augetrans)
 			p.cr = inputs.naccs.at(p.cr).alt;
 		}
 		//p.amount = n.amount;
-		p.amount.set(n.amount.get());
+		p.amount = n.amount;
 		p.desc = n.desc;
 		ps.push_back(p);
 

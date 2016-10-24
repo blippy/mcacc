@@ -3,15 +3,15 @@ bin_PROGRAMS = mcacc
 man1_MANS = mcacc.1
 mcacc_LDADD = -lpthread -lboost_system -lboost_filesystem -lboost_program_options
 #-lasprintf
-mcacc_SOURCES = centis.cc cgt.cc common.cc cpq.cc \
+mcacc_SOURCES = cgt.cc common.cc \
+		dec.cc \
 		epics.cc etb.cc etran.cc etrans-aug.cc \
 		gaap.cc \
 		inputs.cc \
 		mcacc.cc \
 		nacc.cc \
 		oven.cc \
-		posts.cc price.cc \
-		quantity.cc \
+		posts.cc \
 		reusable.cc \
 		show.cc stend.cc \ 
 		tests.cc types.cc \

@@ -2,10 +2,12 @@
 
 #include <string>
 #include <vector>
+
+#include "dec.hpp"
 #include "types.hpp"
-#include "quantity.hpp"
-#include "centis.hpp"
-#include "price.hpp"
+//#include "quantity.hpp"
+//#include "centis.hpp"
+//#include "price.hpp"
 
 enum Etype { unknown, leak, regular };
 
@@ -16,7 +18,7 @@ typedef struct etran_t {
 	bool		buy;
 	std::string	folio;
 	quantity	qty;
-	centis  	cost;
+	currency  	cost;
 	std::string	ticker;
 	Etype typ = unknown;
 	std::string	buystr() const { return buy? "B" : "S"; };
@@ -30,11 +32,11 @@ typedef struct augetran_t {
 	price		start_price;
 	dstamp_t	end_dstamp;
 	price		end_price;
-	centis		prior_year_profit;
-	centis		vbefore;
-	centis		flow;
-	centis		profit;
-	centis		vto;
+	currency	prior_year_profit;
+	currency	vbefore;
+	currency	flow;
+	currency	profit;
+	currency	vto;
 } augetran_t ;
 
 

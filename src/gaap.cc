@@ -19,12 +19,9 @@ using namespace std;
 
 void ul1(ostream* ofs) { (*ofs) << nchars(' ', 11) << nchars('-', 10) << endl;};
 
-void emit(ostream* ofs, const string& title, const centis& value)
+void emit(ostream* ofs, const string& title, const currency& value)
 {
-	//char sgn = ' ';
-	//if (value<0) { sgn = '-' ; value = -value;}
-	//double bal = round2(double(value)/double(100));
-	double bal = round2(value.get()/100);
+	double bal = round2(value.dbl());
 	char sgn = bal<0 ? '-' : ' ';
 	bal = fabs(bal);
 	setlocale(LC_NUMERIC, "");
@@ -39,13 +36,12 @@ void emit(ostream* ofs, const string& title, const centis& value)
 ostream* m_ofs = nullptr;
 nacc_ts m_naccs;
 
-centis get_bal(string key)
+currency get_bal(string key)
 { 
-	//centis bal;
 	try {
 		return m_naccs.at(key).bal;
 	} catch (const std::out_of_range& ex) {
-		return centis();
+		return currency();
 	}	
 
 	//return bal;
@@ -53,7 +49,7 @@ centis get_bal(string key)
 
 struct Lie { 
 	string desc; 
-	centis amount; 
+	currency amount; 
 	bool oline = false ; 
 	bool uline = false;
 }; // line entry
@@ -73,7 +69,7 @@ class section {
 		}
 		
 		section add(string desc) {
-			centis amount = get_bal(desc);
+			currency amount = get_bal(desc);
 			struct Lie lie = {desc, amount};
 			add(lie);
 			return *this;
@@ -115,7 +111,7 @@ class section {
 		vector<Lie> lies;
 };
 
-void subtotal(ostream* ofs, const string& title, centis& value)
+void subtotal(ostream* ofs, const string& title, currency& value)
 { 
 	ul1(ofs); emit(ofs, title, value); 
 	ul1(ofs);
@@ -133,9 +129,9 @@ void gaap_main(const nacc_ts& the_naccs, const period& per)
 	m_naccs = the_naccs;
 
 	auto get_bal = [the_naccs](auto key){ 
-		centis bal;
+		currency bal;
 		try {
-			bal.set( the_naccs.at(key).bal);
+			bal = the_naccs.at(key).bal;
 		} catch (const std::out_of_range& ex) {
 			//bal = 0;
 		}	
