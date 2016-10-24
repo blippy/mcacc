@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 #include <decimal/decimal>
 #include <string>
@@ -58,7 +59,16 @@ class price
 		price() { the_price = 0 ; } ; //std::decimal::
 		price(std::decimal::decimal128 dec) { the_price = dec;};
 		price(const std::string& s) { from_str(s); };
-		double operator=(price rhs) { return std::decimal::decimal_to_double(rhs.the_price); };
+		/*
+		double operator=(price rhs) { 
+			return std::decimal::decimal_to_double(rhs.the_price);
+	       	};
+		*/
+		price& operator=(const price& rhs) { 
+			//std::swap(the_price, other.the_price);
+			the_price = rhs.the_price;
+			return *this;
+		};
 		double dbl(const price& p) const { return std::decimal::decimal_to_double(p.the_price); } ;
 		double dbl() const { return std::decimal::decimal_to_double(the_price); } ;
 		std::string str() const { return format_num( std::decimal::decimal_to_double(the_price), 12, DP); };

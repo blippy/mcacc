@@ -227,7 +227,9 @@ void insert_LVL05(inputs_t& inputs, const strings& fields)
 	string subtype = fields[1];
 	yahoo_t y = make_yahoo(inputs, fields);	
 	if(subtype == "PRICE-1") {
-		y.yprice = currency(fields[6]) / quantity(fields[5]);
+		currency c(fields[6]);
+		quantity q(fields[5]);
+		y.yprice = c/q;
 		//y.rox =1;
 	} else if (subtype != "YAHOO-1") {
 		cerr << "inputs.cc:insert_LVL05() couldn't understand type ";

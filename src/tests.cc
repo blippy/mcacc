@@ -104,6 +104,9 @@ void check_decimals()
 	check(p2.stra() == "145.60000", "price from string");
 	//cout << p2.str() << endl;
 	
+	price p3 = p2;
+	check(p3.stra() == p2.stra(), "simple price assignment");
+	
 }
 
 void run_all_tests()
