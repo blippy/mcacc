@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <cfenv>
 #include <ctime>
+#include <dirent.h>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -15,7 +16,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <boost/filesystem.hpp>
+//#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
 #include "common.hpp"
@@ -25,7 +26,7 @@
 #include "show.hpp"
 
 
-namespace fsys = boost::filesystem;
+//namespace fsys = boost::filesystem;
 using namespace std;
 namespace po = boost::program_options;
 
@@ -48,6 +49,7 @@ bool operator>(const etran_t &a, const etran_t &b)
 // http://stackoverflow.com/questions/14610185/how-to-avoid-removing-directory-on-remove-all-with-boost-libraries
 // NB C++ has a filesystem::remove_all() function which will do this for us,
 // but is only experimental at 22-Sep-2016
+/*
 void rmfiles(std::string fname)
 {
 	fsys::path path_to_remove(fname.c_str());
@@ -56,13 +58,72 @@ void rmfiles(std::string fname)
 	}
 
 }
+*/
 
+// http://www.linuxquestions.org/questions/programming-9/deleting-a-directory-using-c-in-linux-248696/
+// remove directory recursively
+// include dirent.h sys/types.h
+int rmdir(const char *dirname)
+{
+    DIR *dir;
+    struct dirent *entry;
+    char path[PATH_MAX];
+
+    if (path == NULL) {
+        fprintf(stderr, "Out of memory error\n");
+        return 0;
+    }
+    dir = opendir(dirname);
+    if (dir == NULL) {
+        perror("Error opendir()");
+        return 0;
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, ".") && strcmp(entry->d_name, "..")) {
+            snprintf(path, (size_t) PATH_MAX, "%s/%s", dirname, entry->d_name);
+            if (entry->d_type == DT_DIR) {
+                rmdir(path);
+            }
+
+            /*
+             * Here, the actual deletion must be done.  Beacuse this is
+             * quite a dangerous thing to do, and this program is not very
+             * well tested, we are just printing as if we are deleting.
+             */
+            //printf("(not really) Deleting: %s\n", path);
+	    remove(path);
+            /*
+             * When you are finished testing this and feel you are ready to do the real
+             * deleting, use this: remove*STUB*(path);
+             * (see "man 3 remove")
+             * Please note that I DONT TAKE RESPONSIBILITY for data you delete with this!
+             */
+        }
+
+    }
+    closedir(dir);
+
+    /*
+     * Now the directory is emtpy, finally delete the directory itself. (Just
+     * printing here, see above) 
+     */
+    //printf("(not really) Deleting: %s\n", dirname);
+    remove(dirname);
+
+    return 1;
+}
+
+int rmdir(const string& dirname)
+{
+	return rmdir(dirname.c_str());
+}
 
 void clean()
 {
-	rmfiles(sndir(1));
-	rmfiles(sndir(2));
-	rmfiles(sndir(3));
+	rmdir(sndir(1));
+	rmdir(sndir(2));
+	rmdir(sndir(3));
 }
 
 
