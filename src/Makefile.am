@@ -1,3 +1,4 @@
+AM_CXXFLAGS = -std=gnu++14 
 bin_PROGRAMS = mcacc 
 #BUILT_SOURCES = assets_mcacc_htm.xxd
 man1_MANS = mcacc.1
@@ -15,7 +16,7 @@ mcacc_SOURCES = args.cc \
 		oven.cc \
 		posts.cc \
 		reusable.cc \
-		show.cc stend.cc \ 
+		show.cc stend.cc \
 		tests.cc types.cc \
 		wiegley.cc \
 		yahoo.cc yproc.cc
