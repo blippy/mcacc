@@ -2,9 +2,10 @@ bin_PROGRAMS = mcacc
 #BUILT_SOURCES = assets_mcacc_htm.xxd
 man1_MANS = mcacc.1
 #mcacc_LDADD = -lpthread -lboost_system -lboost_filesystem -lboost_program_options
-mcacc_LDADD = -lpthread -lboost_program_options
+mcacc_LDADD = -lpthread
 #-lasprintf
-mcacc_SOURCES = cgt.cc common.cc \
+mcacc_SOURCES = args.cc \
+		cgt.cc common.cc \
 		dec.cc \
 		epics.cc etb.cc etran.cc etrans-aug.cc \
 		gaap.cc \
@@ -19,9 +20,9 @@ mcacc_SOURCES = cgt.cc common.cc \
 		wiegley.cc \
 		yahoo.cc yproc.cc
 
-mcacc_SOURCES += $(BUILT_SOURCES)
+#mcacc_SOURCES += $(BUILT_SOURCES)
 
-CLEANFILES = $(BUILT_SOURCES)
+#CLEANFILES = $(BUILT_SOURCES)
 
 
 #assets_mcacc_htm.xxd : ../assets/mcacc.htm

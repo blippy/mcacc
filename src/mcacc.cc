@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <assert.h>
 #include <cfenv>
+#include <cstring>
 #include <ctime>
 #include <dirent.h>
 #include <fstream>
@@ -17,8 +18,9 @@
 #include <unistd.h>
 
 //#include <boost/filesystem.hpp>
-#include <boost/program_options.hpp>
+//#include <boost/program_options.hpp>
 
+#include "args.hpp"
 #include "common.hpp"
 #include "oven.hpp"
 #include "tests.hpp"
@@ -28,7 +30,7 @@
 
 //namespace fsys = boost::filesystem;
 using namespace std;
-namespace po = boost::program_options;
+//namespace po = boost::program_options;
 
 
 
@@ -137,18 +139,19 @@ void preprocess(const char* command)
 	
 }
 
-void main_processing(po::variables_map vm)
+//void main_processing(po::variables_map vm)
+void main_processing(const vm_t& vm)
 {
 
 	//if(vm.count("init")) init();
 	if(vm.count("clean")) clean();
 
 	if(vm.count("pre")>0) {
-		string pre = vm["pre"].as<string>();
+		string pre = vm.at("pre");
 		preprocess(pre.c_str());
 	}
 
-	string wiegley_str = vm["wiegley"].as<string>();
+	string wiegley_str = vm.at("wiegley");
 	bool do_wiegley = wiegley_str == "on";
 	if(! do_wiegley && wiegley_str != "off") {
 		cerr << "ERR: Option wiegley error. Must be on|off, but given`"
@@ -165,17 +168,22 @@ void main_processing(po::variables_map vm)
 	system("mcacc-reports.sh");
 }
 
+/*
 void print_version()
 {
 	cout << "mcacc " << VERSION << '\n';
 }
 
+
 void print_rootdir()
 {
 	cout << rootdir() << "\n";
 }
+*/
 
 
+
+/*
 po::variables_map process_options(int argc, char *argv[])
 {
 	//options res;
@@ -210,13 +218,15 @@ po::variables_map process_options(int argc, char *argv[])
 
 	return vm;
 }
-
+*/
 
 int main(int argc, char *argv[])
 {
 
 	feenableexcept(FE_OVERFLOW);
 
+	const vm_t vm = parse_args(argc, argv);
+/*
 	po::variables_map vm;
 
 	try {
@@ -233,13 +243,16 @@ int main(int argc, char *argv[])
 	if(vm.count("root")) { print_rootdir(); return EXIT_SUCCESS; }
 
 	if(vm.count("version")) { print_version(); return EXIT_SUCCESS; }
-
+*/
 	main_processing(vm);
 
+	if(vm.count("show") > 0) show(vm.at("show"));
+	/*
 	if(vm.count("show")) { 
 		const string str = vm["show"].as<string>();
 		show(str);
 	}
+	*/
 
 	return EXIT_SUCCESS;
 }

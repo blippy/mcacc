@@ -1,5 +1,7 @@
 #pragma once
 
+#include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -25,5 +27,7 @@ void insert_yahoo(const yahoo_t& y, inputs_t& inputs);
 
 namespace parse {
 	std::vector<std::string> tokenise_line(std::string& s);
+	vecvec_t vecvec(std::istream& istr);
+	vecvec_t vecvec(const std::string& filename);
 }
 

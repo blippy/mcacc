@@ -76,7 +76,7 @@ vecvec_t vecvec(istream  &istr)
 	return res;
 }
 
-vecvec_t vecvec(std::string  &filename)
+vecvec_t vecvec(const std::string& filename)
 {
 	ifstream fin;
 	fin.open(filename.c_str(), ifstream::in);
