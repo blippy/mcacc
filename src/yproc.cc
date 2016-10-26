@@ -68,7 +68,10 @@ void mkyahoos(downloads_t& ds)
 
 }
 
-
+void write_fields(ofstream& ofs, const strings& values)
+{
+	ofs << intercalate(" ", values) << endl;
+}
 
 
 
@@ -83,25 +86,26 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 		ret_str("CHG%"), pad_left("VALUE", 12), pad_left("QTY", 12), 
 		pad_left("PRICE", 12)};
 	sout << intercalate(" ", fields) << endl;
-	
+
 	currency total_profit, total_value;
 
-	bool total_written = false;
+	//bool total_written = false;
 	for(auto& y:ds.ys) {
+		if(y.ticker[0] == '^') continue;
 		quantity qty;
-		bool is_index = y.ticker[0] == '^';
 		for(auto& e:inps.etrans) 
 			if(y.ticker == e.ticker) 
 				qty += e.qty;
 
-		currency profit;
-		if(is_index) {
-			profit = y.chg.dbl() * 100;
-		} else {
-			profit = y.chg * qty;
-		}
+		const currency profit = y.chg * qty;
+		//if(is_index) {
+		//	profit = y.chg.dbl() * 100;
+		//} else {
+		//	profit = y.chg * qty;
+		//}
 		total_profit += profit;
-		
+		//cout << y.ticker << " " << profit.str() << " " << total_profit.str() << endl; // TODO remove
+
 		string chgpc_str =ret_str(y.chgpc);
 		string price_str = y.yprice.str();
 		currency value = y.yprice*qty;
@@ -110,19 +114,20 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 		strings fields = strings {pad_right(y.ticker, 6), 
 			profit.str(), chgpc_str, value_str, 
 			qty.str(), price_str};
-
-		if(is_index && ! total_written) {
-			string chgpc_str = retchg_str(total_profit.dbl(),total_value.dbl());
-			strings fields = {pad_right("TOTAL", 6), 
-				total_profit.str(), 
-				chgpc_str, total_value.str()};
-			sout << intercalate(" ", fields) << endl << endl;
-			total_written = true;
-		}
-
-		sout << intercalate(" ", fields) << endl;
-
+		write_fields(sout, fields);
 	}
+	// write totals
+	string chgpc_str = retchg_str(total_profit.dbl(),total_value.dbl());
+	fields = {pad_right("TOTAL", 6), 
+		total_profit.str(), 
+		chgpc_str, total_value.str()};
+	sout << intercalate(" ", fields) << endl << endl;
+
+	sout << "TODO HIGH write changes to indices\n";
+
+//		sout << intercalate(" ", fields) << endl;
+
+//	}
 	sout << endl << intercalate(" ", strings {"DSTAMP:", ds.dstamp, ds.tstamp}) << endl;
 	sout.close();
 }

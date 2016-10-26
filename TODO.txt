@@ -1,3 +1,4 @@
+on ubuntu 2016-10-26, gaap.rep (421266.07) and epics.rep (421266.08) folios don't match
+
 Old boost::rational using files can be removed from mcacc
 
-Replace option parsing
