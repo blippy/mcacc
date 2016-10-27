@@ -159,10 +159,10 @@ void main_processing(const vm_t& vm)
 			<< "'. Continuing anyway." << endl;
 	}
 
-	bool do_snap = vm.count("snap") > 0;
+	//bool do_snap = vm.count("snap") > 0;
 	oven ove;
 	ove.load_inputs();
-	if(do_snap) ove.fetch();
+	if(vm.at("snap") == "on") ove.fetch();
 	ove.process(do_wiegley);
 
 	system("mcacc-reports.sh");

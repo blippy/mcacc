@@ -38,7 +38,7 @@ void oven::process(bool do_wiegley)
 			inserter(all_yahoos, all_yahoos.begin()));
 	const period& per = curr_period();
 	const stend_ts stends = stend_main(all_yahoos, per);
-	const augetran_ts augetrans = eaug_main(user_inputs.etrans, stends,
+	const detran_cs augetrans = eaug_main(user_inputs.etrans, stends,
 			per);
 	const post_ts posts = posts_main(user_inputs, augetrans);
 	etb_main(user_inputs.naccs, posts);

@@ -1,4 +1,5 @@
 #include "dec.hpp"
+#include "types.hpp"
 
 using namespace std::decimal;
 
@@ -21,4 +22,8 @@ price operator/(const currency& c, const quantity& q)
 currency operator*(const price& p, const quantity& q) { return currency(p.dbl()*q.dbl()/100); }
 
 
+std::string ret_curr(const currency& num, const currency& denom)
+{
+	return ret_str(num.dbl(), denom.dbl());
+}	
 

@@ -3,9 +3,11 @@
 #include <algorithm>
 #include <cmath>
 #include <decimal/decimal>
+#include <ostream>
 #include <string>
 
 
+//#include "types.hpp"
 #include "reusable.hpp"
 
 std::decimal::decimal128 dbl_to_dec(double d, int dp);
@@ -43,9 +45,16 @@ class decn
 		decn_t& operator+=(const decn_t& rhs) { this->dec += rhs.dec;} ;
 		bool zerop() const { return dbl() == 0.0; };
 		void negate() { dec = -dec; } ;
+
+		friend std::ostream& operator<<(std::ostream& os, const decn_t& obj)
+		{
+			os << obj.str();
+			return os;
+		};
+
 };
 
-//bool operator==(const decn& lhs, const decn& rhs) { return lhs.dp == rhs.dp && lhs.dec == rhs.dec; }
+//std::ostream& operator<<(std::ostream& os, const dec& obj);
 
 typedef decn<12, 2> currency;
 typedef decn<12, 3> quantity;
@@ -75,9 +84,19 @@ class price
 		std::string stra() const { return format_num( std::decimal::decimal_to_double(the_price), DP); };
 		friend price operator/(price lhs, const price& rhs) { return lhs.the_price / rhs.the_price; } ;
 		friend price operator-(price lhs, const price& rhs) { return lhs.the_price - rhs.the_price; } ;
-		void from_str(const std::string& s) { the_price = str_to_dec(s, DP); } ;
+		void from_str(const std::string& s) {
+		       	the_price = str_to_dec(s, DP); 
+		};
+		friend std::ostream& operator<<(std::ostream& os, 
+				const price& obj)
+		{
+			os << obj.str();
+			return os;
+		}
 
 };
 
 price operator/(const currency& c, const quantity& q);
 currency operator*(const price& p, const quantity& q);
+
+std::string ret_curr(const currency& num, const currency& denom); 

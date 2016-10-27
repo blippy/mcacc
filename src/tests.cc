@@ -80,6 +80,8 @@ void check_fundamentals()
 
 void check_decimals()
 {
+	cout.precision(15);
+
 	currency d1 = currency(12, 34);
 	static_assert(true, "always works");
 	//assert(d.dp ==2);
@@ -106,7 +108,12 @@ void check_decimals()
 	
 	price p3 = p2;
 	check(p3.stra() == p2.stra(), "simple price assignment");
-	
+
+	currency d3 = price("200.4749") * quantity("8889.15787");
+	check_near(d3.dbl(), 17820.53, "200.4749 * 8889.15787");
+
+
+
 }
 
 void run_all_tests()

@@ -15,9 +15,9 @@
 using namespace std;
 
 
-augetran_t augment(const etran_t& e, const stend_ts& stends, const period& per)
+detran_c augment(const etran_t& e, const stend_ts& stends, const period& per)
 {
-	augetran_t aug;
+	detran_c aug;
 	aug.etran = e;
 	const stend& s = stends.at(e.ticker);
 
@@ -65,7 +65,7 @@ void recline(ofstream& ofs, const string& fname, T const& fvalue)
 	ofs << fstr << fvs << endl;
 }
 
-void write_augetran(ofstream& ofs, const augetran_t& e)
+void write_augetran(ofstream& ofs, const detran_c& e)
 {
 	
 	auto gout = [&ofs](const string& s, const auto& v) {
@@ -92,10 +92,10 @@ void write_augetran(ofstream& ofs, const augetran_t& e)
 	ofs << endl;
 }
 
-augetran_ts eaug_main(const etran_ts& etrans, const stend_ts& stends, 
+detran_cs eaug_main(const etran_ts& etrans, const stend_ts& stends, 
 		const period &per)
 {
-	augetran_ts augs;
+	detran_cs augs;
 
 	string fname;
 	for(auto& e:etrans) 
@@ -112,3 +112,20 @@ augetran_ts eaug_main(const etran_ts& etrans, const stend_ts& stends,
 	return augs;
 }
 
+detran_c& detran_c::operator+=(const detran_c& rhs){
+	etran_t& elhs = this->etran;
+	const etran_t& erhs = rhs.etran;
+	elhs.ticker = erhs.ticker;
+
+	if(erhs.buy){
+		elhs.cost += erhs.cost;
+	} else {
+		elhs.cost += (elhs.cost/elhs.qty) * erhs.qty;
+	}
+	elhs.qty += erhs.qty;
+	this->ucost = elhs.cost/elhs.qty;
+	this->end_price = rhs.end_price;
+	this->vto = this->end_price * elhs.qty;
+	// TODO NOW
+	return *this;
+}

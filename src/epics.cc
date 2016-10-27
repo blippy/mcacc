@@ -24,11 +24,74 @@ void underline(ostream &ost, char c)
 		pad_gbp(c), pad_gbp(c), pad_gbp(c), ret_str(c) };
 	print_strings(ost, fields);
 }
-struct folio {
-	string name;
-	int ftype;
+
+//bool always() { return true;}
+struct folio { string name; int ftype; } ;
+
+        
+class folio_c {
+	public:
+		folio_c(const string& name): m_name(name) {};
+		string m_name;
+		detran_cs filter(const detran_cs& es) const;
+	//string name;
+	//int ftype;
+	//function<bool(const string& folio accept 
 };
 
+bool operator<(const detran_c& lhs, const detran_c& rhs)
+{
+	return lhs.etran < rhs.etran;
+}
+
+detran_cs folio_c::filter(const detran_cs& es) const
+{
+	detran_cs result;
+	for(const auto& e:es){
+		const string& folio = e.etran.folio;
+		bool match = folio == m_name || 
+			(m_name == "mine" && folio != "ut") ||
+			m_name == "total";
+		if(match)
+			result.push_back(e);
+	}
+	std::sort(result.begin(), result.end()); // mostly for debugging convenience
+	return result;
+}
+
+// TODO find better home
+string ticker(const detran_c& e) { return e.etran.ticker; }
+
+detran_c reduce_all (const detran_cs& es)
+{
+	detran_c result;
+	for(const auto& e:es) result += e;
+	return result;
+}
+detran_cs reduce(const detran_cs& es)
+{
+	detran_cs result;
+
+	set<string> tickers;
+       	for(const auto& e:es) tickers.insert(ticker(e));
+
+	for(const auto& t:tickers) {
+		detran_cs ticker_etrans;
+		for(const auto& e:es) 
+			if(ticker(e) == t) ticker_etrans.push_back(e);
+
+		const detran_c reduction = reduce_all(ticker_etrans); 
+		result.push_back(reduction);
+	}
+	return result;
+}
+vector<folio_c> g_folios = { 
+	folio_c("hal"), folio_c("hl"), folio_c("igg"),
+	folio_c("tdi"), folio_c("tdn"), folio_c("mine"), folio_c("ut"), 
+	folio_c("total")
+};
+
+/*
 vector<folio> folios = {
 	{"hal",   0},
 	{"hl",    0},
@@ -39,8 +102,24 @@ vector<folio> folios = {
 	{"ut",    0},
 	{"total", 2}
 };
+*/
 
-void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es, 
+void debug(const detran_c& e, const currency& vto)
+{
+	static int n_azn = 0;
+	return; // just switch it off for now
+	if(n_azn==0) cout << "epics.cc:debug() output follows\n";
+	if(e.etran.ticker == "AZN.L") n_azn++;
+	if(n_azn>1) return;
+	if(e.etran.folio != "hal") return;
+
+	cout << pad_right(e.etran.ticker, 6) << e.vto.str() << " ";
+	cout << e.etran.qty.str() << e.end_price.str();
+       cout << vto.str() << endl;
+}
+
+/*
+void process_folio(folio &f, set<string> &epic_names, const detran_cs& es, 
 		ostream &eout, ostream &pout)
 {
 	eout << f.name << endl;
@@ -80,18 +159,26 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 			vflow += e.flow;
 			vprofit += e.profit;
 			vto += e.vto;
+			debug(e, vto);
 		}
 
-		if(tqty.zerop()) { zeros.insert(k) ; continue; }
+		if(tqty.zerop()) { 
+			zeros.insert(k);
+			continue;
+			//Can sometimes get the case where there 
+			// are slight rounding errors, e.g. with ICP.L
+			//
+		       //if(vto.zerop())continue; 
+		}
 		//price ucost;
-	       	//ucost.reprice(tcost, tqty);
+		//ucost.reprice(tcost, tqty);
 		const price ucost = tcost/tqty;
 		currency value = uvalue * tqty;
 		//recentis(value, uvalue, tqty);
 
 		fields = {pad_right(k, 7),
-		       	tcost.str(), value.str() , 
-			ret_str(value.dbl()/ tcost.dbl()), 
+			tcost.str(), value.str() , 
+			ret_str(value.dbl(), tcost.dbl()), 
 			tqty.str(), ucost.str(), uvalue.str()};
 		print_strings(eout, fields);
 		grand_cost += tcost;
@@ -100,7 +187,7 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 	}
 	fields = {pad_right("Grand:", 7), grand_cost.str(), 
 		grand_value.str(),
-	       	ret_str(grand_value.dbl()/grand_cost.dbl()), 
+		ret_str(grand_value.dbl()/grand_cost.dbl()), 
 		pad_gbp(' '), pad_gbp(' '), pad_gbp(' ') };
 	print_strings(eout, fields);
 	eout << endl;
@@ -116,18 +203,20 @@ void process_folio(folio &f, set<string> &epic_names, const augetran_ts& es,
 		}
 		eout << endl;
 	}
-		
-	
+
+
 	// portfolios output
 	if(f.ftype ==1 || f.ftype==2) underline(pout, '-');
+	//string gain_str = "FOO";
+	string gain_str = ret_str(vprofit.dbl()+vbefore.dbl(), vbefore.dbl());
 	fields = {pad_ticker(f.name), vbefore.str(), vflow.str(), 
-		vprofit.str(), vto.str(),
-	       	ret_str((vprofit + vbefore).dbl()/vbefore.dbl()) };
+		vprofit.str(), vto.str(), gain_str};
 	print_strings(pout, fields);
 	if(f.ftype==2) underline(pout, '=');
 
 
 }
+*/
 
 void print_indices(const stend_ts& stends, ostream &pout)
 {
@@ -152,7 +241,7 @@ void print_indices(const stend_ts& stends, ostream &pout)
 	}
 }
 
-void epics_main(const augetran_ts& es, const stend_ts& stends)
+void epics_main(const detran_cs& es, const stend_ts& stends)
 {
 	set<string> keys;
 	for(auto e:es) { keys.insert(e.etran.ticker);}
@@ -161,6 +250,32 @@ void epics_main(const augetran_ts& es, const stend_ts& stends)
 	s3("epics.rep", filename);
 	ofstream eout;
 	eout.open(filename);
+	for(const folio_c& f:g_folios){
+		cout << f.m_name << endl;
+		const detran_cs fes = f.filter(es);
+		const detran_cs reds = reduce(fes);
+		cout << "doing subtotal\n";
+		currency cost, value;
+		for(const auto& r:reds) { 
+			if(r.etran.qty.zerop()) continue;
+
+			cout << pad_left(r.etran.ticker, 6)
+				<< r.etran.cost
+				<< r.vto
+				<< ret_curr(r.vto, r.etran.cost)
+				<< r.etran.qty
+				<< r.ucost
+				<< r.end_price
+				<< endl;
+			cost+= r.etran.cost;
+			value += r.vto;
+		}
+		//detran_c subtotal = reduce_all(reds);
+		cout << pad_right("Grand:", 6) << cost << value 
+			<< ret_curr(value, cost) << endl;
+		//reduce(reds);
+		cout << "done\n";
+	}
 
 	s3("portfolios.rep", filename);
 	ofstream pout;

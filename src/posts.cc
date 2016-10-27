@@ -30,7 +30,7 @@ void push(post_ts &ps, const string& dstamp, const string& ticker, string acc, s
 	ps.push_back(p);
 }
 
-post_ts posts_main(const inputs_t& inputs, const augetran_ts& augetrans)
+post_ts posts_main(const inputs_t& inputs, const detran_cs& augetrans)
 {
 
 	post_ts ps;
