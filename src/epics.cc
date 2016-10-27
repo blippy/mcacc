@@ -26,7 +26,7 @@ void underline(ostream &ost, char c)
 }
 
 //bool always() { return true;}
-struct folio { string name; int ftype; } ;
+//struct folio { string name; int ftype; } ;
 
         
 class folio_c {
@@ -34,6 +34,13 @@ class folio_c {
 		folio_c(const string& name): m_name(name) {};
 		string m_name;
 		detran_cs filter(const detran_cs& es) const;
+		void calculate(const detran_cs& all_etrans);
+		set<string> zeros;
+		currency cost;
+		currency value;
+		void print_to_epic_file(ofstream& ofs) const;
+		void print_to_portfolio_file(ofstream& ofs) const;
+		vector<detran_c> reduced_epics;
 	//string name;
 	//int ftype;
 	//function<bool(const string& folio accept 
@@ -241,54 +248,114 @@ void print_indices(const stend_ts& stends, ostream &pout)
 	}
 }
 
+
+void folio_c::calculate(const detran_cs& all_etrans)
+{
+	//folio_calcs result;
+	const detran_cs by_epics = reduce(filter(all_etrans));
+
+	//currency cost, value;
+	for(const auto& esum:by_epics){
+		if(esum.etran.qty.zerop()) { 
+			zeros.insert(esum.etran.ticker);
+		} else {
+			reduced_epics.push_back(esum);
+			cost += esum.etran.cost;
+			value += esum.vto;
+		}
+	}
+}
+
+void folio_c::print_to_epic_file(ofstream& ofs) const
+{
+	ofs << m_name << endl;
+
+	string hdr = "TICKER        COST       VALUE   RET%         QTY"s +
+		"       UCOST      UVALUE"s;
+	//strings fields = { pad_ticker("TICK"), pad_gbp("COST"), 
+	//	pad_gbp("VALUE"), ret_str("RET%"), 
+	//	pad_gbp("QTY"), pad_gbp("UCOST"), pad_gbp("UVALUE") };
+	//print_strings(cout, fields);
+	ofs << hdr << endl;
+
+	for(const auto& e:reduced_epics)
+	{
+		ofs << pad_left(e.etran.ticker, 6)
+			<< e.etran.cost
+			<< e.vto
+			<< ret_curr(e.vto, e.etran.cost)
+			<< e.etran.qty
+			<< e.ucost
+			<< e.end_price
+			<< endl;
+	}
+
+	ofs << pad_right("Grand:", 6) << cost << value 
+		<< ret_curr(value, cost) << endl << endl;
+
+	if(m_name != "total") return;
+	ofs << "Zeros:\n";
+	int i=0;
+	for(const auto& z:zeros) {
+		ofs << pad_right(z, 6) << " ";
+		i++;
+		if(i==10) {i = 0; ofs << endl; }
+	}
+}
+
+void folio_c::print_to_portfolio_file(ofstream& ofs) const
+{
+	cout << "TODO folio_c::print_to_portfolio_file()\n";
+}
 void epics_main(const detran_cs& es, const stend_ts& stends)
 {
-	set<string> keys;
-	for(auto e:es) { keys.insert(e.etran.ticker);}
 
-	string filename;
-	s3("epics.rep", filename);
+	for(auto& f:g_folios)
+		f.calculate(es);
+		//folio_etrans = f.filter(es);
+		//const folio_calcs fc = process_folio(f, es);
+		//calc_map[f.
+	//}
+
+	//for(const auto& f:g_folios) 
+
+	//for(auto f:folios){ process_folio(f, keys, es, eout, pout); }
+	//set<string> keys;
+	//for(auto e:es) { keys.insert(e.etran.ticker);}
+
+	string filename = s3("epics.rep");
 	ofstream eout;
 	eout.open(filename);
+	for(const auto& f:g_folios) f.print_to_epic_file(eout);
+	eout.close();
+/*
 	for(const folio_c& f:g_folios){
 		cout << f.m_name << endl;
 		const detran_cs fes = f.filter(es);
 		const detran_cs reds = reduce(fes);
 		cout << "doing subtotal\n";
 		currency cost, value;
-		for(const auto& r:reds) { 
-			if(r.etran.qty.zerop()) continue;
-
-			cout << pad_left(r.etran.ticker, 6)
-				<< r.etran.cost
-				<< r.vto
-				<< ret_curr(r.vto, r.etran.cost)
-				<< r.etran.qty
-				<< r.ucost
-				<< r.end_price
-				<< endl;
-			cost+= r.etran.cost;
-			value += r.vto;
-		}
+		//for(const auto& r:reds) { 
+		//	if(r.etran.qty.zerop()) continue;
+			// ostenbile printing
+			//cost+= r.etran.cost;
+			//value += r.vto;
+		//}
 		//detran_c subtotal = reduce_all(reds);
-		cout << pad_right("Grand:", 6) << cost << value 
-			<< ret_curr(value, cost) << endl;
 		//reduce(reds);
-		cout << "done\n";
+	//	cout << "done\n";
 	}
+	*/
 
-	s3("portfolios.rep", filename);
+	filename = s3("portfolios.rep");
 	ofstream pout;
 	pout.open(filename);
 	strings fields = strings { pad_ticker("FOLIO"), pad_gbp("VBEFORE"), 
 		pad_gbp("VFLOW"), pad_gbp("VPROFIT"), 
 		pad_gbp("VTO"), ret_str("VRET")};
 	print_strings(pout, fields);
-
-	for(auto f:folios){ process_folio(f, keys, es, eout, pout); }
-
+	for(const auto& f:g_folios)
+		f.print_to_portfolio_file(pout);
 	print_indices(stends, pout);
-
-	eout.close();
 	pout.close();
 }
