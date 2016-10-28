@@ -10,7 +10,6 @@
 #include "common.hpp"
 #include "types.hpp"
 #include "etrans-aug.hpp"
-//#include "cpq.hpp"
 
 using namespace std;
 
@@ -125,7 +124,9 @@ detran_c& detran_c::operator+=(const detran_c& rhs){
 	elhs.qty += erhs.qty;
 	this->ucost = elhs.cost/elhs.qty;
 	this->end_price = rhs.end_price;
+	this->profit += rhs.profit;
 	this->vto = this->end_price * elhs.qty;
-	// TODO NOW
+	this->vbefore += rhs.vbefore;
+	this->prior_year_profit += rhs.prior_year_profit;
 	return *this;
 }

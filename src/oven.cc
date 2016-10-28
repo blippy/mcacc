@@ -40,10 +40,10 @@ void oven::process(bool do_wiegley)
 	const stend_ts stends = stend_main(all_yahoos, per);
 	const detran_cs augetrans = eaug_main(user_inputs.etrans, stends,
 			per);
-	const post_ts posts = posts_main(user_inputs, augetrans);
+	const folio_cs folios = epics_main(augetrans, stends);
+	const post_ts posts = posts_main(user_inputs, folios);
 	etb_main(user_inputs.naccs, posts);
 	gaap_main(user_inputs.naccs, per);
-	epics_main(augetrans, stends);
 	cgt(user_inputs.etrans, per);
 
 	if(do_wiegley) wiegley(user_inputs);
