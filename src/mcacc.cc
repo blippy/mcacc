@@ -119,6 +119,7 @@ int main(int argc, char *argv[])
 	}
 
 	oven ove;
+	ove.m_vm = vm;
 	ove.load_inputs();
 	if(vm.at("snap") == "on") ove.fetch();
 	ove.process(do_wiegley);

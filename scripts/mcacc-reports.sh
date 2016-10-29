@@ -8,6 +8,8 @@ returns.sh
 #snap.sh
 
 paste $s3/gaap-0.rep $s1/gaap-1.rep >$s3/gaap.rep
-mkdir -p $w/gaap
-cp $s3/gaap-0.rep $w/gaap/`date --iso`.txt
+mkdir -p $root/arc/gaap
+DS=`grep END $s3/gaap-0.rep | awk '{print $2}' `
+#echo "ds is $DS"
+cp $s3/gaap-0.rep $root/arc/gaap/$DS.txt
 nass.sh

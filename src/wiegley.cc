@@ -89,9 +89,9 @@ void mkprices(const yahoo_ts&  ys)
 	spit_strings(fname, prices);
 }
 
-void wiegley(const inputs_t& inputs)
+void wiegley(const etran_ts& etrans, const ntran_ts& ntrans, const yahoo_ts& yahoos)
 {
 	// note that I split this out into two functions for profiling purposes
-	mkledger(inputs.etrans, inputs.ntrans);
-	mkprices(inputs.yahoos);
+	mkledger(etrans, ntrans);
+	mkprices(yahoos);
 }

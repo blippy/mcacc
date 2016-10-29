@@ -28,24 +28,28 @@ void oven::fetch()
 
 period oven::curr_period() const
 {
-	return user_inputs.p;
+	period p = user_inputs.p;
+	if(m_vm.count("end")>0) p.end_date = m_vm.at("end");
+	if(m_vm.count("start")>0) p.start_date = m_vm.at("start");
+	return p;
 }
 void oven::process(bool do_wiegley)
 {
 	yahoo_ts all_yahoos;
-	set_union(user_inputs.yahoos.begin(), user_inputs.yahoos.end(),
+	const inputs_t& inps = user_inputs;
+	set_union(inps.yahoos.begin(), inps.yahoos.end(),
 			fetched_yahoos.begin(), fetched_yahoos.end(),
 			inserter(all_yahoos, all_yahoos.begin()));
-	const period& per = curr_period();
-	const stend_ts stends = stend_main(all_yahoos, per);
-	const detran_cs augetrans = eaug_main(user_inputs.etrans, stends,
-			per);
+	const period& perd = curr_period();
+	const stend_ts stends = stend_main(all_yahoos, perd);
+	const detran_cs augetrans = eaug_main(inps.etrans, stends,
+			perd);
 	const folio_cs folios = epics_main(augetrans, stends);
-	const post_ts posts = posts_main(user_inputs, folios);
+	const post_ts posts = posts_main(inps.naccs, inps.ntrans, folios, perd);
 	etb_main(user_inputs.naccs, posts);
-	gaap_main(user_inputs.naccs, per);
-	cgt(user_inputs.etrans, per);
+	gaap_main(inps.naccs, perd);
+	cgt(inps.etrans, perd);
 
-	if(do_wiegley) wiegley(user_inputs);
+	if(do_wiegley) wiegley(inps.etrans, inps.ntrans, inps.yahoos);
 
 }

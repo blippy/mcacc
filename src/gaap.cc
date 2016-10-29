@@ -119,9 +119,11 @@ void subtotal(ostream* ofs, const string& title, currency& value)
 
 }
 
-void write_period(const string& s)
+void write_period(const period& p)
 {
-	(*m_ofs) << nchars(' ', 11) << s << endl;
+	(*m_ofs) << pad_right("START", 11) << p.start_date << endl
+		<< pad_right("END", 11) << p.end_date << endl;
+		//nchars(' ', 11) << s << endl;
 }
 
 void gaap_main(const nacc_ts& the_naccs, const period& per)
@@ -145,8 +147,9 @@ void gaap_main(const nacc_ts& the_naccs, const period& per)
 	ofs.open(fname.c_str(), ofstream::out);
 	m_ofs = &ofs;
 
-	write_period(per.start_date);
-	write_period(per.end_date);
+	write_period(per);
+	//write_period(per.start_date);
+	//write_period(per.end_date);
 	ofs << endl;
 
 	section inco = section("Income").adds({"div", "int", "wag"});

@@ -26,11 +26,13 @@ void reinsert(map<K, V>& m, const K& key, const V& value)
 const string help_text=R"hlp(
 Options:
   --clean               Clean up the working folders
+  --end YYYY-MM-DD      End date
   -h [ --help ]         Help
   --pre arg             Preprocess command
   -r [ --root ]         Print root directory
   --show arg            Show a report
   -s [ --snap ]         Snapshot
+  --start YYYY-MM-DD    Start date
   -t [ --tests ]        Run tests only
   -v [ --version ]      Version
   --wiegley arg (=off)  Produce (on) or surpress (off) wiegley output
@@ -58,9 +60,11 @@ vm_t parse_args(int argc, char *argv[])
                 int option_index = 0;
                 static struct option long_options[] = {
 			{"clean",   no_argument, 0, 0},
+			{"end",   required_argument, 0, 0},
                         {"help",    no_argument, 0, 'h'},
 			{"root",    no_argument, 0, 'r'},
                         {"snap",    no_argument, 0, 's'},
+			{"start",   required_argument, 0, 0},
 			{"tests",   no_argument, 0, 't'},
                         {"version", no_argument, 0, 'v'},
                         {0 ,0,0,0}

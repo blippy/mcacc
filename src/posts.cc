@@ -48,23 +48,24 @@ void push_fpost(post_ts& ps, const string& acc, const string& desc,
 	ps.push_back(p);
 }
 
-//post_ts posts_main(const inputs_t& inputs, const detran_cs& augetrans)
-post_ts posts_main(const inputs_t& inputs, const folio_cs& folios)
+//post_ts posts_main(const inputs_t& inputs, const folio_cs& folios)
+post_ts posts_main(const nacc_ts& naccs, const ntran_ts& ntrans, 
+		const folio_cs& folios, const period& perd)
 {
 
 	post_ts ps;
 	
-	for(auto& n:inputs.ntrans) {
-		if(n.dstamp > inputs.p.end_date) continue;
+	for(auto& n:ntrans) {
+		if(n.dstamp > perd.end_date) continue;
 		if(n.amount.zerop()) continue;
 
 		post_t p;
 		p.dstamp = n.dstamp;
 		p.dr = n.dr;
 		p.cr = n.cr;
-		if(n.dstamp < inputs.p.start_date) {
-			p.dr = inputs.naccs.at(p.dr).alt;
-			p.cr = inputs.naccs.at(p.cr).alt;
+		if(n.dstamp < perd.start_date) {
+			p.dr = naccs.at(p.dr).alt;
+			p.cr = naccs.at(p.cr).alt;
 		}
 		p.amount = n.amount;
 		p.desc = n.desc;
