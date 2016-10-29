@@ -104,7 +104,7 @@ void mksnap(const inputs_t& inps, const downloads_t& ds)
 		//	profit = y.chg * qty;
 		//}
 		total_profit += profit;
-		//cout << y.ticker << " " << profit.str() << " " << total_profit.str() << endl; // TODO remove
+		cout << "TODO yrpoc(): " << y.ticker << " " << profit.str() << " " << total_profit.str() << endl; // TODO remove
 
 		string chgpc_str =ret_str(y.chgpc);
 		string price_str = y.yprice.str();
