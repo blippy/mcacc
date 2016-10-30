@@ -16,6 +16,7 @@ class folio_c {
 		void calculate(const detran_cs& all_etrans);
 		std::set<std::string> zeros;
 		currency cost;
+		currency flow;
 		currency value;
 		currency pdp;
 		currency vbefore;

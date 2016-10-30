@@ -3,13 +3,19 @@
 
 source mcacc-env.sh
 
-financials.sh
-returns.sh
-#snap.sh
+#financials.sh
+#returns.sh
 
+
+#archive snap
+mkdir -p $arc/snap
+DS=`grep DSTAMP $s3/snap.rep | awk '{print $2}' `
+cp $s3/snap.rep $arc/snap/$DS.txt
+
+
+#create net assets
 paste $s3/gaap-0.rep $s1/gaap-1.rep >$s3/gaap.rep
-mkdir -p $root/arc/gaap
+mkdir -p $arc/gaap
 DS=`grep END $s3/gaap-0.rep | awk '{print $2}' `
-#echo "ds is $DS"
-cp $s3/gaap-0.rep $root/arc/gaap/$DS.txt
+cp $s3/gaap-0.rep $arc/gaap/$DS.txt
 nass.sh

@@ -18,13 +18,14 @@
 using namespace std;
 using namespace std::decimal;
 
+/*
 void underline(ostream &ost, char c)
 { 
 	auto fields = strings {pad_ticker(c), pad_gbp(c), 
 		pad_gbp(c), pad_gbp(c), pad_gbp(c), ret_str(c) };
 	print_strings(ost, fields);
 }
-
+*/
 
         
 
@@ -142,7 +143,8 @@ void folio_c::calculate(const detran_cs& all_etrans)
 	pdp     = sum(by_epics, epdp);
 	pbd     = sum(by_epics, epbd);
 	vbefore = sum(by_epics, evbefore);
-	cout << "pbd = " << pbd << endl;
+	flow    = value - pdp - vbefore;
+	//cout << "pbd = " << pbd << endl;
 }
 
 void folio_c::print_to_epic_file(ofstream& ofs) const
@@ -180,7 +182,14 @@ void folio_c::print_to_epic_file(ofstream& ofs) const
 
 void folio_c::print_to_portfolio_file(ofstream& ofs) const
 {
-	cout << "TODO folio_c::print_to_portfolio_file()\n";
+	if(m_name == "mine" || m_name == "total")
+		ofs << nchars('-', 61) << endl;
+	// TODO there is another function for this: use it
+	const string rstr = ret_str((pdp+vbefore).dbl(), vbefore.dbl());
+	ofs << pad_right(m_name, 6) << vbefore << flow
+	       	<< pdp << value << rstr << endl;
+		//"TODO folio_c::print_to_portfolio_file()\n";
+	if(m_name == "total") ofs << nchars('=', 61) << endl;
 }
 
 folio_cs epics_main(const detran_cs& es, const stend_ts& stends)
@@ -203,10 +212,16 @@ folio_cs epics_main(const detran_cs& es, const stend_ts& stends)
 	filename = s3("portfolios.rep");
 	ofstream pout;
 	pout.open(filename);
+	/*
 	strings fields = strings { pad_ticker("FOLIO"), pad_gbp("VBEFORE"), 
 		pad_gbp("VFLOW"), pad_gbp("VPROFIT"), 
 		pad_gbp("VTO"), ret_str("VRET")};
-	print_strings(pout, fields);
+		*/
+	const string hdr = 
+		"FOLIO      VBEFORE       VFLOW     VPROFIT         VTO   VRET";
+	//"hal       85336.11    27881.72   -11576.66   101641.17"
+	//print_strings(cout, hdr);
+	pout << hdr << endl;
 	for(const auto& f:folios)
 		f.print_to_portfolio_file(pout);
 	print_indices(stends, pout);
